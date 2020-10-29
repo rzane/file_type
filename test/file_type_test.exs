@@ -33,6 +33,7 @@ defmodule FileTypeTest do
   fixture "fixture.ps", "application/postscript"
   fixture "fixture.eps", "application/postscript"
   fixture "fixture2.eps", "application/postscript"
+  fixture "fixture.psd", "application/vnd.adobe.photoshop"
 
   # OGG
   fixture "fixture.opus", "audio/opus"
