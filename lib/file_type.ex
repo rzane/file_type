@@ -1,9 +1,19 @@
 defmodule FileType do
-  import FileType.Macros
-
   @minimum_bytes 4_100
 
   @type read_error :: File.posix() | :badarg | :terminated
+
+  defmacrop sigil_h({:<<>>, _, [data]}, []) do
+    Base.decode16!(data, case: :lower)
+  end
+
+  defmacrop magic(data, offset \\ 0) do
+    quote do: <<_::binary-size(unquote(offset)), unquote(data)>> <> _
+  end
+
+  defmacrop ftyp(data) do
+    quote do: <<_::binary-size(4), "ftyp", unquote(data)>> <> _
+  end
 
   @spec read(binary) :: {:ok, binary} | {:error, read_error}
   def read(path) when is_binary(path) do
