@@ -6,5 +6,6 @@ defmodule FileTypeTest do
   fixture "fixture.jpg", "image/jpeg"
   fixture "fixture.bmp", "image/bmp"
   fixture "fixture.mp4", "video/mp4"
+  fixture "fixture.mkv", "video/x-matroska"
   fixture "fixture.mp3", "audio/mpeg"
 end
