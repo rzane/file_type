@@ -1,4 +1,5 @@
 # MIME            OFFSET     SIGNATURE
+application/pdf   0          255044462d
 video/mp4         4          667479704d534e56
 video/mp4         4          667479704d345620
 video/mp4         4          6674797069736f6d

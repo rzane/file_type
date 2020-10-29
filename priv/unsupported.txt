@@ -34,7 +34,6 @@
 # application/mxf                                          0      060e2b34020501010d0102010102
 # application/ogg                                          0      4f676753
 # application/owl+xml                                      0      3c4f6e746f6c6f6779
-# application/pdf                                          0      255044462d
 # application/pgp-encrypted                                0      2d2d2d2d2d424547494e20504750204d4553534147452d2d2d2d2d
 # application/pgp-keys                                     0      2d2d2d2d2d424547494e205047502050524956415445204b455920424c4f434b2d2d2d2d2d
 # application/pgp-keys                                     0      2d2d2d2d2d424547494e20504750205055424c4943204b455920424c4f434b2d2d2d2d2d
