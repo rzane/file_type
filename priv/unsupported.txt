@@ -475,7 +475,6 @@
 # font/ttf                                                 65     4646494c
 # font/woff                                                0      774f4632
 # font/woff                                                0      774f4646
-# image/bmp                                                0      424d
 # image/dpx                                                0      53445058
 # image/emf                                                0      01000000
 # image/fits                                               0      53494d504c4520203d
