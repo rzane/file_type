@@ -4,7 +4,6 @@
 # application/dicom                                        128    4449434d
 # application/epub+zip                                     0      504b0304
 # application/gnunet-directory                             0      89474e440d0a1a0a
-# application/gzip                                         0      1f8b
 # application/javascript                                   0      2321202f62696e2f676a73
 # application/javascript                                   0      2321202f7573722f62696e2f676a73
 # application/javascript                                   0      2321202f7573722f6c6f63616c2f62696e2f676a73
