@@ -480,7 +480,6 @@
 # image/emf                                                0      01000000
 # image/fits                                               0      53494d504c4520203d
 # image/gif                                                0      47494638
-# image/jpeg                                               0      ffd8
 # image/ktx                                                0      ab4b5458
 # image/openraster                                         0      504b0304
 # image/svg+xml                                            0      3c21444f435459504520737667
