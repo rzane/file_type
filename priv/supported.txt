@@ -1,53 +1,59 @@
 # MIME                OFFSET     SIGNATURE
+audio/mpeg              0          494433
+audio/x-wav             8          57415620
+audio/x-wav             8          57415645
 
-audio/mpeg            0          494433
-audio/x-wav           8          57415620
-audio/x-wav           8          57415645
+video/mp4               4          667479704d534e56
+video/mp4               4          667479704d345620
+video/mp4               4          6674797069736f6d
+video/mp4               4          6674797066347620
+video/mp4               4          667479706d703432
+video/x-matroska        0          1a45dfa3
+video/quicktime         4          66726565
+video/quicktime         4          6d646174
+video/quicktime         4          6d6f6f76
+video/quicktime         4          77696465
+video/quicktime         4          667479707174
 
-video/mp4             4          667479704d534e56
-video/mp4             4          667479704d345620
-video/mp4             4          6674797069736f6d
-video/mp4             4          6674797066347620
-video/mp4             4          667479706d703432
-video/x-matroska      0          1a45dfa3
-video/quicktime       4          66726565
-video/quicktime       4          6d646174
-video/quicktime       4          6d6f6f76
-video/quicktime       4          77696465
-video/quicktime       4          667479707174
+image/png               0          89504e47
+image/jpeg              0          ffd8ff
+image/bmp               0          424d
+image/webp              0          52494646
+image/tiff              0          49492a00
+image/tiff              0          4d4d002a
+image/heic              4          6674797068656963
+image/heic              4          6674797068656978
+image/heic              4          667479706d696631
 
-image/png             0          89504e47
-image/jpeg            0          ffd8ff
-image/bmp             0          424d
-image/webp            0          52494646
-image/tiff            0          49492a00
-image/tiff            0          4d4d002a
-image/heic            4          6674797068656963
-image/heic            4          6674797068656978
-image/heic            4          667479706d696631
+# Compression
+application/gzip        0          1f8b
+application/zip         0          504b0304
+application/vnd.rar     0          52617221
+application/x-tar       257        757374617200
+application/x-tar       257        7573746172202000
 
-application/pdf       0          255044462d
-application/gzip      0          1f8b
-application/zip       0          504b0304
-application/vnd.rar   0          52617221
-application/x-tar     257        757374617200
-application/x-tar     257        7573746172202000
+# Adobe
+application/pdf         0          255044462d
+application/postscript  0          c5d0d3c6
+application/postscript  0          042521
+application/postscript  0          25215053
 
-application/msword    0      31be0000
-application/msword    0      504f5e5160
-application/msword    0      dba52d000000
-application/msword    0      fe370023
-application/msword    2108   4d53576f7264446f63
-application/msword    2112   4d53576f7264446f63
-application/msword    2112   4d6963726f736f667420576f726420646f63756d656e742064617461
-application/msword    546    626a626a
-application/msword    546    6a626a62
+# Microsoft
+application/msword      0          31be0000
+application/msword      0          504f5e5160
+application/msword      0          dba52d000000
+application/msword      0          fe370023
+application/msword      2108       4d53576f7264446f63
+application/msword      2112       4d53576f7264446f63
+application/msword      2112       4d6963726f736f667420576f726420646f63756d656e742064617461
+application/msword      546        626a626a
+application/msword      546        6a626a62
 
 # OGG Containers (order is critical)
-audio/opus            28         4f70757348656164
-video/ogg             28         807468656f7261
-video/ogg             28         01766964656f00
-audio/ogg             28         7f464c4143
-audio/ogg             28         53706565782020
-audio/ogg             28         01766f72626973
-application/ogg       0          4f676753
+audio/opus              28         4f70757348656164
+video/ogg               28         807468656f7261
+video/ogg               28         01766964656f00
+audio/ogg               28         7f464c4143
+audio/ogg               28         53706565782020
+audio/ogg               28         01766f72626973
+application/ogg         0          4f676753

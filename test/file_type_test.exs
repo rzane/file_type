@@ -19,14 +19,22 @@ defmodule FileTypeTest do
   fixture "fixture.mp3", "audio/mpeg"
   fixture "fixture.wav", "audio/x-wav"
 
-  fixture "fixture.pdf", "application/pdf"
+  # Compressed
   fixture "fixture.zip", "application/zip"
   fixture "fixture.tar.gz", "application/gzip"
   fixture "fixture.rar", "application/vnd.rar"
   fixture "fixture.tar", "application/x-tar"
+
+  # Microsoft
   fixture "fixture.doc", "application/msword"
 
-  # OGG Containers
+  # Adobe
+  fixture "fixture.pdf", "application/pdf"
+  fixture "fixture.ps", "application/postscript"
+  fixture "fixture.eps", "application/postscript"
+  fixture "fixture2.eps", "application/postscript"
+
+  # OGG
   fixture "fixture.opus", "audio/opus"
   fixture "fixture.oga", "audio/ogg"
   fixture "fixture.ogg", "audio/ogg"
