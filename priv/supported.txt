@@ -40,12 +40,3 @@ application/msword               2112       4d53576f7264446f63
 application/msword               2112       4d6963726f736f667420576f726420646f63756d656e742064617461
 application/msword               546        626a626a
 application/msword               546        6a626a62
-
-# OGG Containers (order is critical)
-audio/opus                       28         4f70757348656164
-video/ogg                        28         807468656f7261
-video/ogg                        28         01766964656f00
-audio/ogg                        28         7f464c4143
-audio/ogg                        28         53706565782020
-audio/ogg                        28         01766f72626973
-application/ogg                  0          4f676753
