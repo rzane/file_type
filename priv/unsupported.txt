@@ -408,7 +408,6 @@
 # audio/midi                                               0      4d546864
 # audio/mp4                                                4      667479704d3441
 # audio/mpeg                                               0      fffb
-# audio/ogg                                                0      4f676753
 # audio/prs.sid                                            0      50534944
 # audio/vnd.dts                                            0      1fffe800
 # audio/vnd.dts                                            0      7ffe8001

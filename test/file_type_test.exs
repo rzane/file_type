@@ -13,6 +13,10 @@ defmodule FileTypeTest do
 
   fixture "fixture.mp3", "audio/mpeg"
   fixture "fixture.wav", "audio/x-wav"
+  fixture "fixture.oga", "audio/ogg"
+  fixture "fixture.ogg", "audio/ogg"
+  fixture "fixture.opus", "audio/ogg"
+  fixture "fixture.spx", "audio/ogg"
 
   fixture "fixture.pdf", "application/pdf"
   fixture "fixture.zip", "application/zip"
