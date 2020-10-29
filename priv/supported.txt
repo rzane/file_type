@@ -14,3 +14,5 @@ audio/mpeg            0          494433
 application/gzip      0          1f8b
 application/zip       0          504b0304
 application/vnd.rar   0          52617221
+application/x-tar     257        757374617200
+application/x-tar     257        7573746172202000

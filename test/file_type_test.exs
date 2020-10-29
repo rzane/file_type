@@ -13,4 +13,5 @@ defmodule FileTypeTest do
   fixture "fixture.zip", "application/zip"
   fixture "fixture.tar.gz", "application/gzip"
   fixture "fixture.rar", "application/vnd.rar"
+  fixture "fixture.tar", "application/x-tar"
 end
