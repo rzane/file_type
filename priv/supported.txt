@@ -1,0 +1,9 @@
+# MIME          OFFSET     SIGNATURE
+video/mp4       4          667479704d534e56
+video/mp4       4          667479704d345620
+video/mp4       4          6674797069736f6d
+video/mp4       4          6674797066347620
+video/mp4       4          667479706d703432
+image/png       0          89504e47
+image/jpeg      0          ffd8ff
+audio/mpeg      0          494433
