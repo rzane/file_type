@@ -9,14 +9,11 @@ defmodule FileType.Case do
 
   defmacro fixture(filename, mime) do
     quote do
-      test unquote(filename) do
-        assert_mime unquote(filename), unquote(mime)
+      test unquote(filename) <> " is " <> unquote(mime) do
+        path = Path.join("test/fixtures", unquote(filename))
+        assert {:ok, data} = FileType.read(path)
+        assert FileType.get(data) == unquote(mime)
       end
     end
-  end
-
-  def assert_mime(filename, mime) do
-    path = Path.join("test/fixtures", filename)
-    assert {:ok, ^mime} = FileType.from_path(path)
   end
 end
