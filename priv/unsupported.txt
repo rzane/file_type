@@ -492,7 +492,6 @@
 # image/vnd.microsoft.icon                                 0      00000100
 # image/vnd.ms-modi                                        0      45502a00
 # image/vnd.zbrush.pcx                                     0      0a
-# image/webp                                               0      52494646
 # image/wmf                                                0      0100
 # image/wmf                                                0      d7cdc69a
 # image/x-applix-graphics                                  0      2a424547494e
