@@ -1,18 +1,24 @@
 # MIME                OFFSET     SIGNATURE
-application/pdf       0          255044462d
+
+audio/mpeg            0          494433
+audio/x-wav           8          57415620
+audio/x-wav           8          57415645
+
 video/mp4             4          667479704d534e56
 video/mp4             4          667479704d345620
 video/mp4             4          6674797069736f6d
 video/mp4             4          6674797066347620
 video/mp4             4          667479706d703432
 video/x-matroska      0          1a45dfa3
+
 image/png             0          89504e47
 image/jpeg            0          ffd8ff
 image/bmp             0          424d
 image/webp            0          52494646
 image/tiff            0          49492a00
 image/tiff            0          4d4d002a
-audio/mpeg            0          494433
+
+application/pdf       0          255044462d
 application/gzip      0          1f8b
 application/zip       0          504b0304
 application/vnd.rar   0          52617221

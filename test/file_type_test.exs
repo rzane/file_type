@@ -7,9 +7,13 @@ defmodule FileTypeTest do
   fixture "fixture.bmp", "image/bmp"
   fixture "fixture.tif", "image/tiff"
   fixture "fixture.webp", "image/webp"
+
   fixture "fixture.mp4", "video/mp4"
   fixture "fixture.mkv", "video/x-matroska"
+
   fixture "fixture.mp3", "audio/mpeg"
+  fixture "fixture.wav", "audio/x-wav"
+
   fixture "fixture.pdf", "application/pdf"
   fixture "fixture.zip", "application/zip"
   fixture "fixture.tar.gz", "application/gzip"
