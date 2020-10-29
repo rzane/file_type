@@ -3,7 +3,6 @@
 audio/mpeg            0          494433
 audio/x-wav           8          57415620
 audio/x-wav           8          57415645
-audio/ogg             0          4f676753
 
 video/mp4             4          667479704d534e56
 video/mp4             4          667479704d345620
@@ -33,3 +32,12 @@ application/zip       0          504b0304
 application/vnd.rar   0          52617221
 application/x-tar     257        757374617200
 application/x-tar     257        7573746172202000
+
+# OGG Containers (order is critical)
+audio/opus            28         4f70757348656164
+video/ogg             28         807468656f7261
+video/ogg             28         01766964656f00
+audio/ogg             28         7f464c4143
+audio/ogg             28         53706565782020
+audio/ogg             28         01766f72626973
+application/ogg       0          4f676753
