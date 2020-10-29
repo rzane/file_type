@@ -1,4 +1,6 @@
 defmodule FileType do
+  import FileType.Definition
+
   @minimum_bytes 4_100
 
   signature_file = Application.app_dir(:file_type, "priv/supported.txt")
@@ -29,6 +31,16 @@ defmodule FileType do
       {:ok, unquote(mime)}
     end
   end
+
+  ftyp "MSNV", do: "video/mp4"
+  ftyp "M4V", do: "video/mp4"
+  ftyp "isom", do: "video/mp4"
+  ftyp "f4v ", do: "video/mp4"
+  ftyp "mp42", do: "video/mp4"
+  ftyp "qt", do: "video/quicktime"
+  ftyp "heic", do: "image/heic"
+  ftyp "heix", do: "image/heic"
+  ftyp "mif1", do: "image/heic"
 
   def detect(_), do: {:error, :unrecognized}
 end
