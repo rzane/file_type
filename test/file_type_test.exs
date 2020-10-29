@@ -5,6 +5,7 @@ defmodule FileTypeTest do
   fixture "fixture.png", "image/png"
   fixture "fixture.jpg", "image/jpeg"
   fixture "fixture.bmp", "image/bmp"
+  fixture "fixture.tif", "image/tiff"
   fixture "fixture.webp", "image/webp"
   fixture "fixture.mp4", "video/mp4"
   fixture "fixture.mkv", "video/x-matroska"

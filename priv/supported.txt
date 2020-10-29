@@ -10,6 +10,8 @@ image/png             0          89504e47
 image/jpeg            0          ffd8ff
 image/bmp             0          424d
 image/webp            0          52494646
+image/tiff            0          49492a00
+image/tiff            0          4d4d002a
 audio/mpeg            0          494433
 application/gzip      0          1f8b
 application/zip       0          504b0304
