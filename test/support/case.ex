@@ -17,7 +17,6 @@ defmodule FileType.Case do
 
   def assert_mime(filename, mime) do
     path = Path.join("test/fixtures", filename)
-    assert {:ok, content} = FileType.read(path)
-    assert FileType.detect(content) == mime
+    assert {:ok, ^mime} = FileType.from_path(path)
   end
 end

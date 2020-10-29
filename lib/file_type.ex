@@ -15,19 +15,20 @@ defmodule FileType do
 
   @external_resource signature_file
 
-  def read(path) do
+  @spec from_path(binary) :: {:ok, binary} | {:error, File.posix | :unrecognized}
+  def from_path(path) when is_binary(path) do
     with {:ok, file} <- :file.open(path, [:read, :binary]),
          {:ok, data} <- :file.read(file, @minimum_bytes),
          :ok <- :file.close(file),
-         do: {:ok, data}
+         do: detect(data)
   end
 
-  @spec detect(binary) :: binary | nil
-  def detect(content)
-
+  @spec detect(binary) :: {:ok, binary} | {:error, :unrecognized}
   for {mime, offset, signature} <- signatures do
-    def detect(<<_::binary-size(unquote(offset))>> <> unquote(signature) <> _), do: unquote(mime)
+    def detect(<<_::binary-size(unquote(offset))>> <> unquote(signature) <> _) do
+      {:ok, unquote(mime)}
+    end
   end
 
-  def detect(_), do: nil
+  def detect(_), do: {:error, :unrecognized}
 end
