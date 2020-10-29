@@ -24,6 +24,7 @@ defmodule FileTypeTest do
   fixture "fixture.tar.gz", "application/gzip"
   fixture "fixture.rar", "application/vnd.rar"
   fixture "fixture.tar", "application/x-tar"
+  fixture "fixture.doc", "application/msword"
 
   # OGG Containers
   fixture "fixture.opus", "audio/opus"
