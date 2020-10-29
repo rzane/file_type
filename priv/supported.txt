@@ -18,6 +18,9 @@ image/bmp             0          424d
 image/webp            0          52494646
 image/tiff            0          49492a00
 image/tiff            0          4d4d002a
+image/heic            4          6674797068656963
+image/heic            4          6674797068656978
+image/heic            4          667479706d696631
 
 application/pdf       0          255044462d
 application/gzip      0          1f8b
