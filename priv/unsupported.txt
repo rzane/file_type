@@ -399,7 +399,6 @@
 # application/xslt+xml                                     0      3c78736c3a7374796c657368656574
 # application/xspf+xml                                     0      3c706c61796c6973742076657273696f6e3d2231
 # application/xspf+xml                                     0      3c706c61796c6973742076657273696f6e3d2731
-# application/zip                                          0      504b0304
 # audio/AMR                                                0      2321414d520a
 # audio/AMR                                                0      2321414d525f4d43312e300a
 # audio/AMR-WB                                             0      2321414d522d57420a

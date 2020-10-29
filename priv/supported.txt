@@ -12,3 +12,4 @@ image/bmp         0          424d
 image/webp        0          52494646
 audio/mpeg        0          494433
 application/gzip  0          1f8b
+application/zip   0          504b0304

@@ -10,5 +10,6 @@ defmodule FileTypeTest do
   fixture "fixture.mkv", "video/x-matroska"
   fixture "fixture.mp3", "audio/mpeg"
   fixture "fixture.pdf", "application/pdf"
+  fixture "fixture.zip", "application/zip"
   fixture "fixture.tar.gz", "application/gzip"
 end
