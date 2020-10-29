@@ -5,8 +5,8 @@ defmodule FileType.Macros do
     Base.decode16!(data, case: :lower)
   end
 
-  defmacro offset <~> data when is_integer(offset) do
-    quote do: <<_::binary-size(unquote(offset)), unquote(data)>>
+  defmacro magic(data, offset \\ 0) do
+    quote do: <<_::binary-size(unquote(offset)), unquote(data)>> <> _
   end
 
   defmacro ftyp(data) do
