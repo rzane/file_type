@@ -11,6 +11,11 @@ video/mp4             4          6674797069736f6d
 video/mp4             4          6674797066347620
 video/mp4             4          667479706d703432
 video/x-matroska      0          1a45dfa3
+video/quicktime       4          66726565
+video/quicktime       4          6d646174
+video/quicktime       4          6d6f6f76
+video/quicktime       4          77696465
+video/quicktime       4          667479707174
 
 image/png             0          89504e47
 image/jpeg            0          ffd8ff

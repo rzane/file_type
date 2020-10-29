@@ -12,6 +12,9 @@ defmodule FileTypeTest do
 
   fixture "fixture.mp4", "video/mp4"
   fixture "fixture.mkv", "video/x-matroska"
+  fixture "fixture.mov", "video/quicktime"
+  fixture "fixture-mjpeg.mov", "video/quicktime"
+  fixture "fixture-moov.mov", "video/quicktime"
 
   fixture "fixture.mp3", "audio/mpeg"
   fixture "fixture.wav", "audio/x-wav"
