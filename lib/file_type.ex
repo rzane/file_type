@@ -50,12 +50,12 @@ defmodule FileType do
 
   def detect("OggS" <> _ = data) do
     case data do
-      text("OpusHead", offset: 28) ->"audio/opus"
-      text(~h"807468656f7261", offset: 28) -> "video/ogg"
-      text(~h"01766964656f00", offset: 28) -> "video/ogg"
-      text("Speex", offset: 28) -> "audio/ogg"
-      text("\dFLAC", offset: 28) -> "audio/ogg"
-      text(~h"01766f72626973", offset: 28) -> "audio/ogg"
+      text(28 ~> "OpusHead") ->"audio/opus"
+      text(28 ~> ~h"807468656f7261") -> "video/ogg"
+      text(28 ~> ~h"01766964656f00") -> "video/ogg"
+      text(28 ~> "Speex") -> "audio/ogg"
+      text(28 ~> "\dFLAC") -> "audio/ogg"
+      text(28 ~> ~h"01766f72626973") -> "audio/ogg"
       _ -> "application/ogg"
     end
   end
