@@ -94,7 +94,6 @@
 # application/vnd.oasis.opendocument.text-master           0      504b0304
 # application/vnd.oasis.opendocument.text-template         0      504b0304
 # application/vnd.oasis.opendocument.text-web              0      504b0304
-# application/vnd.rar                                      0      52617221
 # application/vnd.rn-realmedia                             0      2e524d46
 # application/vnd.sqlite3                                  0      53514c69746520666f726d61742033
 # application/vnd.squashfs                                 0      68737173
