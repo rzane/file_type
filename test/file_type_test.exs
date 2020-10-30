@@ -630,15 +630,11 @@ defmodule FileTypeTest do
   end
 
   describe "video/3gpp" do
-    @tag :pending
     fixture "fixture.3gp", "video/3gpp"
-
-    @tag :pending
     fixture "fixture2.3gp", "video/3gpp"
   end
 
   describe "video/3gpp2" do
-    @tag :pending
     fixture "fixture.3g2", "video/3gpp2"
   end
 
@@ -649,13 +645,10 @@ defmodule FileTypeTest do
 
   describe "video/mp4" do
     fixture "fixture.mp4", "video/mp4"
-    fixture "fixture.m4v", "video/x-m4v"
     fixture "fixture-imovie.mp4", "video/mp4"
     fixture "fixture-isom.mp4", "video/mp4"
     fixture "fixture-isomv2.mp4", "video/mp4"
     fixture "fixture-mp4v2.mp4", "video/mp4"
-
-    @tag :pending
     fixture "fixture-dash.mp4", "video/mp4"
   end
 
@@ -691,6 +684,10 @@ defmodule FileTypeTest do
   describe "video/x-flv" do
     @tag :pending
     fixture "fixture.flv", "video/x-flv"
+  end
+
+  describe "video/x-m4v" do
+    fixture "fixture.m4v", "video/x-m4v"
   end
 
   describe "video/x-matroska" do

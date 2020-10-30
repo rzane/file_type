@@ -73,28 +73,28 @@ defmodule FileType.Signature do
   def match(magic(~h"504b0304")), do: {"zip", "application/zip"}
 
   # File-type boxes
-  def match(<<_::binary-size(4), "ftyp", type::binary-size(4)>> <> _)  do
-    case type do
-      "avif" -> {"avif", "image/avif"}
-      "mif1" -> {"heic", "image/heif"}
-      "msf1" -> {"heic", "image/heif-sequence"}
-      "heic" -> {"heic", "image/heic"}
-      "heix" -> {"heic", "image/heic"}
-      "hevc" -> {"heic", "image/heic-sequence"}
-      "hevx" -> {"heic", "image/heic-sequence"}
-      "qt  " -> {"mov", "video/quicktime"}
-      "M4V " -> {"m4v", "video/x-m4v"}
-      "M4P " -> {"m4p", "video/mp4"}
-      "M4B " -> {"m4b", "audio/mp4"}
-      "M4A " -> {"m4a", "audio/x-m4a"}
-      "F4V " -> {"f4v", "video/mp4"}
-      "F4P " -> {"f4p", "video/mp4"}
-      "F4A " -> {"f4a", "audio/mp4"}
-      "F4B " -> {"f4b", "audio/mp4"}
-      "crx " -> {"cr3", "image/x-canon-cr3"}
-      _ -> {"mp4", "video/mp4"}
-    end
-  end
+  def match(ftyp("avif")), do: {"avif", "image/avif"}
+  def match(ftyp("mif1")), do: {"heic", "image/heif"}
+  def match(ftyp("msf1")), do: {"heic", "image/heif-sequence"}
+  def match(ftyp("heic")), do: {"heic", "image/heic"}
+  def match(ftyp("heix")), do: {"heic", "image/heic"}
+  def match(ftyp("hevc")), do: {"heic", "image/heic-sequence"}
+  def match(ftyp("hevx")), do: {"heic", "image/heic-sequence"}
+  def match(ftyp("qt  ")), do: {"mov", "video/quicktime"}
+  def match(ftyp("M4V ")), do: {"m4v", "video/x-m4v"}
+  def match(ftyp("M4A ")), do: {"m4a", "audio/x-m4a"}
+  def match(ftyp("M4P ")), do: {"m4p", "video/mp4"}
+  def match(ftyp("F4V ")), do: {"f4v", "video/mp4"}
+  def match(ftyp("F4P ")), do: {"f4p", "video/mp4"}
+  def match(ftyp("M4B ")), do: {"m4b", "audio/mp4"}
+  def match(ftyp("F4A ")), do: {"f4a", "audio/mp4"}
+  def match(ftyp("F4B ")), do: {"f4b", "audio/mp4"}
+  def match(ftyp("crx ")), do: {"cr3", "image/x-canon-cr3"}
+  def match(ftyp("mj2s")), do: {"mj2", "video/mj2"}
+  def match(ftyp("mjp2")), do: {"mj2", "video/mj2"}
+  def match(ftyp("3g2")), do: {"3g2", "video/3gpp2"}
+  def match(ftyp("3g")), do: {"3gp", "video/3gpp"}
+  def match(ftyp("")), do: {"mp4", "video/mp4"}
 
   # More bytes!
   def match(magic(~h"757374617200", 257)), do: {"tar", "application/x-tar"}
