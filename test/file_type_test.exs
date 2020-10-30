@@ -70,9 +70,6 @@ defmodule FileTypeTest do
     fixture "fixture.cur", "application/octet-stream"
 
     @tag :pending
-    fixture "fixture.dmg", "application/octet-stream"
-
-    @tag :pending
     fixture "fixture.dng", "application/octet-stream"
 
     @tag :pending
@@ -362,6 +359,10 @@ defmodule FileTypeTest do
   describe "application/vnd.wv.csp+wbxml" do
     @tag :pending
     fixture "fixture.wv", "application/vnd.wv.csp+wbxml"
+  end
+
+  describe "application/x-apple-diskimage" do
+    fixture "fixture.dmg", "application/x-apple-diskimage"
   end
 
   describe "application/x-bzip2" do
