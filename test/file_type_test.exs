@@ -564,11 +564,6 @@ defmodule FileTypeTest do
     fixture "fixture.jpx", "image/jpx"
   end
 
-  describe "image/jxr" do
-    @tag :pending
-    fixture "fixture.jxr", "image/jxr"
-  end
-
   describe "image/ktx" do
     @tag :pending
     fixture "fixture.ktx", "image/ktx"
@@ -598,6 +593,10 @@ defmodule FileTypeTest do
   describe "image/vnd.mozilla.apng" do
     @tag :pending
     fixture "fixture.apng", "image/vnd.mozilla.apng"
+  end
+
+  describe "image/vnd.ms-photo" do
+    fixture "fixture.jxr", "image/vnd.ms-photo"
   end
 
   describe "image/webp" do

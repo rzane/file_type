@@ -71,6 +71,7 @@ defmodule FileType do
   defp match(magic(~h"49492a00")), do: "image/tiff"
   defp match(magic(~h"4d4d002a")), do: "image/tiff"
   defp match(magic("8BPS")), do: "image/vnd.adobe.photoshop"
+  defp match(magic(~h"4949bc")), do: "image/vnd.ms-photo"
 
   defp match(magic(~h"1f8b")), do: "application/gzip"
   defp match(magic(~h"504b0304")), do: "application/zip"
