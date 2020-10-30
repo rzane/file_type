@@ -535,7 +535,10 @@ defmodule FileTypeTest do
 
   describe "image/heic" do
     fixture "fixture-heic.heic", "image/heic"
-    fixture "fixture-mif1.heic", "image/heic"
+  end
+
+  describe "image/heif" do
+    fixture "fixture-mif1.heic", "image/heif"
   end
 
   describe "image/heif-sequence" do
@@ -646,7 +649,7 @@ defmodule FileTypeTest do
 
   describe "video/mp4" do
     fixture "fixture.mp4", "video/mp4"
-    fixture "fixture.m4v", "video/mp4"
+    fixture "fixture.m4v", "video/x-m4v"
     fixture "fixture-imovie.mp4", "video/mp4"
     fixture "fixture-isom.mp4", "video/mp4"
     fixture "fixture-isomv2.mp4", "video/mp4"

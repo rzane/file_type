@@ -13,80 +13,92 @@ defmodule FileType.Signature do
     quote do: <<_::binary-size(4), "ftyp", unquote(data)>> <> _
   end
 
-  @spec match(binary) :: binary | nil
+  @spec match(binary) :: {binary, binary} | nil
 
   # 2-byte signatures
-  def match(magic("BM")), do: "image/bmp"
-  def match(magic(~h"0b77")), do: "audio/vnd.dolby.dd-raw"
-  def match(magic(~h"7801")), do: "application/x-apple-diskimage"
-  def match(magic(~h"4d5a")), do: "application/x-msdownload"
-  def match(magic(~h"1fa0")), do: "application/x-compress"
-  def match(magic(~h"1f9d")), do: "application/x-compress"
+  def match(magic("BM")), do: {"bmp", "image/bmp"}
+  def match(magic(~h"0b77")), do: {"ac3", "audio/vnd.dolby.dd-raw"}
+  def match(magic(~h"7801")), do: {"dmg", "application/x-apple-diskimage"}
+  def match(magic(~h"4d5a")), do: {"exe", "application/x-msdownload"}
+  def match(magic(~h"1fa0")), do: {"Z", "application/x-compress"}
+  def match(magic(~h"1f9d")), do: {"Z", "application/x-compress"}
 
   # 3-byte signatures
-  def match(magic("ID3")), do: "audio/mpeg" # FIXME: file-type does a bit more work
-  def match(magic(~h"ffd8ff")), do: "image/jpeg"
-  def match(magic(~h"4949bc")), do: "image/vnd.ms-photo"
-  def match(magic(~h"1f8b")), do: "application/gzip"
-  def match(magic(~h"425a68")), do: "application/x-bzip2"
-  def match(magic(~h"435753")), do: "application/x-shockwave-flash"
-  def match(magic(~h"465753")), do: "application/x-shockwave-flash"
+  def match(magic("ID3")), do: {"mp3", "audio/mpeg"} # FIXME: file-type does a bit more work?
+  def match(magic(~h"ffd8ff")), do: {"jpg", "image/jpeg"}
+  def match(magic(~h"4949bc")), do: {"jxr", "image/vnd.ms-photo"}
+  def match(magic(~h"1f8b")), do: {"gz", "application/gzip"}
+  def match(magic(~h"425a68")), do: {"bz2", "application/x-bzip2"}
+  def match(magic(~h"435753")), do: {"swf", "application/x-shockwave-flash"}
+  def match(magic(~h"465753")), do: {"swf", "application/x-shockwave-flash"}
+  def match(magic(~h"474946")), do: {"gif", "image/gif"}
 
   # 4-byte signatures
-  def match(magic(~h"474946")), do: "image/gif"
-  def match(magic("FLIF")), do: "image/flif"
-  def match(magic("8BPS")), do: "image/vnd.adobe.photoshop"
-  def match(magic("WEBP", 8)), do: "image/webp"
-  def match(magic("free", 4)), do: "video/quicktime"
-  def match(magic("mdat", 4)), do: "video/quicktime"
-  def match(magic("moov", 4)), do: "video/quicktime"
-  def match(magic("wide", 4)), do: "video/quicktime"
-  def match(magic("WAVE", 8)), do: "audio/vnd.wave"
-  def match(magic("%PDF-")), do: "application/pdf" # FIXME: Adobe Illustrator
-  def match(magic("Rar!")), do: "application/vnd.rar"
+  def match(magic("FLIF")), do: {"flif", "image/flif"}
+  def match(magic("8BPS")), do: {"psd", "image/vnd.adobe.photoshop"}
+  def match(magic("WEBP", 8)), do: {"webp", "image/webp"}
+  def match(magic("free", 4)), do: {"mov", "video/quicktime"}
+  def match(magic("mdat", 4)), do: {"mov", "video/quicktime"}
+  def match(magic("moov", 4)), do: {"mov", "video/quicktime"}
+  def match(magic("wide", 4)), do: {"mov", "video/quicktime"}
+  def match(magic("WAVE", 8)), do: {"wav", "audio/vnd.wave"}
+  def match(magic("%PDF-")), do: {"pdf", "application/pdf"} # FIXME: Adobe Illustrator
+  def match(magic("Rar!")), do: {"rar", "application/vnd.rar"}
+  def match(magic(~h"c5d0d3c6")), do: {"eps", "application/eps"}
 
-  def match(magic("OggS") = data) do
+  def match(magic("%!PS") = data) do
     case data do
-       magic("OpusHead", 28) -> "audio/opus"
-       magic("Speex", 28) -> "audio/ogg"
-       magic("\dFLAC", 28) -> "audio/ogg"
-       magic(~h"01766f72626973", 28) -> "audio/ogg"
-       magic(~h"807468656f7261", 28) -> "video/ogg"
-       magic(~h"01766964656f00", 28) -> "video/ogg"
-      _ -> "application/ogg"
+      magic(" EPSF-", 14) -> {"eps", "application/eps"}
+      _ -> {"ps", "application/postscript"}
     end
   end
 
-  # Postscript
-  # FIXME: Some EPS files not matching?
-  def match(magic("%!PS") = data) do
+  def match(magic("OggS") = data) do
     case data do
-      magic(" EPSF-", 14) -> "application/eps"
-      _ -> "application/postscript"
+       magic(~h"4f70757348656164", 28) -> {"opus", "audio/opus"}
+       magic(~h"53706565782020", 28) -> {"spx", "audio/ogg"}
+       magic(~h"7f464c4143", 28) -> {"oga", "audio/ogg"}
+       magic(~h"01766f72626973", 28) -> {"ogg", "audio/ogg"}
+       magic(~h"807468656f7261", 28) -> {"ogv", "video/ogg"}
+       magic(~h"01766964656f00", 28) -> {"ogm", "video/ogg"}
+      _ -> {"ogx", "application/ogg"}
     end
   end
 
   # 8-byte signatures
-  def match(magic(~h"1a45dfa3")), do: "video/x-matroska"
-  def match(magic(~h"89504e47")), do: "image/png"
-  def match(magic(~h"49492a00")), do: "image/tiff"
-  def match(magic(~h"4d4d002a")), do: "image/tiff"
-  def match(magic(~h"504b0304")), do: "application/zip"
+  def match(magic(~h"1a45dfa3")), do: {"mkv", "video/x-matroska"}
+  def match(magic(~h"89504e47")), do: {"png", "image/png"}
+  def match(magic(~h"49492a00")), do: {"tif", "image/tiff"}
+  def match(magic(~h"4d4d002a")), do: {"tif", "image/tiff"}
+  def match(magic(~h"504b0304")), do: {"zip", "application/zip"}
 
   # File-type boxes
-  def match(ftyp("heic")), do: "image/heic"
-  def match(ftyp("heix")), do: "image/heic"
-  def match(ftyp("mif1")), do: "image/heic"
-  def match(ftyp("MSNV")), do: "video/mp4"
-  def match(ftyp("M4V")), do: "video/mp4"
-  def match(ftyp("isom")), do: "video/mp4"
-  def match(ftyp("f4v ")), do: "video/mp4"
-  def match(ftyp("mp42")), do: "video/mp4"
-  def match(ftyp("qt")), do: "video/quicktime"
+  def match(<<_::binary-size(4), "ftyp", type::binary-size(4)>> <> _)  do
+    case type do
+      "avif" -> {"avif", "image/avif"}
+      "mif1" -> {"heic", "image/heif"}
+      "msf1" -> {"heic", "image/heif-sequence"}
+      "heic" -> {"heic", "image/heic"}
+      "heix" -> {"heic", "image/heic"}
+      "hevc" -> {"heic", "image/heic-sequence"}
+      "hevx" -> {"heic", "image/heic-sequence"}
+      "qt  " -> {"mov", "video/quicktime"}
+      "M4V " -> {"m4v", "video/x-m4v"}
+      "M4P " -> {"m4p", "video/mp4"}
+      "M4B " -> {"m4b", "audio/mp4"}
+      "M4A " -> {"m4a", "audio/x-m4a"}
+      "F4V " -> {"f4v", "video/mp4"}
+      "F4P " -> {"f4p", "video/mp4"}
+      "F4A " -> {"f4a", "audio/mp4"}
+      "F4B " -> {"f4b", "audio/mp4"}
+      "crx " -> {"cr3", "image/x-canon-cr3"}
+      _ -> {"mp4", "video/mp4"}
+    end
+  end
 
   # More bytes!
-  def match(magic(~h"757374617200", 257)), do: "application/x-tar"
-  def match(magic(~h"7573746172202000", 257)), do: "application/x-tar"
+  def match(magic(~h"757374617200", 257)), do: {"tar", "application/x-tar"}
+  def match(magic(~h"7573746172202000", 257)), do: {"tar", "application/x-tar"}
 
   def match(_), do: nil
 end

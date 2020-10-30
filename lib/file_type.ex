@@ -1,8 +1,12 @@
 defmodule FileType do
   alias FileType.Signature
 
+  @enforce_keys [:ext, :mime]
+  defstruct [:ext, :mime]
+
   @required_bytes 265
 
+  @type t :: %__MODULE__{ext: binary, mime: binary}
   @type reason :: File.posix() | :unrecognized
 
   @doc """
@@ -20,7 +24,7 @@ defmodule FileType do
       {:error, :enoexist}
 
   """
-  @spec from_path(binary) :: {:ok, binary} | {:error, reason}
+  @spec from_path(binary) :: {:ok, t} | {:error, reason}
   def from_path(path) when is_binary(path) do
     with {:ok, file} <- File.open(path, [:read, :binary]) do
       from_file(file)
@@ -34,12 +38,12 @@ defmodule FileType do
       {:ok, "image/png"}
 
   """
-  @spec from_io(File.io_device()) :: {:ok, binary} | {:error, reason}
+  @spec from_io(File.io_device()) :: {:ok, t} | {:error, reason}
   def from_io(device) do
     device
     |> IO.binread(@required_bytes)
     |> Signature.match()
-    |> to_result()
+    |> normalize()
   end
 
   defp from_file(device) do
@@ -48,6 +52,6 @@ defmodule FileType do
     File.close(device)
   end
 
-  defp to_result(nil), do: {:error, :unrecognized}
-  defp to_result(mime), do: {:ok, mime}
+  defp normalize(nil), do: {:error, :unrecognized}
+  defp normalize({ext, mime}), do: {:ok, %__MODULE__{ext: ext, mime: mime}}
 end
