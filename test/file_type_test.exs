@@ -365,7 +365,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-bzip2" do
-    @tag :pending
     fixture "fixture.bz2", "application/x-bzip2"
   end
 
