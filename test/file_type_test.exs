@@ -1,6 +1,5 @@
 defmodule FileTypeTest do
   use FileType.Case
-  doctest FileType
 
   fixture "fixture.png", "image/png"
   fixture "fixture.jpg", "image/jpeg"

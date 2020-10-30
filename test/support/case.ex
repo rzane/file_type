@@ -11,8 +11,7 @@ defmodule FileType.Case do
     quote do
       test unquote(filename) <> " is " <> unquote(mime) do
         path = Path.join("test/fixtures", unquote(filename))
-        assert {:ok, data} = FileType.read(path)
-        assert FileType.get(data) == unquote(mime)
+        assert FileType.from_path(path) == {:ok, unquote(mime)}
       end
     end
   end

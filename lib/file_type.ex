@@ -1,7 +1,7 @@
 defmodule FileType do
-  @minimum_bytes 4_100
+  @required_bytes 4_100
 
-  @type read_error :: File.posix() | :badarg | :terminated
+  @type reason :: File.posix() | :badarg | :terminated | :unrecognized
 
   defmacrop sigil_h({:<<>>, _, [data]}, []) do
     Base.decode16!(data, case: :lower)
@@ -15,71 +15,82 @@ defmodule FileType do
     quote do: <<_::binary-size(4), "ftyp", unquote(data)>> <> _
   end
 
-  @spec read(binary) :: {:ok, binary} | {:error, read_error}
-  def read(path) when is_binary(path) do
-    with {:ok, file} <- :file.open(path, [:read, :binary]),
-         {:ok, data} <- :file.read(file, @minimum_bytes),
-         :ok <- :file.close(file),
-         do: {:ok, data}
-  end
+  @doc """
+  Determine the MIME type of a file on disk.
 
-  @spec fetch(binary) :: {:ok, binary}  | :error
-  def fetch(data) do
-    case get(data) do
-      nil -> :error
-      mime -> {:ok, mime}
+  ## Examples
+
+      iex> FileType.from_path("file.png")
+      {:ok, "image/png"}
+
+      iex> FileType.from_path("file.abc")
+      {:error, :unrecognized}
+
+      iex> FileType.from_path("does-not-exist.txt")
+      {:error, :enoexist}
+
+  """
+  @spec from_path(binary) :: {:ok, binary} | {:error, reason}
+  def from_path(path) when is_binary(path) do
+    with {:ok, file} <- :file.open(path, [:read, :binary]),
+         {:ok, data} <- :file.read(file, @required_bytes),
+         :ok <- :file.close(file) do
+      case match(data) do
+        nil -> {:error, :unrecognized}
+        mime -> {:ok, mime}
+      end
     end
   end
 
-  @spec get(binary) :: binary | nil
-  def get(ftyp("MSNV")), do: "video/mp4"
-  def get(ftyp("M4V")), do: "video/mp4"
-  def get(ftyp("isom")), do: "video/mp4"
-  def get(ftyp("f4v ")), do: "video/mp4"
-  def get(ftyp("mp42")), do: "video/mp4"
-  def get(ftyp("qt")), do: "video/quicktime"
-  def get(magic("free", 4)), do: "video/quicktime"
-  def get(magic("mdat", 4)), do: "video/quicktime"
-  def get(magic("moov", 4)), do: "video/quicktime"
-  def get(magic("wide", 4)), do: "video/quicktime"
-  def get(magic(~h"1a45dfa3")), do: "video/x-matroska"
+  @spec match(binary) :: binary | nil
+  defp match(ftyp("MSNV")), do: "video/mp4"
+  defp match(ftyp("M4V")), do: "video/mp4"
+  defp match(ftyp("isom")), do: "video/mp4"
+  defp match(ftyp("f4v ")), do: "video/mp4"
+  defp match(ftyp("mp42")), do: "video/mp4"
+  defp match(ftyp("qt")), do: "video/quicktime"
+  defp match(magic("free", 4)), do: "video/quicktime"
+  defp match(magic("mdat", 4)), do: "video/quicktime"
+  defp match(magic("moov", 4)), do: "video/quicktime"
+  defp match(magic("wide", 4)), do: "video/quicktime"
+  defp match(magic(~h"1a45dfa3")), do: "video/x-matroska"
 
-  def get(magic("ID3")), do: "audio/mpeg"
-  def get(magic("WAV", 8)), do: "audio/x-wav"
+  defp match(magic("ID3")), do: "audio/mpeg"
+  defp match(magic("WAV", 8)), do: "audio/x-wav"
 
-  def get(magic("BM")), do: "image/bmp"
-  def get(magic("RIFF")), do: "image/webp"
-  def get(ftyp("heic")), do: "image/heic"
-  def get(ftyp("heix")), do: "image/heic"
-  def get(ftyp("mif1")), do: "image/heic"
-  def get(magic(~h"89504e47")), do: "image/png"
-  def get(magic(~h"ffd8ff")), do: "image/jpeg"
-  def get(magic(~h"49492a00")), do: "image/tiff"
-  def get(magic(~h"4d4d002a")), do: "image/tiff"
+  defp match(magic("BM")), do: "image/bmp"
+  defp match(magic("RIFF")), do: "image/webp"
+  defp match(ftyp("heic")), do: "image/heic"
+  defp match(ftyp("heix")), do: "image/heic"
+  defp match(ftyp("mif1")), do: "image/heic"
+  defp match(magic(~h"89504e47")), do: "image/png"
+  defp match(magic(~h"ffd8ff")), do: "image/jpeg"
+  defp match(magic(~h"49492a00")), do: "image/tiff"
+  defp match(magic(~h"4d4d002a")), do: "image/tiff"
 
-  def get(magic(~h"1f8b")), do: "application/gzip"
-  def get(magic(~h"504b0304")), do: "application/zip"
-  def get(magic("Rar!")), do: "application/vnd.rar"
-  def get(magic(~h"757374617200", 257)), do: "application/x-tar"
-  def get(magic(~h"7573746172202000", 257)), do: "application/x-tar"
+  defp match(magic(~h"1f8b")), do: "application/gzip"
+  defp match(magic(~h"504b0304")), do: "application/zip"
+  defp match(magic("Rar!")), do: "application/vnd.rar"
+  defp match(magic(~h"757374617200", 257)), do: "application/x-tar"
+  defp match(magic(~h"7573746172202000", 257)), do: "application/x-tar"
 
-  def get(magic("%PDF-")), do: "application/pdf"
-  def get(magic("%!PS")), do: "application/postscript"
-  def get(magic(~h"042521")), do: "application/postscript"
-  def get(magic(~h"c5d0d3c6")), do: "application/postscript"
-  def get(magic("8BPS")), do: "application/vnd.adobe.photoshop"
+  defp match(magic("%PDF-")), do: "application/pdf"
+  defp match(magic("%!PS")), do: "application/postscript"
+  defp match(magic(~h"042521")), do: "application/postscript"
+  defp match(magic(~h"c5d0d3c6")), do: "application/postscript"
+  defp match(magic("8BPS")), do: "application/vnd.adobe.photoshop"
 
-  def get(magic(~h"fe370023")), do: "application/msword"
-  def get(magic(~h"31be0000")), do: "application/msword"
-  def get(magic(~h"504f5e5160")), do: "application/msword"
-  def get(magic(~h"dba52d000000")), do: "application/msword"
-  def get(magic("MSWordDoc", 2108)), do: "application/msword"
-  def get(magic("MSWordDoc", 2112)), do: "application/msword"
-  def get(magic("Microsoft Word document data", 2112)), do: "application/msword"
-  def get(magic("bjbj", 546)), do: "application/msword"
-  def get(magic("jbjb", 546)), do: "application/msword"
+  defp match(magic(~h"fe370023")), do: "application/msword"
+  defp match(magic(~h"31be0000")), do: "application/msword"
+  defp match(magic(~h"504f5e5160")), do: "application/msword"
+  defp match(magic(~h"dba52d000000")), do: "application/msword"
+  defp match(magic("MSWordDoc", 2108)), do: "application/msword"
+  defp match(magic("MSWordDoc", 2112)), do: "application/msword"
+  defp match(magic("Microsoft Word document data", 2112)), do: "application/msword"
+  defp match(magic("bjbj", 546)), do: "application/msword"
+  defp match(magic("jbjb", 546)), do: "application/msword"
 
-  def get("OggS" <> _ = data) do
+  defp match("OggS" <> _ = data) do
     case data do
        magic("OpusHead", 28) -> "audio/opus"
        magic("Speex", 28) -> "audio/ogg"
@@ -91,5 +102,5 @@ defmodule FileType do
     end
   end
 
-  def get(_), do: nil
+  defp match(_), do: nil
 end
