@@ -217,11 +217,6 @@ defmodule FileTypeTest do
     fixture "fixture.rtf", "application/rtf"
   end
 
-  describe "application/vnd.adobe.flash.movie" do
-    @tag :pending
-    fixture "fixture.swf", "application/vnd.adobe.flash.movie"
-  end
-
   describe "application/vnd.debian.binary-package" do
     @tag :pending
     fixture "fixture.deb", "application/vnd.debian.binary-package"
@@ -384,6 +379,10 @@ defmodule FileTypeTest do
   describe "application/x-rpm" do
     @tag :pending
     fixture "fixture.rpm", "application/x-rpm"
+  end
+
+  describe "application/x-shockwave-flash" do
+    fixture "fixture.swf", "application/x-shockwave-flash"
   end
 
   describe "application/x-tar" do

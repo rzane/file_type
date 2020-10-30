@@ -81,8 +81,12 @@ defmodule FileType do
   defp match(magic(~h"425a68")), do: "application/x-bzip2"
   defp match(magic(~h"7801")), do: "application/x-apple-diskimage"
   defp match(magic(~h"4d5a")), do: "application/x-msdownload"
+
   defp match(magic(~h"1fa0")), do: "application/x-compress"
   defp match(magic(~h"1f9d")), do: "application/x-compress"
+
+  defp match(magic(~h"435753")), do: "application/x-shockwave-flash"
+  defp match(magic(~h"465753")), do: "application/x-shockwave-flash"
 
   defp match(magic("%PDF-")), do: "application/pdf"
   defp match(magic(~h"042521")), do: "application/postscript"
