@@ -78,6 +78,7 @@ defmodule FileType do
   defp match(magic(~h"757374617200", 257)), do: "application/x-tar"
   defp match(magic(~h"7573746172202000", 257)), do: "application/x-tar"
   defp match(magic(~h"7801")), do: "application/x-apple-diskimage"
+  defp match(magic(~h"4d5a")), do: "application/x-msdownload"
 
   defp match(magic("%PDF-")), do: "application/pdf"
   defp match(magic("%!PS")), do: "application/postscript"

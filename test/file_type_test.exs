@@ -79,9 +79,6 @@ defmodule FileTypeTest do
     fixture "fixture.dsf", "application/octet-stream"
 
     @tag :pending
-    fixture "fixture.exe", "application/octet-stream"
-
-    @tag :pending
     fixture "fixture.f4a", "application/octet-stream"
 
     @tag :pending
@@ -373,6 +370,10 @@ defmodule FileTypeTest do
   describe "application/x-chrome-extension" do
     @tag :pending
     fixture "fixture.crx", "application/x-chrome-extension"
+  end
+
+  describe "application/x-msdownload" do
+    fixture "fixture.exe", "application/x-msdownload"
   end
 
   describe "application/x-rpm" do
