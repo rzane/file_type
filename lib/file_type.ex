@@ -55,6 +55,7 @@ defmodule FileType do
   defp match(magic("wide", 4)), do: "video/quicktime"
   defp match(magic(~h"1a45dfa3")), do: "video/x-matroska"
 
+  defp match(magic("\vw")), do: "audio/vnd.dolby.dd-raw"
   defp match(magic("ID3")), do: "audio/mpeg"
   defp match(magic("WAV", 8)), do: "audio/x-wav"
 

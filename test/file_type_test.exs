@@ -420,11 +420,6 @@ defmodule FileTypeTest do
     fixture "fixture-id3v2.aac", "audio/aac"
   end
 
-  describe "audio/ac3" do
-    @tag :pending
-    fixture "fixture.ac3", "audio/ac3"
-  end
-
   describe "audio/midi" do
     @tag :pending
     fixture "fixture.mid", "audio/midi"
@@ -470,6 +465,10 @@ defmodule FileTypeTest do
   describe "audio/qcelp" do
     @tag :pending
     fixture "fixture.qcp", "audio/qcelp"
+  end
+
+  describe "audio/vnd.dolby.dd-raw" do
+    fixture "fixture.ac3", "audio/vnd.dolby.dd-raw"
   end
 
   describe "audio/x-aiff" do
