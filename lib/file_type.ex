@@ -1,5 +1,5 @@
 defmodule FileType do
-  @required_bytes 300
+  @required_bytes 265
 
   @type reason :: File.posix() | :badarg | :terminated | :unrecognized
 
@@ -43,62 +43,38 @@ defmodule FileType do
   end
 
   @spec match(binary) :: binary | nil
-  defp match(ftyp("MSNV")), do: "video/mp4"
-  defp match(ftyp("M4V")), do: "video/mp4"
-  defp match(ftyp("isom")), do: "video/mp4"
-  defp match(ftyp("f4v ")), do: "video/mp4"
-  defp match(ftyp("mp42")), do: "video/mp4"
-  defp match(ftyp("qt")), do: "video/quicktime"
+
+  # 2-byte signatures
+  defp match(magic("BM")), do: "image/bmp"
+  defp match(magic(~h"0b77")), do: "audio/vnd.dolby.dd-raw"
+  defp match(magic(~h"7801")), do: "application/x-apple-diskimage"
+  defp match(magic(~h"4d5a")), do: "application/x-msdownload"
+  defp match(magic(~h"1fa0")), do: "application/x-compress"
+  defp match(magic(~h"1f9d")), do: "application/x-compress"
+
+  # 3-byte signatures
+  defp match(magic("ID3")), do: "audio/mpeg" # FIXME: file-type does a bit more work
+  defp match(magic(~h"ffd8ff")), do: "image/jpeg"
+  defp match(magic(~h"4949bc")), do: "image/vnd.ms-photo"
+  defp match(magic(~h"1f8b")), do: "application/gzip"
+  defp match(magic(~h"425a68")), do: "application/x-bzip2"
+  defp match(magic(~h"435753")), do: "application/x-shockwave-flash"
+  defp match(magic(~h"465753")), do: "application/x-shockwave-flash"
+
+  # 4-byte signatures
+  defp match(magic(~h"474946")), do: "image/gif"
+  defp match(magic("FLIF")), do: "image/flif"
+  defp match(magic("8BPS")), do: "image/vnd.adobe.photoshop"
+  defp match(magic("WEBP", 8)), do: "image/webp"
   defp match(magic("free", 4)), do: "video/quicktime"
   defp match(magic("mdat", 4)), do: "video/quicktime"
   defp match(magic("moov", 4)), do: "video/quicktime"
   defp match(magic("wide", 4)), do: "video/quicktime"
-  defp match(magic(~h"1a45dfa3")), do: "video/x-matroska"
-
-  defp match(magic("\vw")), do: "audio/vnd.dolby.dd-raw"
-  defp match(magic("ID3")), do: "audio/mpeg"
-  defp match(magic("WAV", 8)), do: "audio/x-wav"
-
-  defp match(magic("BM")), do: "image/bmp"
-  defp match(magic("RIFF")), do: "image/webp"
-  defp match(ftyp("heic")), do: "image/heic"
-  defp match(ftyp("heix")), do: "image/heic"
-  defp match(ftyp("mif1")), do: "image/heic"
-  defp match(magic(~h"89504e47")), do: "image/png"
-  defp match(magic(~h"ffd8ff")), do: "image/jpeg"
-  defp match(magic(~h"474946")), do: "image/gif"
-  defp match(magic("FLIF")), do: "image/flif"
-  defp match(magic(~h"49492a00")), do: "image/tiff"
-  defp match(magic(~h"4d4d002a")), do: "image/tiff"
-  defp match(magic("8BPS")), do: "image/vnd.adobe.photoshop"
-  defp match(magic(~h"4949bc")), do: "image/vnd.ms-photo"
-
-  defp match(magic(~h"1f8b")), do: "application/gzip"
-  defp match(magic(~h"504b0304")), do: "application/zip"
+  defp match(magic("WAVE", 8)), do: "audio/vnd.wave"
+  defp match(magic("%PDF-")), do: "application/pdf" # FIXME: Adobe Illustrator
   defp match(magic("Rar!")), do: "application/vnd.rar"
-  defp match(magic(~h"757374617200", 257)), do: "application/x-tar"
-  defp match(magic(~h"7573746172202000", 257)), do: "application/x-tar"
-  defp match(magic(~h"425a68")), do: "application/x-bzip2"
-  defp match(magic(~h"7801")), do: "application/x-apple-diskimage"
-  defp match(magic(~h"4d5a")), do: "application/x-msdownload"
 
-  defp match(magic(~h"1fa0")), do: "application/x-compress"
-  defp match(magic(~h"1f9d")), do: "application/x-compress"
-
-  defp match(magic(~h"435753")), do: "application/x-shockwave-flash"
-  defp match(magic(~h"465753")), do: "application/x-shockwave-flash"
-
-  defp match(magic("%PDF-")), do: "application/pdf"
-  defp match(magic(~h"042521")), do: "application/postscript"
-  defp match(magic(~h"c5d0d3c6")), do: "application/postscript"
-  defp match(magic("%!PS") = data) do
-    case data do
-      magic(" EPSF-", 14) -> "application/eps"
-      _ -> "application/postscript"
-    end
-  end
-
-  defp match("OggS" <> _ = data) do
+  defp match(magic("OggS") = data) do
     case data do
        magic("OpusHead", 28) -> "audio/opus"
        magic("Speex", 28) -> "audio/ogg"
@@ -109,6 +85,37 @@ defmodule FileType do
       _ -> "application/ogg"
     end
   end
+
+  # Postscript
+  # FIXME: Some EPS files not matching?
+  defp match(magic("%!PS") = data) do
+    case data do
+      magic(" EPSF-", 14) -> "application/eps"
+      _ -> "application/postscript"
+    end
+  end
+
+  # 8-byte signatures
+  defp match(magic(~h"1a45dfa3")), do: "video/x-matroska"
+  defp match(magic(~h"89504e47")), do: "image/png"
+  defp match(magic(~h"49492a00")), do: "image/tiff"
+  defp match(magic(~h"4d4d002a")), do: "image/tiff"
+  defp match(magic(~h"504b0304")), do: "application/zip"
+
+  # File-type boxes
+  defp match(ftyp("heic")), do: "image/heic"
+  defp match(ftyp("heix")), do: "image/heic"
+  defp match(ftyp("mif1")), do: "image/heic"
+  defp match(ftyp("MSNV")), do: "video/mp4"
+  defp match(ftyp("M4V")), do: "video/mp4"
+  defp match(ftyp("isom")), do: "video/mp4"
+  defp match(ftyp("f4v ")), do: "video/mp4"
+  defp match(ftyp("mp42")), do: "video/mp4"
+  defp match(ftyp("qt")), do: "video/quicktime"
+
+  # More bytes!
+  defp match(magic(~h"757374617200", 257)), do: "application/x-tar"
+  defp match(magic(~h"7573746172202000", 257)), do: "application/x-tar"
 
   defp match(_), do: nil
 end

@@ -477,6 +477,10 @@ defmodule FileTypeTest do
     fixture "fixture.ac3", "audio/vnd.dolby.dd-raw"
   end
 
+  describe "audio/vnd.wave" do
+    fixture "fixture.wav", "audio/vnd.wave"
+  end
+
   describe "audio/x-aiff" do
     @tag :pending
     fixture "fixture.aif", "audio/x-aiff"
@@ -493,10 +497,6 @@ defmodule FileTypeTest do
   describe "audio/x-s3m" do
     @tag :pending
     fixture "fixture.s3m", "audio/x-s3m"
-  end
-
-  describe "audio/x-wav" do
-    fixture "fixture.wav", "audio/x-wav"
   end
 
   describe "font/otf" do
