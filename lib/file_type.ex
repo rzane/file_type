@@ -65,6 +65,7 @@ defmodule FileType do
   defp match(ftyp("mif1")), do: "image/heic"
   defp match(magic(~h"89504e47")), do: "image/png"
   defp match(magic(~h"ffd8ff")), do: "image/jpeg"
+  defp match(magic(~h"474946")), do: "image/gif"
   defp match(magic(~h"49492a00")), do: "image/tiff"
   defp match(magic(~h"4d4d002a")), do: "image/tiff"
 

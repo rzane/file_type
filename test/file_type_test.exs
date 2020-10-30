@@ -2,6 +2,7 @@ defmodule FileTypeTest do
   use FileType.Case
 
   fixture "fixture.png", "image/png"
+  fixture "fixture.gif", "image/gif"
   fixture "fixture.jpg", "image/jpeg"
   fixture "fixture.bmp", "image/bmp"
   fixture "fixture.tif", "image/tiff"
