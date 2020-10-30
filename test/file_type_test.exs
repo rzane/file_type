@@ -149,9 +149,6 @@ defmodule FileTypeTest do
     fixture "fixture.rw2", "application/octet-stream"
 
     @tag :pending
-    fixture "fixture.tar.Z", "application/octet-stream"
-
-    @tag :pending
     fixture "fixture.tar.lz", "application/octet-stream"
 
     @tag :pending
@@ -375,6 +372,10 @@ defmodule FileTypeTest do
   describe "application/x-chrome-extension" do
     @tag :pending
     fixture "fixture.crx", "application/x-chrome-extension"
+  end
+
+  describe "application/x-compress" do
+    fixture "fixture.tar.Z", "application/x-compress"
   end
 
   describe "application/x-msdownload" do
