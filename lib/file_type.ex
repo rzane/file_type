@@ -81,9 +81,14 @@ defmodule FileType do
   defp match(magic(~h"4d5a")), do: "application/x-msdownload"
 
   defp match(magic("%PDF-")), do: "application/pdf"
-  defp match(magic("%!PS")), do: "application/postscript"
   defp match(magic(~h"042521")), do: "application/postscript"
   defp match(magic(~h"c5d0d3c6")), do: "application/postscript"
+  defp match(magic("%!PS") = data) do
+    case data do
+      magic(" EPSF-", 14) -> "application/eps"
+      _ -> "application/postscript"
+    end
+  end
 
   defp match("OggS" <> _ = data) do
     case data do

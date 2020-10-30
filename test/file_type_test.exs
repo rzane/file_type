@@ -11,6 +11,13 @@ defmodule FileTypeTest do
     fixture "fixture.epub", "application/epub+zip"
   end
 
+  describe "application/eps" do
+    @tag :pending
+    fixture "fixture.eps", "application/eps"
+
+    fixture "fixture2.eps", "application/eps"
+  end
+
   describe "application/gzip" do
     fixture "fixture.tar.gz", "application/gzip"
   end
@@ -202,9 +209,7 @@ defmodule FileTypeTest do
   end
 
   describe "application/postscript" do
-    fixture "fixture.eps", "application/postscript"
     fixture "fixture.ps", "application/postscript"
-    fixture "fixture2.eps", "application/postscript"
 
     @tag :pending
     fixture "fixture.ai", "application/postscript"
