@@ -24,9 +24,6 @@ defmodule FileTypeTest do
   fixture "fixture.rar", "application/vnd.rar"
   fixture "fixture.tar", "application/x-tar"
 
-  # Microsoft
-  fixture "fixture.doc", "application/msword"
-
   # Adobe
   fixture "fixture.pdf", "application/pdf"
   fixture "fixture.ps", "application/postscript"

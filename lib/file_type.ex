@@ -1,5 +1,5 @@
 defmodule FileType do
-  @required_bytes 4_100
+  @required_bytes 300
 
   @type reason :: File.posix() | :badarg | :terminated | :unrecognized
 
@@ -79,16 +79,6 @@ defmodule FileType do
   defp match(magic(~h"042521")), do: "application/postscript"
   defp match(magic(~h"c5d0d3c6")), do: "application/postscript"
   defp match(magic("8BPS")), do: "application/vnd.adobe.photoshop"
-
-  defp match(magic(~h"fe370023")), do: "application/msword"
-  defp match(magic(~h"31be0000")), do: "application/msword"
-  defp match(magic(~h"504f5e5160")), do: "application/msword"
-  defp match(magic(~h"dba52d000000")), do: "application/msword"
-  defp match(magic("MSWordDoc", 2108)), do: "application/msword"
-  defp match(magic("MSWordDoc", 2112)), do: "application/msword"
-  defp match(magic("Microsoft Word document data", 2112)), do: "application/msword"
-  defp match(magic("bjbj", 546)), do: "application/msword"
-  defp match(magic("jbjb", 546)), do: "application/msword"
 
   defp match("OggS" <> _ = data) do
     case data do
