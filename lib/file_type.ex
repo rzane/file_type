@@ -69,6 +69,7 @@ defmodule FileType do
   defp match(magic("FLIF")), do: "image/flif"
   defp match(magic(~h"49492a00")), do: "image/tiff"
   defp match(magic(~h"4d4d002a")), do: "image/tiff"
+  defp match(magic("8BPS")), do: "image/vnd.adobe.photoshop"
 
   defp match(magic(~h"1f8b")), do: "application/gzip"
   defp match(magic(~h"504b0304")), do: "application/zip"
@@ -80,7 +81,6 @@ defmodule FileType do
   defp match(magic("%!PS")), do: "application/postscript"
   defp match(magic(~h"042521")), do: "application/postscript"
   defp match(magic(~h"c5d0d3c6")), do: "application/postscript"
-  defp match(magic("8BPS")), do: "application/vnd.adobe.photoshop"
 
   defp match("OggS" <> _ = data) do
     case data do
