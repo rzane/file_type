@@ -1,7 +1,7 @@
 defmodule FileType do
   @required_bytes 265
 
-  @type reason :: File.posix() | :badarg | :terminated | :unrecognized
+  @type reason :: File.posix() | :unrecognized
 
   defmacrop sigil_h({:<<>>, _, [data]}, []) do
     Base.decode16!(data, case: :lower)
@@ -32,15 +32,27 @@ defmodule FileType do
   """
   @spec from_path(binary) :: {:ok, binary} | {:error, reason}
   def from_path(path) when is_binary(path) do
-    with {:ok, file} <- :file.open(path, [:read, :binary]),
-         {:ok, data} <- :file.read(file, @required_bytes),
-         :ok <- :file.close(file) do
-      case match(data) do
-        nil -> {:error, :unrecognized}
-        mime -> {:ok, mime}
-      end
+    with {:ok, file} <- File.open(path, [:read, :binary]) do
+      from_file(file)
     end
   end
+
+  @spec from_io(File.io_device()) :: {:ok, binary} | {:error, reason}
+  def from_io(device) do
+    device
+    |> IO.binread(@required_bytes)
+    |> match()
+    |> to_result()
+  end
+
+  defp from_file(device) do
+    from_io(device)
+  after
+    File.close(device)
+  end
+
+  defp to_result(nil), do: {:error, :unrecognized}
+  defp to_result(mime), do: {:ok, mime}
 
   @spec match(binary) :: binary | nil
 
