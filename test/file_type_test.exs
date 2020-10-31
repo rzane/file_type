@@ -457,7 +457,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/bpg" do
-    @tag :pending
     fixture "fixture.bpg"
   end
 
