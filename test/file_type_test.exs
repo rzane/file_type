@@ -550,11 +550,8 @@ defmodule FileTypeTest do
   end
 
   describe "image/x-icon" do
-    @tag :pending
-    fixture "fixture.cur"
-
-    @tag :pending
     fixture "fixture.ico"
+    fixture "fixture.cur"
   end
 
   describe "image/x-nikon-nef" do

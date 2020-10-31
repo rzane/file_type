@@ -43,11 +43,13 @@ defmodule FileType.Signature do
   def detect(~m"Cr24"), do: {"crx", "application/x-google-chrome-extension"}
   def detect(~m"MSCF"), do: {"cab", "application/vnd.ms-cab-compressed"}
   def detect(~m"ISc("), do: {"cab", "application/vnd.ms-cab-compressed"}
-  def detect(~m"c5d0d3c6"h), do: {"eps", "application/eps"}
   def detect(~m"1a45dfa3"h), do: {"mkv", "video/x-matroska"}
   def detect(~m"464c5601"h), do: {"flv", "video/x-flv"}
   def detect(~m"89504e47"h), do: {"png", "image/png"}
   def detect(~m"425047fb"h), do: {"bpg", "image/bpg"}
+  def detect(~m"00000100"h), do: {"ico", "image/x-icon"}
+  def detect(~m"00000200"h), do: {"cur", "image/x-icon"}
+  def detect(~m"c5d0d3c6"h), do: {"eps", "application/eps"}
   def detect(~m"504b0304"h), do: {"zip", "application/zip"}
   def detect(~m"0061736d"h), do: {"wasm", "application/wasm"}
   def detect(~m"d4c3b2a1"h), do: {"pcap", "application/vnd.tcpdump.pcap"}
