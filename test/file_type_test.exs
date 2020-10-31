@@ -391,7 +391,6 @@ defmodule FileTypeTest do
   end
 
   describe "audio/x-voc" do
-    @tag :pending
     fixture "fixture.voc"
   end
 

@@ -168,6 +168,9 @@ defmodule FileType.Signature do
   def detect(~m"626f6f6b000000006d61726b00000000"h), do: {"alias", "application/x.apple.alias"}
   def detect(~m"0606edf5d81d46e5bd31efe7fe74b71d"h), do: {"indd", "application/x-indesign"}
 
+  # 19-byte signatures
+  def detect(~m"Creative Voice File"), do: {"voc", "audio/x-voc"}
+
   # More bytes!
   def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
   def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
