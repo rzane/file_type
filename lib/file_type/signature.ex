@@ -119,6 +119,9 @@ defmodule FileType.Signature do
   def detect(~m"4152524f57310000"h), do: {"arrow", "application/x-apache-arrow"}
   def detect(~m"676c544602000000"h), do: {"glb", "model/gltf-binary"}
 
+  # 9-byte signatures
+  def detect(~m"4949524f0800000018"h), do: {"orf", "image/x-olympus-orf"}
+
   # ~12-byte signatures
   def detect(~m"8::WEBP"o), do: {"webp", "image/webp"}
   def detect(<<"RIFF", _::bs(4), "AVI">> <> _), do: {"avi", "video/vnd.avi"}

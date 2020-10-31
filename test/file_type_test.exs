@@ -551,7 +551,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/x-olympus-orf" do
-    @tag :pending
     fixture "fixture.orf"
   end
 
