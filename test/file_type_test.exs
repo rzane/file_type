@@ -127,7 +127,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-7z-compressed" do
-    @tag :pending
     fixture "fixture.7z"
   end
 

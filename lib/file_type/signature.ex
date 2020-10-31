@@ -101,6 +101,7 @@ defmodule FileType.Signature do
   def detect(~m"BEGIN:"), do: {"ics", "text/calendar"}
   def detect(~m"fd377a585a00"h), do: {"xz", "application/x-xz"}
   def detect(~m"526172211a07"h), do: {"rar", "application/vnd.rar"}
+  def detect(~m"377abcaf271c"h), do: {"7z", "application/x-7z-compressed"}
 
   # 8-byte signatures
   def detect(~m"4::free"o), do: {"mov", "video/quicktime"}
