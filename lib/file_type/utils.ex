@@ -17,7 +17,7 @@ defmodule FileType.Utils do
       iex> ~m"4869"h = "Hi"
       "Hi"
 
-      iex> ~m"3::bar" = "foobar"
+      iex> ~m"3::bar"o = "foobar"
       "foobar"
 
   """
