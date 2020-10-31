@@ -228,7 +228,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-nintendo-nes-rom" do
-    @tag :pending
     fixture "fixture.nes"
   end
 

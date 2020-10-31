@@ -47,6 +47,7 @@ defmodule FileType.Signature do
   def detect(~m"0061736d"h), do: {"wasm", "application/wasm"}
   def detect(~m"d4c3b2a1"h), do: {"pcap", "application/vnd.tcpdump.pcap"}
   def detect(~m"a1b2c3d4"h), do: {"pcap", "application/vnd.tcpdump.pcap"}
+  def detect(~m"4e45531a"h), do: {"nes", "application/x-nintendo-nes-rom"}
 
   def detect(~m"%!PS" = data) do
     case data do
