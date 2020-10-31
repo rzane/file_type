@@ -260,7 +260,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x.ms.shortcut" do
-    @tag :pending
     fixture "fixture.lnk"
   end
 
