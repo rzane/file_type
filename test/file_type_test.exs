@@ -32,7 +32,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/pgp-encrypted" do
-    @tag :pending
     fixture "fixture.pgp"
   end
 

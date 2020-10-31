@@ -175,6 +175,9 @@ defmodule FileType.Signature do
   def detect(~m"4c0000000114020000000000c000000000000046"h),
     do: {"lnk", "application/x.ms.shortcut"}
 
+  # 27-byte signatures
+  def detect(~m"-----BEGIN PGP MESSAGE-----"), do: {"pgp", "application/pgp-encrypted"}
+
   # More bytes!
   def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
   def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
