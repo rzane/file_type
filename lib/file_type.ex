@@ -11,6 +11,9 @@ defmodule FileType do
   @doc """
   Determine the MIME type of a file on disk.
 
+  This will read the first #{@required_bytes} bytes from the
+  file and attempt to determine the file's type.
+
   ## Examples
 
       iex> FileType.from_path("file.png")
@@ -32,6 +35,9 @@ defmodule FileType do
 
   @doc """
   Determine the MIME type from an IO device.
+
+  This will read the first #{@required_bytes} bytes from the
+  IO device and attempt to determine the file's type.
 
       iex> {:ok, file} = File.open("file.png", [:read, :binary])
       {:ok, #PID<0.109.0>}
