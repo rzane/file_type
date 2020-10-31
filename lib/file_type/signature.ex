@@ -148,10 +148,11 @@ defmodule FileType.Signature do
       "M4B " -> {"m4b", "audio/mp4"}
       "F4A " -> {"f4a", "audio/mp4"}
       "F4B " -> {"f4b", "audio/mp4"}
+      "mj2s" -> {"mj2", "video/mj2"}
+      "mjp2" -> {"mj2", "video/mj2"}
       "crx " -> {"cr3", "image/x-canon-cr3"}
       "3g2" <> _ -> {"3g2", "video/3gpp2"}
       "3g" <> _ -> {"3gp", "video/3gpp"}
-      "mj" <> _ -> {"mj2", "video/mj2"}
       _ -> {"mp4", "video/mp4"}
     end
   end
@@ -182,6 +183,7 @@ defmodule FileType.Signature do
       "jpx " -> {"jpx", "image/jpx"}
       "jpm " -> {"jpm", "image/jpm"}
       "mjp2" -> {"mj2", "image/mj2"}
+      "mj2s" -> {"mj2", "image/mj2"}
       _ -> nil
     end
   end
