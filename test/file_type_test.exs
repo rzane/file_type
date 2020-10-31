@@ -583,7 +583,6 @@ defmodule FileTypeTest do
   end
 
   describe "text/calendar" do
-    @tag :pending
     fixture "fixture.ics"
   end
 

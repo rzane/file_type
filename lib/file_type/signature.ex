@@ -98,6 +98,7 @@ defmodule FileType.Signature do
 
   # 6-byte signatures
   def detect(~m"<?xml "), do: {"xml", "application/xml"}
+  def detect(~m"BEGIN:"), do: {"ics", "text/calendar"}
   def detect(~m"fd377a585a00"h), do: {"xz", "application/x-xz"}
   def detect(~m"526172211a07"h), do: {"rar", "application/vnd.rar"}
 
