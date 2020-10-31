@@ -181,6 +181,7 @@ defmodule FileType.Signature do
       "jp2 " -> {"jp2", "image/jp2"}
       "jpx " -> {"jpx", "image/jpx"}
       "jpm " -> {"jpm", "image/jpm"}
+      "mjp2" -> {"mj2", "image/mj2"}
       _ -> nil
     end
   end
