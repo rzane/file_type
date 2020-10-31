@@ -43,10 +43,14 @@ defmodule FileType.Signature do
   def match(magic("MPCK")), do: {"mpc", "audio/x-musepack"}
   def match(magic("FORM")), do: {"aif", "audio/aiff"}
   def match(magic("MThd")), do: {"mid", "audio/midi"}
-
   def match(magic("%PDF-")), do: {"pdf", "application/pdf"}
   def match(magic("Rar!")), do: {"rar", "application/vnd.rar"}
   def match(magic(~h"c5d0d3c6")), do: {"eps", "application/eps"}
+  def match(magic(~h"1a45dfa3")), do: {"mkv", "video/x-matroska"}
+  def match(magic(~h"89504e47")), do: {"png", "image/png"}
+  def match(magic(~h"49492a00")), do: {"tif", "image/tiff"}
+  def match(magic(~h"4d4d002a")), do: {"tif", "image/tiff"}
+  def match(magic(~h"504b0304")), do: {"zip", "application/zip"}
 
   def match(magic("%!PS") = data) do
     case data do
@@ -68,11 +72,10 @@ defmodule FileType.Signature do
   end
 
   # 8-byte signatures
-  def match(magic(~h"1a45dfa3")), do: {"mkv", "video/x-matroska"}
-  def match(magic(~h"89504e47")), do: {"png", "image/png"}
-  def match(magic(~h"49492a00")), do: {"tif", "image/tiff"}
-  def match(magic(~h"4d4d002a")), do: {"tif", "image/tiff"}
-  def match(magic(~h"504b0304")), do: {"zip", "application/zip"}
+  def match(magic("wOFFOTTO")), do: {"woff", "font/woff"}
+  def match(magic("wOF2OTTO")), do: {"woff2", "font/woff2"}
+  def match(magic(~h"774f464600010000")), do: {"woff", "font/woff"}
+  def match(magic(~h"774f463200010000")), do: {"woff2", "font/woff2"}
 
   # File-type boxes
   def match(<<_::binary-size(4), "ftyp", type::binary-size(4)>> <> _) do

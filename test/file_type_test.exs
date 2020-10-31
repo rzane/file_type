@@ -441,18 +441,12 @@ defmodule FileTypeTest do
   end
 
   describe "font/woff" do
-    @tag :pending
     fixture "fixture.woff"
-
-    @tag :pending
     fixture "fixture-otto.woff"
   end
 
   describe "font/woff2" do
-    @tag :pending
     fixture "fixture.woff2"
-
-    @tag :pending
     fixture "fixture-otto.woff2"
   end
 
