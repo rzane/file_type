@@ -273,7 +273,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/xml" do
-    @tag :pending
     fixture "fixture.xml"
   end
 
