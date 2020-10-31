@@ -51,6 +51,8 @@ defmodule FileType.Signature do
   def match(magic(~h"49492a00")), do: {"tif", "image/tiff"}
   def match(magic(~h"4d4d002a")), do: {"tif", "image/tiff"}
   def match(magic(~h"504b0304")), do: {"zip", "application/zip"}
+  def match(magic(~h"d4c3b2a1")), do: {"pcap", "application/vnd.tcpdump.pcap"}
+  def match(magic(~h"a1b2c3d4")), do: {"pcap", "application/vnd.tcpdump.pcap"}
 
   def match(magic("%!PS") = data) do
     case data do

@@ -121,10 +121,7 @@ defmodule FileTypeTest do
   end
 
   describe "application/vnd.tcpdump.pcap" do
-    @tag :pending
     fixture "fixture-big-endian.pcap"
-
-    @tag :pending
     fixture "fixture-little-endian.pcap"
   end
 
