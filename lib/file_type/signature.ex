@@ -75,6 +75,7 @@ defmodule FileType.Signature do
       ~m"8::1f000b00"oh -> {"nef", "image/x-nikon-nef"}
       ~m"8::2d00fe00"oh -> {"dng", "image/x-adobe-dng"}
       ~m"8::2700fe00"oh -> {"dng", "image/x-adobe-dng"}
+      ~m"9::00fe00040001000000010000000301"oh -> {"arw", "image/x-sony-arw"}
       _ -> {"tif", "image/tiff"}
     end
   end

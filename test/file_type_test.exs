@@ -583,19 +583,10 @@ defmodule FileTypeTest do
   end
 
   describe "image/x-sony-arw" do
-    @tag :pending
     fixture "fixture.arw"
-
-    @tag :pending
     fixture "fixture2.arw"
-
-    @tag :pending
     fixture "fixture3.arw"
-
-    @tag :pending
     fixture "fixture4.arw"
-
-    @tag :pending
     fixture "fixture5.arw"
   end
 
