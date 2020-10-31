@@ -107,7 +107,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/vnd.sketchup.skp" do
-    @tag :pending
     fixture "fixture.skp"
   end
 

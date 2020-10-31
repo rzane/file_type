@@ -178,6 +178,10 @@ defmodule FileType.Signature do
   # 27-byte signatures
   def detect(~m"-----BEGIN PGP MESSAGE-----"), do: {"pgp", "application/pgp-encrypted"}
 
+  # 32-byte signatures
+  def detect(~m"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"h),
+    do: {"skp", "application/vnd.sketchup.skp"}
+
   # More bytes!
   def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
   def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
