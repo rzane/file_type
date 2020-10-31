@@ -91,11 +91,13 @@ defmodule FileType.Signature do
   def detect(~m"774f464600010000"h), do: {"woff", "font/woff"}
   def detect(~m"774f463200010000"h), do: {"woff2", "font/woff2"}
 
-  # 12-byte signatures
+  # ~12-byte signatures
   def detect(~m"8::WEBP"o), do: {"webp", "image/webp"}
-  def detect(~m"8::WAVE"o), do: {"wav", "audio/vnd.wave"}
+  def detect(<<"RIFF", _::bs(4), "AVI">> <> _), do: {"avi", "video/vnd.avi"}
+  def detect(<<"RIFF", _::bs(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
+  def detect(<<"RIFF", _::bs(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
 
-  def detect(<<_::binary-size(4), "ftyp", type::binary-size(4)>> <> _) do
+  def detect(<<_::bs(4), "ftyp", type::bs(4)>> <> _) do
     case String.replace(type, "\0", " ") do
       "avif" -> {"avif", "image/avif"}
       "mif1" -> {"heic", "image/heif"}

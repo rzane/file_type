@@ -356,7 +356,6 @@ defmodule FileTypeTest do
   end
 
   describe "audio/qcelp" do
-    @tag :pending
     fixture "fixture.qcp"
   end
 
@@ -659,7 +658,6 @@ defmodule FileTypeTest do
   end
 
   describe "video/vnd.avi" do
-    @tag :pending
     fixture "fixture.avi"
   end
 

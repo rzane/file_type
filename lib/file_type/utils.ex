@@ -27,6 +27,10 @@ defmodule FileType.Utils do
     quote do: <<_::binary-size(unquote(offset)), unquote(data)>> <> _
   end
 
+  defmacro bs(n) when is_integer(n) do
+    quote do: binary-size(unquote(n))
+  end
+
   defp hex!(data) do
     Base.decode16!(data, case: :lower)
   end
