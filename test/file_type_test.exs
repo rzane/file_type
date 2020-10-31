@@ -380,6 +380,8 @@ defmodule FileTypeTest do
 
   describe "audio/x-flac" do
     fixture "fixture.flac"
+
+    @tag :pending
     fixture "fixture-id3v2.flac"
   end
 
