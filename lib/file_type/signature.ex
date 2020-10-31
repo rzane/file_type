@@ -6,7 +6,7 @@ defmodule FileType.Signature do
   @spec detect(binary) :: {binary, binary} | nil
   def detect(data)
 
-  # 2-byte signatures
+  # 2 bytes
   def detect(~m"BM"), do: {"bmp", "image/bmp"}
   def detect(~m"0b77"h), do: {"ac3", "audio/vnd.dolby.dd-raw"}
   def detect(~m"7801"h), do: {"dmg", "application/x-apple-diskimage"}
@@ -14,7 +14,7 @@ defmodule FileType.Signature do
   def detect(~m"1fa0"h), do: {"Z", "application/x-compress"}
   def detect(~m"1f9d"h), do: {"Z", "application/x-compress"}
 
-  # 3-byte signatures
+  # 3 bytes
   def detect(~m"ID3"), do: {"mp3", "audio/mpeg"}
   def detect(~m"MP+"), do: {"mpc", "audio/x-musepack"}
   def detect(~m"ffd8ff"h), do: {"jpg", "image/jpeg"}
@@ -25,7 +25,7 @@ defmodule FileType.Signature do
   def detect(~m"465753"h), do: {"swf", "application/x-shockwave-flash"}
   def detect(~m"474946"h), do: {"gif", "image/gif"}
 
-  # 4-byte signatures
+  # 4 bytes
   def detect(~m"FLIF"), do: {"flif", "image/flif"}
   def detect(~m"8BPS"), do: {"psd", "image/vnd.adobe.photoshop"}
   def detect(~m"icns"), do: {"icns", "image/icns"}
@@ -90,13 +90,13 @@ defmodule FileType.Signature do
     end
   end
 
-  # 5-byte signatures
+  # 5 bytes
   def detect(~m"#!AMR"), do: {"amr", "audio/amr"}
   def detect(~m"{\rtf"), do: {"rtf", "application/rtf"}
   def detect(~m"4f54544f00"h), do: {"otf", "font/otf"}
   def detect(~m"0001000000"h), do: {"ttf", "font/ttf"}
 
-  # 6-byte signatures
+  # 6 bytes
   def detect(~m"<?xml "), do: {"xml", "application/xml"}
   def detect(~m"BEGIN:"), do: {"ics", "text/calendar"}
   def detect(~m"solid "), do: {"stl", "model/stl"}
@@ -104,10 +104,10 @@ defmodule FileType.Signature do
   def detect(~m"526172211a07"h), do: {"rar", "application/vnd.rar"}
   def detect(~m"377abcaf271c"h), do: {"7z", "application/x-7z-compressed"}
 
-  # 7-byte signatures
+  # 7 bytes
   def detect(~m"BLENDER"), do: {"blend", "application/x-blender"}
 
-  # 8-byte signatures
+  # 8 bytes
   def detect(~m"4::free"o), do: {"mov", "video/quicktime"}
   def detect(~m"4::mdat"o), do: {"mov", "video/quicktime"}
   def detect(~m"4::moov"o), do: {"mov", "video/quicktime"}
@@ -119,10 +119,10 @@ defmodule FileType.Signature do
   def detect(~m"4152524f57310000"h), do: {"arrow", "application/x-apache-arrow"}
   def detect(~m"676c544602000000"h), do: {"glb", "model/gltf-binary"}
 
-  # 9-byte signatures
+  # 9 bytes
   def detect(~m"4949524f0800000018"h), do: {"orf", "image/x-olympus-orf"}
 
-  # ~12-byte signatures
+  # 12 bytes
   def detect(~m"8::WEBP"o), do: {"webp", "image/webp"}
   def detect(~m"ab4b5458203131bb0d0a1a0a"h), do: {"ktx", "image/ktx"}
   def detect(~m"494955001800000088e774d8"h), do: {"rw2", "image/x-panasonic-rw2"}
@@ -156,38 +156,47 @@ defmodule FileType.Signature do
     end
   end
 
-  # 14-byte signatures
+  # 14 bytes
   def detect(~m"060e2b34020501010d0102010102"h), do: {"mxf", "application/mxf"}
   def detect(~m"2::270a00000000000000000000"oh), do: {"shp", "application/x-esri-shape"}
 
-  # 15-byte signatures
+  # 15 bytes
   def detect(~m"FUJIFILMCCD-RAW"), do: {"raf", "image/x-fujifilm-raf"}
 
-  # 16-byte signatures
+  # 16 bytes
   def detect(~m"Extended Module:"), do: {"xm", "audio/x-xm"}
   def detect(~m"626f6f6b000000006d61726b00000000"h), do: {"alias", "application/x.apple.alias"}
   def detect(~m"0606edf5d81d46e5bd31efe7fe74b71d"h), do: {"indd", "application/x-indesign"}
 
-  # 19-byte signatures
+  # 19 bytes
   def detect(~m"Creative Voice File"), do: {"voc", "audio/x-voc"}
 
-  # 20-byte signatures
+  # 20 bytes
   def detect(~m"4c0000000114020000000000c000000000000046"h),
     do: {"lnk", "application/x.ms.shortcut"}
 
-  # 27-byte signatures
+  # 27 bytes
   def detect(~m"-----BEGIN PGP MESSAGE-----"), do: {"pgp", "application/pgp-encrypted"}
 
-  # 32-byte signatures
+  # 32 bytes
   def detect(~m"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"h),
     do: {"skp", "application/vnd.sketchup.skp"}
 
-  # More bytes!
+  # 48 bytes
   def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
+
+  # 68 bytes
   def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
+
+  # 132 bytes
   def detect(~m"128::4449434d"oh), do: {"dcm", "application/dicom"}
+
+  # 263 bytes
   def detect(~m"257::757374617200"oh), do: {"tar", "application/x-tar"}
+
+  # 265 bytes
   def detect(~m"257::7573746172202000"oh), do: {"tar", "application/x-tar"}
 
+  # Oh, no. Undetected file!
   def detect(_), do: nil
 end
