@@ -40,6 +40,8 @@ defmodule FileType.Signature do
   def detect(~m"LZIP"), do: {"lz", "application/x-lzip"}
   def detect(~m"SQLi"), do: {"sqlite", "application/x-sqlite3"}
   def detect(~m"Cr24"), do: {"crx", "application/x-google-chrome-extension"}
+  def detect(~m"MSCF"), do: {"cab", "application/vnd.ms-cab-compressed"}
+  def detect(~m"ISc("), do: {"cab", "application/vnd.ms-cab-compressed"}
   def detect(~m"c5d0d3c6"h), do: {"eps", "application/eps"}
   def detect(~m"1a45dfa3"h), do: {"mkv", "video/x-matroska"}
   def detect(~m"89504e47"h), do: {"png", "image/png"}

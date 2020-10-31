@@ -51,7 +51,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/vnd.ms-cab-compressed" do
-    @tag :pending
     fixture "fixture.cab"
   end
 
