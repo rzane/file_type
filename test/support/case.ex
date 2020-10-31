@@ -14,8 +14,7 @@ defmodule FileType.Case do
         path = Path.join("test/fixtures", unquote(filename))
 
         assert {:ok, type} = FileType.from_path(path)
-        assert type.ext == ext
-        assert type.mime == unquote(mime)
+        assert type == %FileType{ext: ext, mime: unquote(mime)}
       end
     end
   end

@@ -421,12 +421,9 @@ defmodule FileTypeTest do
     fixture "fixture.midi", "audio/midi"
   end
 
-  describe "audio/mp4" do
-    @tag :pending
-    fixture "fixture-babys-songbook.m4b.m4a", "audio/mp4"
-
-    @tag :pending
-    fixture "fixture.m4a", "audio/mp4"
+  describe "audio/x-m4a" do
+    fixture "fixture.m4a", "audio/x-m4a"
+    fixture "fixture-babys-songbook.m4b.m4a", "audio/x-m4a"
   end
 
   describe "audio/mpeg" do

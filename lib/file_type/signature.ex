@@ -76,7 +76,7 @@ defmodule FileType.Signature do
 
   # File-type boxes
   def match(<<_::binary-size(4), "ftyp", type::binary-size(4)>> <> _) do
-    case type do
+    case String.replace(type, "\0", " ") do
       "avif" -> {"avif", "image/avif"}
       "mif1" -> {"heic", "image/heif"}
       "msf1" -> {"heic", "image/heif-sequence"}
