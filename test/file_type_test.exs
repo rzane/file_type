@@ -126,7 +126,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/wasm" do
-    @tag :pending
     fixture "fixture.wasm"
   end
 
