@@ -1,14 +1,18 @@
 defmodule FileType.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/rzane/file_store"
+  @version "0.0.0"
+
   def project do
     [
       app: :file_type,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
-      deps: deps()
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -24,6 +28,17 @@ defmodule FileType.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    []
+    [
+      {:ex_doc, "~> 0.23", only: :dev, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      source_ref: "v#{@version}",
+      source_url: @source_url,
+      extras: ["README.md"]
+    ]
   end
 end
