@@ -465,7 +465,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/jpm" do
-    @tag :pending
     fixture "fixture.jpm"
   end
 

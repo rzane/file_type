@@ -180,6 +180,7 @@ defmodule FileType.Signature do
     case binary_part(rest, 8, 4) do
       "jp2 " -> {"jp2", "image/jp2"}
       "jpx " -> {"jpx", "image/jpx"}
+      "jpm " -> {"jpm", "image/jpm"}
       _ -> nil
     end
   end
