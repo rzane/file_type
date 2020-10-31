@@ -148,7 +148,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-blender" do
-    @tag :pending
     fixture "fixture.blend"
   end
 

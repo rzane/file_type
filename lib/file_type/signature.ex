@@ -104,6 +104,9 @@ defmodule FileType.Signature do
   def detect(~m"526172211a07"h), do: {"rar", "application/vnd.rar"}
   def detect(~m"377abcaf271c"h), do: {"7z", "application/x-7z-compressed"}
 
+  # 7-byte signatures
+  def detect(~m"BLENDER"), do: {"blend", "application/x-blender"}
+
   # 8-byte signatures
   def detect(~m"4::free"o), do: {"mov", "video/quicktime"}
   def detect(~m"4::mdat"o), do: {"mov", "video/quicktime"}
