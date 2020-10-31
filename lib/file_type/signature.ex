@@ -136,6 +136,8 @@ defmodule FileType.Signature do
   end
 
   # More bytes!
+  def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
+  def detect(~m"128::4449434d"oh), do: {"dcm", "application/dicom"}
   def detect(~m"257::757374617200"oh), do: {"tar", "application/x-tar"}
   def detect(~m"257::7573746172202000"oh), do: {"tar", "application/x-tar"}
 

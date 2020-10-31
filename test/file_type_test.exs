@@ -2,7 +2,6 @@ defmodule FileTypeTest do
   use FileType.Case
 
   describe "application/dicom" do
-    @tag :pending
     fixture "fixture.dcm"
   end
 
@@ -400,7 +399,6 @@ defmodule FileTypeTest do
   end
 
   describe "audio/x-s3m" do
-    @tag :pending
     fixture "fixture.s3m"
   end
 
