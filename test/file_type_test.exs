@@ -377,7 +377,6 @@ defmodule FileTypeTest do
   end
 
   describe "audio/x-dsf" do
-    @tag :pending
     fixture "fixture.dsf"
   end
 
