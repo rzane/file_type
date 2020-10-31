@@ -413,7 +413,6 @@ defmodule FileTypeTest do
   end
 
   describe "font/otf" do
-    @tag :pending
     fixture "fixture.otf"
   end
 
