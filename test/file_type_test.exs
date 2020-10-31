@@ -12,9 +12,7 @@ defmodule FileTypeTest do
   end
 
   describe "application/eps" do
-    @tag :pending
     fixture "fixture.eps", "application/eps"
-
     fixture "fixture2.eps", "application/eps"
   end
 
