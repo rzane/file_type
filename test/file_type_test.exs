@@ -131,7 +131,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-apache-arrow" do
-    @tag :pending
     fixture "fixture.arrow"
   end
 

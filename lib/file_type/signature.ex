@@ -116,6 +116,7 @@ defmodule FileType.Signature do
   def detect(~m"wOF2OTTO"), do: {"woff2", "font/woff2"}
   def detect(~m"774f464600010000"h), do: {"woff", "font/woff"}
   def detect(~m"774f463200010000"h), do: {"woff2", "font/woff2"}
+  def detect(~m"4152524f57310000"h), do: {"arrow", "application/x-apache-arrow"}
 
   # ~12-byte signatures
   def detect(~m"8::WEBP"o), do: {"webp", "image/webp"}
