@@ -165,6 +165,7 @@ defmodule FileType.Signature do
 
   # 16-byte signatures
   def detect(~m"Extended Module:"), do: {"xm", "audio/x-xm"}
+  def detect(~m"626f6f6b000000006d61726b00000000"h), do: {"alias", "application/x.apple.alias"}
 
   # More bytes!
   def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}

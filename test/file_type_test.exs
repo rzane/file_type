@@ -257,7 +257,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x.apple.alias" do
-    @tag :pending
     fixture "fixture.alias"
   end
 
