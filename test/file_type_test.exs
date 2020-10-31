@@ -45,7 +45,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/rtf" do
-    @tag :pending
     fixture "fixture.rtf"
   end
 
