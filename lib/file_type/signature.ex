@@ -92,6 +92,7 @@ defmodule FileType.Signature do
 
   # 5-byte signatures
   def detect(~m"4f54544f00"h), do: {"otf", "font/otf"}
+  def detect(~m"0001000000"h), do: {"ttf", "font/ttf"}
 
   # 6-byte signatures
   def detect(~m"526172211a07"h), do: {"rar", "application/vnd.rar"}
