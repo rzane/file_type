@@ -212,7 +212,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-mobipocket-ebook" do
-    @tag :pending
     fixture "fixture.mobi"
   end
 
