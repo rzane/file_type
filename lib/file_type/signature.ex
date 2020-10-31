@@ -91,6 +91,7 @@ defmodule FileType.Signature do
   end
 
   # 5-byte signatures
+  def detect(~m"#!AMR"), do: {"amr", "audio/amr"}
   def detect(~m"4f54544f00"h), do: {"otf", "font/otf"}
   def detect(~m"0001000000"h), do: {"ttf", "font/ttf"}
 

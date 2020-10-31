@@ -302,7 +302,6 @@ defmodule FileTypeTest do
   end
 
   describe "audio/amr" do
-    @tag :pending
     fixture "fixture.amr"
   end
 
