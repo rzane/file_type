@@ -27,26 +27,6 @@ defmodule FileType.Utils do
     quote do: <<_::binary-size(unquote(offset)), unquote(data)>> <> _
   end
 
-  @doc """
-  Decodes a hex-encoded string.
-
-  ## Examples
-
-      iex> ~h"4869"
-      "Hi"
-
-  """
-  defmacro sigil_h({:<<>>, _meta, [data]}, []) when is_binary(data) do
-    hex!(data)
-  end
-
-  @doc """
-  An shorthand for `binary-size` within a binary pattern match.
-  """
-  defmacro bs(n) when is_integer(n) do
-    quote do: binary-size(unquote(n))
-  end
-
   defp hex!(data) do
     Base.decode16!(data, case: :lower)
   end

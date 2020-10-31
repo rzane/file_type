@@ -94,73 +94,15 @@ defmodule FileType.Signature do
   def detect(~m"8::WEBP"o), do: {"webp", "image/webp"}
   def detect(~m"ab4b5458203131bb0d0a1a0a"h), do: {"ktx", "image/ktx"}
   def detect(~m"494955001800000088e774d8"h), do: {"rw2", "image/x-panasonic-rw2"}
-  def detect(<<"RIFF", _::bs(4), "AVI">> <> _), do: {"avi", "video/vnd.avi"}
-  def detect(<<"RIFF", _::bs(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
-  def detect(<<"RIFF", _::bs(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
+  def detect(<<"RIFF", _::binary-size(4), "AVI">> <> _), do: {"avi", "video/vnd.avi"}
+  def detect(<<"RIFF", _::binary-size(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
+  def detect(<<"RIFF", _::binary-size(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
 
-  # 14 bytes
-  def detect(~m"060e2b34020501010d0102010102"h), do: {"mxf", "application/mxf"}
-  def detect(~m"2::270a00000000000000000000"oh), do: {"shp", "application/x-esri-shape"}
-
-  # 15 bytes
-  def detect(~m"FUJIFILMCCD-RAW"), do: {"raf", "image/x-fujifilm-raf"}
-
-  # 16 bytes
-  def detect(~m"Extended Module:"), do: {"xm", "audio/x-xm"}
-  def detect(~m"626f6f6b000000006d61726b00000000"h), do: {"alias", "application/x.apple.alias"}
-  def detect(~m"0606edf5d81d46e5bd31efe7fe74b71d"h), do: {"indd", "application/x-indesign"}
-
-  # 19 bytes
-  def detect(~m"Creative Voice File"), do: {"voc", "audio/x-voc"}
-
-  # 20 bytes
-  def detect(~m"4c0000000114020000000000c000000000000046"h),
-    do: {"lnk", "application/x.ms.shortcut"}
-
-  # 27 bytes
-  def detect(~m"-----BEGIN PGP MESSAGE-----"), do: {"pgp", "application/pgp-encrypted"}
-
-  # 32 bytes
-  def detect(~m"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"h),
-    do: {"skp", "application/vnd.sketchup.skp"}
-
-  # 48 bytes
-  def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
-
-  # 68 bytes
-  def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
-
-  # 132 bytes
-  def detect(~m"128::4449434d"oh), do: {"dcm", "application/dicom"}
-
-  # 263 bytes
-  def detect(~m"257::757374617200"oh), do: {"tar", "application/x-tar"}
-
-  # 265 bytes
-  def detect(~m"257::7573746172202000"oh), do: {"tar", "application/x-tar"}
-
-  # Special cases
-  def detect(~m"%!PS" = data) do
-    case data do
-      ~m"14:: EPSF-"o -> {"eps", "application/eps"}
-      _ -> {"ps", "application/postscript"}
-    end
-  end
-
-  def detect(~m"OggS" = data) do
-    case data do
-      ~m"28::4f70757348656164"oh -> {"opus", "audio/opus"}
-      ~m"28::53706565782020"oh -> {"spx", "audio/ogg"}
-      ~m"28::7f464c4143"oh -> {"oga", "audio/ogg"}
-      ~m"28::01766f72626973"oh -> {"ogg", "audio/ogg"}
-      ~m"28::807468656f7261"oh -> {"ogv", "video/ogg"}
-      ~m"28::01766964656f00"oh -> {"ogm", "video/ogg"}
-      _ -> {"ogx", "application/ogg"}
-    end
-  end
-
-  def detect(<<_::bs(4), "ftyp", type::bs(4)>> <> _) do
-    case String.replace(type, "\0", " ") do
+  def detect(~m"4::ftyp"o = data) do
+    data
+    |> binary_part(8, 4)
+    |> String.replace("\0", " ")
+    |> case do
       "avif" -> {"avif", "image/avif"}
       "mif1" -> {"heic", "image/heif"}
       "msf1" -> {"heic", "image/heif-sequence"}
@@ -186,6 +128,33 @@ defmodule FileType.Signature do
     end
   end
 
+  # 14 bytes
+  def detect(~m"060e2b34020501010d0102010102"h), do: {"mxf", "application/mxf"}
+  def detect(~m"2::270a00000000000000000000"oh), do: {"shp", "application/x-esri-shape"}
+
+  # 15 bytes
+  def detect(~m"FUJIFILMCCD-RAW"), do: {"raf", "image/x-fujifilm-raf"}
+
+  # 16 bytes
+  def detect(~m"Extended Module:"), do: {"xm", "audio/x-xm"}
+  def detect(~m"626f6f6b000000006d61726b00000000"h), do: {"alias", "application/x.apple.alias"}
+  def detect(~m"0606edf5d81d46e5bd31efe7fe74b71d"h), do: {"indd", "application/x-indesign"}
+
+  # 19 bytes
+  def detect(~m"Creative Voice File"), do: {"voc", "audio/x-voc"}
+
+  def detect(~m"%!PS" = data) do
+    case data do
+      ~m"14:: EPSF-"o -> {"eps", "application/eps"}
+      _ -> {"ps", "application/postscript"}
+    end
+  end
+
+  # 20 bytes
+  def detect(~m"4c0000000114020000000000c000000000000046"h),
+    do: {"lnk", "application/x.ms.shortcut"}
+
+  # 24 bytes
   def detect(~m"49492a00"h = data) do
     case data do
       ~m"8::CR"o -> {"cr2", "image/x-canon-cr2"}
@@ -198,8 +167,8 @@ defmodule FileType.Signature do
     end
   end
 
-  def detect(~h"0000000c6a5020200d0a870a" <> rest) do
-    case binary_part(rest, 8, 4) do
+  def detect(~m"0000000c6a5020200d0a870a"h = data) do
+    case binary_part(data, 20, 4) do
       "jp2 " -> {"jp2", "image/jp2"}
       "jpx " -> {"jpx", "image/jpx"}
       "jpm " -> {"jpm", "image/jpm"}
@@ -208,6 +177,40 @@ defmodule FileType.Signature do
       _ -> nil
     end
   end
+
+  # 27 bytes
+  def detect(~m"-----BEGIN PGP MESSAGE-----"), do: {"pgp", "application/pgp-encrypted"}
+
+  # 32 bytes
+  def detect(~m"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"h),
+    do: {"skp", "application/vnd.sketchup.skp"}
+
+  def detect(~m"OggS" = data) do
+    case data do
+      ~m"28::4f70757348656164"oh -> {"opus", "audio/opus"}
+      ~m"28::53706565782020"oh -> {"spx", "audio/ogg"}
+      ~m"28::7f464c4143"oh -> {"oga", "audio/ogg"}
+      ~m"28::01766f72626973"oh -> {"ogg", "audio/ogg"}
+      ~m"28::807468656f7261"oh -> {"ogv", "video/ogg"}
+      ~m"28::01766964656f00"oh -> {"ogm", "video/ogg"}
+      _ -> {"ogx", "application/ogg"}
+    end
+  end
+
+  # 48 bytes
+  def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
+
+  # 68 bytes
+  def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
+
+  # 132 bytes
+  def detect(~m"128::4449434d"oh), do: {"dcm", "application/dicom"}
+
+  # 263 bytes
+  def detect(~m"257::757374617200"oh), do: {"tar", "application/x-tar"}
+
+  # 265 bytes
+  def detect(~m"257::7573746172202000"oh), do: {"tar", "application/x-tar"}
 
   # Oh, no. Undetected file!
   def detect(_), do: nil
