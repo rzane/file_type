@@ -99,9 +99,6 @@ defmodule FileTypeTest do
     fixture "fixture.flif", "application/octet-stream"
 
     @tag :pending
-    fixture "fixture.icns", "application/octet-stream"
-
-    @tag :pending
     fixture "fixture.indd", "application/octet-stream"
 
     @tag :pending
@@ -538,6 +535,10 @@ defmodule FileTypeTest do
   describe "image/heif-sequence" do
     @tag :pending
     fixture "fixture-msf1.heic", "image/heif-sequence"
+  end
+
+  describe "image/icns" do
+    fixture "fixture.icns", "image/icns"
   end
 
   describe "image/jp2" do

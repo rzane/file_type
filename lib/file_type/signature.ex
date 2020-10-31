@@ -33,6 +33,7 @@ defmodule FileType.Signature do
   # 4-byte signatures
   def match(magic("FLIF")), do: {"flif", "image/flif"}
   def match(magic("8BPS")), do: {"psd", "image/vnd.adobe.photoshop"}
+  def match(magic("icns")), do: {"icns", "image/icns"}
   def match(magic("WEBP", 8)), do: {"webp", "image/webp"}
   def match(magic("free", 4)), do: {"mov", "video/quicktime"}
   def match(magic("mdat", 4)), do: {"mov", "video/quicktime"}
