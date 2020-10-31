@@ -570,7 +570,6 @@ defmodule FileTypeTest do
   end
 
   describe "model/gltf-binary" do
-    @tag :pending
     fixture "fixture.glb"
   end
 
