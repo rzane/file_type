@@ -27,6 +27,9 @@ defmodule FileType.Utils do
     quote do: <<_::binary-size(unquote(offset)), unquote(data)>> <> _
   end
 
+  @doc """
+  An alias for `binary-size` within a binary pattern match.
+  """
   defmacro bs(n) when is_integer(n) do
     quote do: binary-size(unquote(n))
   end

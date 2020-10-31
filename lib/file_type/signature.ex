@@ -37,7 +37,6 @@ defmodule FileType.Signature do
   def detect(~m"wvpk"), do: {"wv", "audio/wavpack"}
   def detect(~m"MAC "), do: {"ape", "audio/ape"}
   def detect(~m"%PDF-"), do: {"pdf", "application/pdf"}
-  def detect(~m"Rar!"), do: {"rar", "application/vnd.rar"}
   def detect(~m"LZIP"), do: {"lz", "application/x-lzip"}
   def detect(~m"c5d0d3c6"h), do: {"eps", "application/eps"}
   def detect(~m"1a45dfa3"h), do: {"mkv", "video/x-matroska"}
@@ -80,6 +79,9 @@ defmodule FileType.Signature do
       _ -> {"tif", "image/tiff"}
     end
   end
+
+  # 6-byte signatures
+  def detect(~m"526172211a07"h), do: {"rar", "application/vnd.rar"}
 
   # 8-byte signatures
   def detect(~m"4::free"o), do: {"mov", "video/quicktime"}
