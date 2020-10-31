@@ -397,6 +397,10 @@ defmodule FileTypeTest do
     fixture "fixture.zip", "application/zip"
   end
 
+  describe "audio/aiff" do
+    fixture "fixture.aif", "audio/aiff"
+  end
+
   describe "audio/AMR" do
     @tag :pending
     fixture "fixture.amr", "audio/AMR"
@@ -469,11 +473,6 @@ defmodule FileTypeTest do
 
   describe "audio/vnd.wave" do
     fixture "fixture.wav", "audio/vnd.wave"
-  end
-
-  describe "audio/x-aiff" do
-    @tag :pending
-    fixture "fixture.aif", "audio/x-aiff"
   end
 
   describe "audio/x-flac" do
