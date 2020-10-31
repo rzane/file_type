@@ -7,7 +7,6 @@ defmodule FileType do
   @required_bytes 265
 
   @type t :: %__MODULE__{ext: binary, mime: binary}
-  @type reason :: File.posix() | :unrecognized
 
   @doc """
   Determine the MIME type of a file on disk.
@@ -24,7 +23,7 @@ defmodule FileType do
       {:error, :enoexist}
 
   """
-  @spec from_path(binary) :: {:ok, t} | {:error, reason}
+  @spec from_path(binary) :: {:ok, t} | {:error, File.posix() | :unrecognized}
   def from_path(path) when is_binary(path) do
     with {:ok, file} <- File.open(path, [:read, :binary]) do
       from_file(file)
@@ -41,7 +40,7 @@ defmodule FileType do
       {:ok, "image/png"}
 
   """
-  @spec from_io(File.io_device()) :: {:ok, t} | {:error, reason}
+  @spec from_io(File.io_device()) :: {:ok, t} | {:error, :unrecognized}
   def from_io(device) do
     device
     |> IO.binread(@required_bytes)
