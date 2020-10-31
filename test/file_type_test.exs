@@ -208,7 +208,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-lzip" do
-    @tag :pending
     fixture "fixture.tar.lz"
   end
 
