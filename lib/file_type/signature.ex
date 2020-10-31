@@ -20,7 +20,8 @@ defmodule FileType.Signature do
   def match(magic(~h"1f9d")), do: {"Z", "application/x-compress"}
 
   # 3-byte signatures
-  def match(magic("ID3")), do: {"mp3", "audio/mpeg"} # FIXME: file-type does a bit more work?
+  def match(magic("ID3")), do: {"mp3", "audio/mpeg"}
+  def match(magic("MP+")), do: {"mpc", "audio/x-musepack"}
   def match(magic(~h"ffd8ff")), do: {"jpg", "image/jpeg"}
   def match(magic(~h"4949bc")), do: {"jxr", "image/vnd.ms-photo"}
   def match(magic(~h"1f8b")), do: {"gz", "application/gzip"}
@@ -38,7 +39,9 @@ defmodule FileType.Signature do
   def match(magic("moov", 4)), do: {"mov", "video/quicktime"}
   def match(magic("wide", 4)), do: {"mov", "video/quicktime"}
   def match(magic("WAVE", 8)), do: {"wav", "audio/vnd.wave"}
-  def match(magic("%PDF-")), do: {"pdf", "application/pdf"} # FIXME: Adobe Illustrator
+  def match(magic("MPCK")), do: {"mpc", "audio/x-musepack"}
+
+  def match(magic("%PDF-")), do: {"pdf", "application/pdf"}
   def match(magic("Rar!")), do: {"rar", "application/vnd.rar"}
   def match(magic(~h"c5d0d3c6")), do: {"eps", "application/eps"}
 
@@ -51,12 +54,12 @@ defmodule FileType.Signature do
 
   def match(magic("OggS") = data) do
     case data do
-       magic(~h"4f70757348656164", 28) -> {"opus", "audio/opus"}
-       magic(~h"53706565782020", 28) -> {"spx", "audio/ogg"}
-       magic(~h"7f464c4143", 28) -> {"oga", "audio/ogg"}
-       magic(~h"01766f72626973", 28) -> {"ogg", "audio/ogg"}
-       magic(~h"807468656f7261", 28) -> {"ogv", "video/ogg"}
-       magic(~h"01766964656f00", 28) -> {"ogm", "video/ogg"}
+      magic(~h"4f70757348656164", 28) -> {"opus", "audio/opus"}
+      magic(~h"53706565782020", 28) -> {"spx", "audio/ogg"}
+      magic(~h"7f464c4143", 28) -> {"oga", "audio/ogg"}
+      magic(~h"01766f72626973", 28) -> {"ogg", "audio/ogg"}
+      magic(~h"807468656f7261", 28) -> {"ogv", "video/ogg"}
+      magic(~h"01766964656f00", 28) -> {"ogm", "video/ogg"}
       _ -> {"ogx", "application/ogg"}
     end
   end

@@ -225,14 +225,6 @@ defmodule FileTypeTest do
     fixture "fixture.skp", "application/vnd.koan"
   end
 
-  describe "application/vnd.mophun.certificate" do
-    @tag :pending
-    fixture "fixture-sv7.mpc", "application/vnd.mophun.certificate"
-
-    @tag :pending
-    fixture "fixture-sv8.mpc", "application/vnd.mophun.certificate"
-  end
-
   describe "application/vnd.ms-asf" do
     @tag :pending
     fixture "fixture.asf", "application/vnd.ms-asf"
@@ -490,6 +482,11 @@ defmodule FileTypeTest do
 
     @tag :pending
     fixture "fixture.flac", "audio/x-flac"
+  end
+
+  describe "audio/x-musepack" do
+    fixture "fixture-sv7.mpc", "audio/x-musepack"
+    fixture "fixture-sv8.mpc", "audio/x-musepack"
   end
 
   describe "audio/x-s3m" do
