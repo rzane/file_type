@@ -313,7 +313,6 @@ defmodule FileTypeTest do
   end
 
   describe "audio/ape" do
-    @tag :pending
     fixture "fixture-monkeysaudio.ape"
   end
 

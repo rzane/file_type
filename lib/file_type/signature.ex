@@ -33,10 +33,11 @@ defmodule FileType.Signature do
   def detect(~m"FORM"), do: {"aif", "audio/aiff"}
   def detect(~m"MThd"), do: {"mid", "audio/midi"}
   def detect(~m"fLaC"), do: {"flac", "audio/x-flac"}
-  def detect(~m"%PDF-"), do: {"pdf", "application/pdf"}
-  def detect(~m"Rar!"), do: {"rar", "application/vnd.rar"}
   def detect(~m"DSD "), do: {"dsf", "audio/x-dsf"}
   def detect(~m"wvpk"), do: {"wv", "audio/wavpack"}
+  def detect(~m"MAC "), do: {"ape", "audio/ape"}
+  def detect(~m"%PDF-"), do: {"pdf", "application/pdf"}
+  def detect(~m"Rar!"), do: {"rar", "application/vnd.rar"}
   def detect(~m"LZIP"), do: {"lz", "application/x-lzip"}
   def detect(~m"c5d0d3c6"h), do: {"eps", "application/eps"}
   def detect(~m"1a45dfa3"h), do: {"mkv", "video/x-matroska"}
