@@ -127,6 +127,7 @@ defmodule FileType.Signature do
   def detect(<<"RIFF", _::bs(4), "AVI">> <> _), do: {"avi", "video/vnd.avi"}
   def detect(<<"RIFF", _::bs(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
   def detect(<<"RIFF", _::bs(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
+  def detect(~m"494955001800000088e774d8"h), do: {"rw2", "image/x-panasonic-rw2"}
 
   def detect(<<_::bs(4), "ftyp", type::bs(4)>> <> _) do
     case String.replace(type, "\0", " ") do

@@ -555,7 +555,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/x-panasonic-rw2" do
-    @tag :pending
     fixture "fixture.rw2"
   end
 
