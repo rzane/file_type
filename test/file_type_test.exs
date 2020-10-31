@@ -577,7 +577,6 @@ defmodule FileTypeTest do
   end
 
   describe "model/stl" do
-    @tag :pending
     fixture "fixture.stl"
   end
 
