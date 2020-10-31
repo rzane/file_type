@@ -7,14 +7,14 @@ defmodule FileType.Case do
     end
   end
 
-  defmacro fixture(filename, mime) do
+  defmacro fixture(filename) do
     quote do
-      test unquote(filename) <> " is " <> unquote(mime) do
+      test unquote(filename), %{describe: mime} do
         "." <> ext = Path.extname(unquote(filename))
         path = Path.join("test/fixtures", unquote(filename))
 
         assert {:ok, type} = FileType.from_path(path)
-        assert type == %FileType{ext: ext, mime: unquote(mime)}
+        assert type == %FileType{ext: ext, mime: mime}
       end
     end
   end
