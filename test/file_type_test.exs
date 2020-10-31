@@ -540,10 +540,7 @@ defmodule FileTypeTest do
   end
 
   describe "image/x-adobe-dng" do
-    @tag :pending
     fixture "fixture.dng"
-
-    @tag :pending
     fixture "fixture2.dng"
   end
 

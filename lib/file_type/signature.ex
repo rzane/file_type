@@ -73,6 +73,8 @@ defmodule FileType.Signature do
       ~m"8::CR"o -> {"cr2", "image/x-canon-cr2"}
       ~m"8::1c00fe00"oh -> {"nef", "image/x-nikon-nef"}
       ~m"8::1f000b00"oh -> {"nef", "image/x-nikon-nef"}
+      ~m"8::2d00fe00"oh -> {"dng", "image/x-adobe-dng"}
+      ~m"8::2700fe00"oh -> {"dng", "image/x-adobe-dng"}
       _ -> {"tif", "image/tiff"}
     end
   end
