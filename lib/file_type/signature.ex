@@ -130,6 +130,13 @@ defmodule FileType.Signature do
   def detect(<<"RIFF", _::bs(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
   def detect(<<"RIFF", _::bs(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
 
+  def detect(~h"0000000c6a5020200d0a870a" <> rest) do
+    case binary_part(rest, 8, 4) do
+      "jp2 " -> {"jp2", "image/jp2"}
+      _ -> nil
+    end
+  end
+
   def detect(<<_::bs(4), "ftyp", type::bs(4)>> <> _) do
     case String.replace(type, "\0", " ") do
       "avif" -> {"avif", "image/avif"}
