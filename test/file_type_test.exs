@@ -181,7 +181,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-esri-shape" do
-    @tag :pending
     fixture "fixture.shp"
   end
 

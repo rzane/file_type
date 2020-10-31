@@ -156,6 +156,9 @@ defmodule FileType.Signature do
     end
   end
 
+  # 14-byte signatures
+  def detect(~m"2::270a00000000000000000000"oh), do: {"shp", "application/x-esri-shape"}
+
   # More bytes!
   def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
   def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
