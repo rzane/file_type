@@ -485,7 +485,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/ktx" do
-    @tag :pending
     fixture "fixture.ktx"
   end
 
