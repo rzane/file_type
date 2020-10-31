@@ -548,7 +548,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/x-canon-cr2" do
-    @tag :pending
     fixture "fixture.cr2"
   end
 

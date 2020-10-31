@@ -42,8 +42,6 @@ defmodule FileType.Signature do
   def detect(~m"1a45dfa3"h), do: {"mkv", "video/x-matroska"}
   def detect(~m"89504e47"h), do: {"png", "image/png"}
   def detect(~m"425047fb"h), do: {"bpg", "image/bpg"}
-  def detect(~m"49492a00"h), do: {"tif", "image/tiff"}
-  def detect(~m"4d4d002a"h), do: {"tif", "image/tiff"}
   def detect(~m"504b0304"h), do: {"zip", "application/zip"}
   def detect(~m"0061736d"h), do: {"wasm", "application/wasm"}
   def detect(~m"d4c3b2a1"h), do: {"pcap", "application/vnd.tcpdump.pcap"}
@@ -65,6 +63,15 @@ defmodule FileType.Signature do
       ~m"28::807468656f7261"oh -> {"ogv", "video/ogg"}
       ~m"28::01766964656f00"oh -> {"ogm", "video/ogg"}
       _ -> {"ogx", "application/ogg"}
+    end
+  end
+
+  def detect(~m"4d4d002a"h), do: {"tif", "image/tiff"}
+
+  def detect(~m"49492a00"h = data) do
+    case data do
+      ~m"8::CR"o -> {"cr2", "image/x-canon-cr2"}
+      _ -> {"tif", "image/tiff"}
     end
   end
 
