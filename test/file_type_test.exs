@@ -230,7 +230,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-rpm" do
-    @tag :pending
     fixture "fixture.rpm"
   end
 
