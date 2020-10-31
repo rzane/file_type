@@ -34,7 +34,10 @@ defmodule FileType do
   @doc """
   Determine the MIME type from an IO device.
 
-      iex> FileType.from_io(:stdio)
+      iex> {:ok, file} = File.open("file.png", [:read, :binary])
+      {:ok, #PID<0.109.0>}
+
+      iex> FileType.from_io(file)
       {:ok, "image/png"}
 
   """
