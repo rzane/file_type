@@ -418,8 +418,7 @@ defmodule FileTypeTest do
   end
 
   describe "audio/midi" do
-    @tag :pending
-    fixture "fixture.mid", "audio/midi"
+    fixture "fixture.midi", "audio/midi"
   end
 
   describe "audio/mp4" do

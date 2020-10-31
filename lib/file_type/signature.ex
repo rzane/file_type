@@ -42,6 +42,7 @@ defmodule FileType.Signature do
   def match(magic("WAVE", 8)), do: {"wav", "audio/vnd.wave"}
   def match(magic("MPCK")), do: {"mpc", "audio/x-musepack"}
   def match(magic("FORM")), do: {"aif", "audio/aiff"}
+  def match(magic("MThd")), do: {"midi", "audio/midi"}
 
   def match(magic("%PDF-")), do: {"pdf", "application/pdf"}
   def match(magic("Rar!")), do: {"rar", "application/vnd.rar"}
