@@ -188,7 +188,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-indesign" do
-    @tag :pending
     fixture "fixture.indd"
   end
 
