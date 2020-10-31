@@ -378,7 +378,6 @@ defmodule FileTypeTest do
   end
 
   describe "audio/x-it" do
-    @tag :pending
     fixture "fixture.it"
   end
 
