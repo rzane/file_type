@@ -243,7 +243,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-sqlite3" do
-    @tag :pending
     fixture "fixture.sqlite"
   end
 

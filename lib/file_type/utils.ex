@@ -28,7 +28,7 @@ defmodule FileType.Utils do
   end
 
   @doc """
-  An alias for `binary-size` within a binary pattern match.
+  An shorthand for `binary-size` within a binary pattern match.
   """
   defmacro bs(n) when is_integer(n) do
     quote do: binary-size(unquote(n))
