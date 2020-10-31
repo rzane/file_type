@@ -192,7 +192,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-google-chrome-extension" do
-    @tag :pending
     fixture "fixture.crx"
   end
 
