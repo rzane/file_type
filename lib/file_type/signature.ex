@@ -71,6 +71,8 @@ defmodule FileType.Signature do
   def detect(~m"49492a00"h = data) do
     case data do
       ~m"8::CR"o -> {"cr2", "image/x-canon-cr2"}
+      ~m"8::1c00fe00"oh -> {"nef", "image/x-nikon-nef"}
+      ~m"8::1f000b00"oh -> {"nef", "image/x-nikon-nef"}
       _ -> {"tif", "image/tiff"}
     end
   end

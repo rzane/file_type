@@ -569,16 +569,9 @@ defmodule FileTypeTest do
   end
 
   describe "image/x-nikon-nef" do
-    @tag :pending
     fixture "fixture.nef"
-
-    @tag :pending
     fixture "fixture2.nef"
-
-    @tag :pending
     fixture "fixture3.nef"
-
-    @tag :pending
     fixture "fixture4.nef"
   end
 
