@@ -531,7 +531,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/x-fujifilm-raf" do
-    @tag :pending
     fixture "fixture.raf"
   end
 

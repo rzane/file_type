@@ -160,6 +160,9 @@ defmodule FileType.Signature do
   def detect(~m"060e2b34020501010d0102010102"h), do: {"mxf", "application/mxf"}
   def detect(~m"2::270a00000000000000000000"oh), do: {"shp", "application/x-esri-shape"}
 
+  # 15-byte signatures
+  def detect(~m"FUJIFILMCCD-RAW"), do: {"raf", "image/x-fujifilm-raf"}
+
   # More bytes!
   def detect(~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
   def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
