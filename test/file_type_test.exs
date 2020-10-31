@@ -470,7 +470,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/jpx" do
-    @tag :pending
     fixture "fixture.jpx"
   end
 

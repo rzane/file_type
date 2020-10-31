@@ -130,13 +130,6 @@ defmodule FileType.Signature do
   def detect(<<"RIFF", _::bs(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
   def detect(<<"RIFF", _::bs(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
 
-  def detect(~h"0000000c6a5020200d0a870a" <> rest) do
-    case binary_part(rest, 8, 4) do
-      "jp2 " -> {"jp2", "image/jp2"}
-      _ -> nil
-    end
-  end
-
   def detect(<<_::bs(4), "ftyp", type::bs(4)>> <> _) do
     case String.replace(type, "\0", " ") do
       "avif" -> {"avif", "image/avif"}
@@ -181,6 +174,15 @@ defmodule FileType.Signature do
   # 20 bytes
   def detect(~m"4c0000000114020000000000c000000000000046"h),
     do: {"lnk", "application/x.ms.shortcut"}
+
+  # 24 bytes
+  def detect(~h"0000000c6a5020200d0a870a" <> rest) do
+    case binary_part(rest, 8, 4) do
+      "jp2 " -> {"jp2", "image/jp2"}
+      "jpx " -> {"jpx", "image/jpx"}
+      _ -> nil
+    end
+  end
 
   # 27 bytes
   def detect(~m"-----BEGIN PGP MESSAGE-----"), do: {"pgp", "application/pgp-encrypted"}
