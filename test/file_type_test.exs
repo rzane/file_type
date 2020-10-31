@@ -371,7 +371,6 @@ defmodule FileTypeTest do
   end
 
   describe "audio/wavpack" do
-    @tag :pending
     fixture "fixture.wv"
   end
 

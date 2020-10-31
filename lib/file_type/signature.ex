@@ -47,6 +47,7 @@ defmodule FileType.Signature do
   def match(magic("%PDF-")), do: {"pdf", "application/pdf"}
   def match(magic("Rar!")), do: {"rar", "application/vnd.rar"}
   def match(magic("DSD ")), do: {"dsf", "audio/x-dsf"}
+  def match(magic("wvpk")), do: {"wv", "audio/wavpack"}
   def match(magic("LZIP")), do: {"lz", "application/x-lzip"}
   def match(magic(~h"c5d0d3c6")), do: {"eps", "application/eps"}
   def match(magic(~h"1a45dfa3")), do: {"mkv", "video/x-matroska"}
