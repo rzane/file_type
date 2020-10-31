@@ -45,6 +45,7 @@ defmodule FileType.Signature do
   def detect(~m"ISc("), do: {"cab", "application/vnd.ms-cab-compressed"}
   def detect(~m"c5d0d3c6"h), do: {"eps", "application/eps"}
   def detect(~m"1a45dfa3"h), do: {"mkv", "video/x-matroska"}
+  def detect(~m"464c5601"h), do: {"flv", "video/x-flv"}
   def detect(~m"89504e47"h), do: {"png", "image/png"}
   def detect(~m"425047fb"h), do: {"bpg", "image/bpg"}
   def detect(~m"504b0304"h), do: {"zip", "application/zip"}

@@ -661,7 +661,6 @@ defmodule FileTypeTest do
   end
 
   describe "video/x-flv" do
-    @tag :pending
     fixture "fixture.flv"
   end
 
