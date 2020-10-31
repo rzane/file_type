@@ -42,7 +42,7 @@ defmodule FileType do
   def from_io(device) do
     device
     |> IO.binread(@required_bytes)
-    |> Signature.match()
+    |> Signature.detect()
     |> normalize()
   end
 
