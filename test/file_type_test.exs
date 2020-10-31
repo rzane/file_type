@@ -259,7 +259,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-xz" do
-    @tag :pending
     fixture "fixture.tar.xz"
   end
 
