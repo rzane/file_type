@@ -157,6 +157,7 @@ defmodule FileType.Signature do
   end
 
   # 14-byte signatures
+  def detect(~m"060e2b34020501010d0102010102"h), do: {"mxf", "application/mxf"}
   def detect(~m"2::270a00000000000000000000"oh), do: {"shp", "application/x-esri-shape"}
 
   # More bytes!

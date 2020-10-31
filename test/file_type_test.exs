@@ -20,7 +20,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/mxf" do
-    @tag :pending
     fixture "fixture.mxf"
   end
 
