@@ -27,6 +27,13 @@ defmodule FileType.Utils do
     quote do: <<_::binary-size(unquote(offset)), unquote(data)>> <> _
   end
 
+  @doc """
+  Just an alias for `binary-size` within a binary pattern match.
+  """
+  defmacro binary(size) do
+    quote do: binary - size(unquote(size))
+  end
+
   defp hex!(data) do
     Base.decode16!(data, case: :lower)
   end

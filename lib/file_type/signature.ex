@@ -94,9 +94,9 @@ defmodule FileType.Signature do
   def detect(~m"8::WEBP"o), do: {"webp", "image/webp"}
   def detect(~m"ab4b5458203131bb0d0a1a0a"h), do: {"ktx", "image/ktx"}
   def detect(~m"494955001800000088e774d8"h), do: {"rw2", "image/x-panasonic-rw2"}
-  def detect(<<"RIFF", _::binary-size(4), "AVI">> <> _), do: {"avi", "video/vnd.avi"}
-  def detect(<<"RIFF", _::binary-size(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
-  def detect(<<"RIFF", _::binary-size(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
+  def detect(<<"RIFF", _::binary(4), "AVI">> <> _), do: {"avi", "video/vnd.avi"}
+  def detect(<<"RIFF", _::binary(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
+  def detect(<<"RIFF", _::binary(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
 
   def detect(~m"4::ftyp"o = data) do
     data
