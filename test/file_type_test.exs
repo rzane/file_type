@@ -11,7 +11,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/epub+zip" do
-    @tag :pending
     fixture "fixture.epub"
   end
 
@@ -59,17 +58,14 @@ defmodule FileTypeTest do
   end
 
   describe "application/vnd.oasis.opendocument.presentation" do
-    @tag :pending
     fixture "fixture.odp"
   end
 
   describe "application/vnd.oasis.opendocument.spreadsheet" do
-    @tag :pending
     fixture "fixture.ods"
   end
 
   describe "application/vnd.oasis.opendocument.text" do
-    @tag :pending
     fixture "fixture.odt"
   end
 
@@ -245,7 +241,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-xpinstall" do
-    @tag :pending
     fixture "fixture.xpi"
   end
 

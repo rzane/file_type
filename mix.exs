@@ -1,7 +1,7 @@
 defmodule FileType.MixProject do
   use Mix.Project
 
-  @source_url "https://github.com/rzane/file_store"
+  @source_url "https://github.com/rzane/file_type"
   @version "0.0.0"
 
   def project do

@@ -1,5 +1,6 @@
 defmodule FileType do
   alias FileType.Signature
+  alias FileType.ZipFile
 
   @enforce_keys [:ext, :mime]
   defstruct [:ext, :mime]
@@ -46,20 +47,35 @@ defmodule FileType do
       {:ok, "image/png"}
 
   """
-  @spec from_io(File.io_device()) :: {:ok, t} | {:error, :unrecognized}
-  def from_io(device) do
-    device
-    |> IO.binread(@required_bytes)
-    |> Signature.detect()
-    |> normalize()
+  @spec from_io(IO.device()) :: {:ok, t} | {:error, :unrecognized}
+  def from_io(io) do
+    with {:ok, data} <- binread(io, @required_bytes) do
+      data
+      |> Signature.detect()
+      |> ZipFile.postprocess(io)
+      |> normalize()
+    end
   end
 
-  defp from_file(device) do
-    from_io(device)
+  defp from_file(io) do
+    from_io(io)
   after
-    File.close(device)
+    File.close(io)
   end
 
-  defp normalize(nil), do: {:error, :unrecognized}
-  defp normalize({ext, mime}), do: {:ok, %__MODULE__{ext: ext, mime: mime}}
+  defp normalize({ext, mime}) do
+    {:ok, %__MODULE__{ext: ext, mime: mime}}
+  end
+
+  defp normalize(nil) do
+    {:error, :unrecognized}
+  end
+
+  defp binread(io, count) do
+    case IO.binread(io, count) do
+      :eof -> {:error, :eof}
+      {:error, reason} -> {:error, reason}
+      data -> {:ok, data}
+    end
+  end
 end
