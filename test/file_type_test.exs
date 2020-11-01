@@ -70,13 +70,8 @@ defmodule FileTypeTest do
   end
 
   describe "application/vnd.openxmlformats-officedocument.presentationml.presentation" do
-    @tag :pending
     fixture "fixture.pptx"
-
-    @tag :pending
     fixture "fixture2.pptx"
-
-    @tag :pending
     fixture "fixture-office365.pptx"
   end
 

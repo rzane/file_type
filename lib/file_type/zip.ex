@@ -44,6 +44,10 @@ defmodule FileType.Zip do
     {:ok, {"docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"}}
   end
 
+  defp match(%Header{name: "ppt/_rels/presentation.xml.rels"}) do
+    {:ok, {"pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"}}
+  end
+
   for {ext, mime} <- @mimetypes, size = byte_size(mime) do
     defp match(%Header{name: "mimetype", size: unquote(size)}) do
       {:ok, {unquote(ext), unquote(mime)}}
