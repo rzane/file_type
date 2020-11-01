@@ -1,6 +1,6 @@
 defmodule FileType do
   alias FileType.Signature
-  alias FileType.ZipFile
+  alias FileType.Zip
 
   @enforce_keys [:ext, :mime]
   defstruct [:ext, :mime]
@@ -52,7 +52,7 @@ defmodule FileType do
     with {:ok, data} <- binread(io, @required_bytes) do
       data
       |> Signature.detect()
-      |> ZipFile.postprocess(io)
+      |> Zip.postprocess(io)
       |> normalize()
     end
   end
