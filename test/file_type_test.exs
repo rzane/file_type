@@ -50,10 +50,7 @@ defmodule FileTypeTest do
   end
 
   describe "application/vnd.ms-fontobject" do
-    @tag :pending
     fixture "fixture.eot"
-
-    @tag :pending
     fixture "fixture-0x20001.eot"
   end
 

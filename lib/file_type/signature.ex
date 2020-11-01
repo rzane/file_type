@@ -178,6 +178,12 @@ defmodule FileType.Signature do
     end
   end
 
+  # 25 bytes
+  for eot <- [<<0x00, 0x00, 0x01>>, <<0x01, 0x00, 0x02>>, <<0x02, 0x00, 0x02>>] do
+    def detect(<<_::binary(8), unquote(eot), _::binary(23), 0x4C, 0x50>> <> _),
+      do: {"eot", "application/vnd.ms-fontobject"}
+  end
+
   # 27 bytes
   def detect(~m"-----BEGIN PGP MESSAGE-----"), do: {"pgp", "application/pgp-encrypted"}
 
