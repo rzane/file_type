@@ -87,13 +87,8 @@ defmodule FileTypeTest do
   end
 
   describe "application/vnd.openxmlformats-officedocument.wordprocessingml.document" do
-    @tag :pending
     fixture "fixture.docx"
-
-    @tag :pending
     fixture "fixture2.docx"
-
-    @tag :pending
     fixture "fixture-office365.docx"
   end
 
