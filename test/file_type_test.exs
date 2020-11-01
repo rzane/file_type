@@ -81,13 +81,8 @@ defmodule FileTypeTest do
   end
 
   describe "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" do
-    @tag :pending
     fixture "fixture.xlsx"
-
-    @tag :pending
     fixture "fixture2.xlsx"
-
-    @tag :pending
     fixture "fixture-office365.xlsx"
   end
 

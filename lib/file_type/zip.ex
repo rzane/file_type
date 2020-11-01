@@ -36,6 +36,10 @@ defmodule FileType.Zip do
     {:ok, {"xpi", "application/x-xpinstall"}}
   end
 
+  defp match(%Header{name: "xl/_rels/workbook.xml.rels"}) do
+    {:ok, {"xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}}
+  end
+
   for {ext, mime} <- @mimetypes, size = byte_size(mime) do
     defp match(%Header{name: "mimetype", size: unquote(size)}) do
       {:ok, {unquote(ext), unquote(mime)}}
