@@ -29,7 +29,7 @@ defmodule FileType.Zip.HeaderTest do
 
   @tag io: "test/fixtures/fixture.png"
   test "detects that the file is not valid", %{io: io} do
-    assert {:error, :malformed} = Header.seek(io)
+    assert {:error, :unrecognized} = Header.seek(io)
   end
 
   defp open(path) do

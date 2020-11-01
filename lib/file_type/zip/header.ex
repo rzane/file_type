@@ -21,7 +21,7 @@ defmodule FileType.Zip.Header do
         seek(io, {:cur, -1})
 
       {:ok, _} ->
-        {:error, :malformed}
+        {:error, :unrecognized}
 
       {:error, reason} ->
         {:error, reason}
@@ -49,5 +49,5 @@ defmodule FileType.Zip.Header do
   end
 
   defp parse(_io, <<@eocd_sig>> <> _), do: :eof
-  defp parse(_io, _data), do: {:error, :malformed}
+  defp parse(_io, _data), do: {:error, :unrecognized}
 end

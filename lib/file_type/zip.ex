@@ -12,23 +12,22 @@ defmodule FileType.Zip do
     {"odp", "application/vnd.oasis.opendocument.presentation"}
   ]
 
-  def postprocess(@zip, io), do: detect(io)
-  def postprocess(type, _io), do: type
-
-  def detect(io) do
+  def postprocess(io, @zip) do
     with {:ok, _} <- Header.seek(io) do
       read(io)
     end
   end
 
+  def postprocess(_io, type), do: {:ok, type}
+
   defp read(io) do
     with {:ok, header} <- Header.read(io),
          {:ok, type} <- match(header) do
-      type
+      {:ok, type}
     else
-      :eof -> @zip
       :continue -> read(io)
-      {:error, _reason} -> nil
+      :eof -> {:ok, @zip}
+      {:error, reason} -> {:error, reason}
     end
   end
 

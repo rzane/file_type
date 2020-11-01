@@ -8,26 +8,50 @@ defmodule FileType do
   @required_bytes 265
 
   @type t :: %__MODULE__{ext: binary, mime: binary}
+  @type error :: File.posix() | :unrecognized
 
   @doc """
-  Determine the MIME type of a file on disk.
+  Determines a MIME type from an IO device.
 
   This will read the first #{@required_bytes} bytes from the
-  file and attempt to determine the file's type.
+  IO device and attempt to determine the file's type.
+
+  If the file looks like a ZIP archive, further processing will
+  be performed in order to support formats like Microsoft Word
+  and Excel.
+
+  ## Examples
+
+      iex> {:ok, io} = File.open("file.png", [:read, :binary])
+      {:ok, #PID<0.109.0>}
+
+      iex> FileType.from_io(io)
+      {:ok, %FileType{ext: "png", mime: "image/png"}}
+
+  """
+  @spec from_io(IO.device()) :: {:ok, t} | {:error, error}
+  def from_io(io) do
+    with {:ok, data} <- binread(io, @required_bytes),
+         {:ok, type} <- detect(data),
+         {:ok, {ext, mime}} <- Zip.postprocess(io, type) do
+      {:ok, %__MODULE__{ext: ext, mime: mime}}
+    end
+  end
+
+  @doc """
+  This is the same as `from_io/1`, except that it will open and close
+  a file for you.
 
   ## Examples
 
       iex> FileType.from_path("file.png")
-      {:ok, "image/png"}
+      {:ok, %FileType{ext: "png", mime: "image/png"}}
 
-      iex> FileType.from_path("file.abc")
-      {:error, :unrecognized}
-
-      iex> FileType.from_path("does-not-exist.txt")
-      {:error, :enoexist}
+      iex> FileType.from_path("does-not-exist.png")
+      {:error, :enoent}
 
   """
-  @spec from_path(binary) :: {:ok, t} | {:error, File.posix() | :unrecognized}
+  @spec from_path(binary) :: {:ok, t} | {:error, error}
   def from_path(path) when is_binary(path) do
     with {:ok, file} <- File.open(path, [:read, :binary]) do
       from_file(file)
@@ -35,26 +59,24 @@ defmodule FileType do
   end
 
   @doc """
-  Determine the MIME type from an IO device.
+  Format an error returned by this library.
 
-  This will read the first #{@required_bytes} bytes from the
-  IO device and attempt to determine the file's type.
+  ## Examples
 
-      iex> {:ok, file} = File.open("file.png", [:read, :binary])
-      {:ok, #PID<0.109.0>}
+      iex> FileType.format_error(:unrecognized)
+      "the file did not match any known format"
 
-      iex> FileType.from_io(file)
-      {:ok, "image/png"}
+      iex> FileType.format_error(:enoent)
+      "no such file or directory"
 
   """
-  @spec from_io(IO.device()) :: {:ok, t} | {:error, :unrecognized}
-  def from_io(io) do
-    with {:ok, data} <- binread(io, @required_bytes) do
-      data
-      |> Signature.detect()
-      |> Zip.postprocess(io)
-      |> normalize()
-    end
+  @spec format_error(error) :: binary
+  def format_error(:unrecognized) do
+    "the file did not match any known format"
+  end
+
+  def format_error(other) do
+    other |> :file.format_error() |> to_string()
   end
 
   defp from_file(io) do
@@ -63,12 +85,11 @@ defmodule FileType do
     File.close(io)
   end
 
-  defp normalize({ext, mime}) do
-    {:ok, %__MODULE__{ext: ext, mime: mime}}
-  end
-
-  defp normalize(nil) do
-    {:error, :unrecognized}
+  defp detect(data) do
+    case Signature.detect(data) do
+      nil -> {:error, :unrecognized}
+      type -> {:ok, type}
+    end
   end
 
   defp binread(io, count) do
