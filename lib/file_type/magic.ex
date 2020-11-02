@@ -6,7 +6,7 @@ defmodule FileType.Magic do
   alias FileType.Zip
   alias FileType.CFB
 
-  @size 265
+  @size 40
   @type result :: {:ok, {binary, binary}} | {:error, FileType.error()}
 
   @spec detect(IO.device()) :: result
@@ -250,28 +250,42 @@ defmodule FileType.Magic do
     end
   end
 
-  # 48 bytes
-  defp detect(_, ~m"44::SCRM"o), do: ok("s3m", "audio/x-s3m")
-
-  # 68 bytes
-  defp detect(_, ~m"60::424f4f4b4d4f4249"oh), do: ok("mobi", "application/x-mobipocket-ebook")
-
-  # 100+ bytes
-  defp detect(_, ~m"128::4449434d"oh), do: ok("dcm", "application/dicom")
-  defp detect(_, ~m"257::757374617200"oh), do: ok("tar", "application/x-tar")
-  defp detect(_, ~m"257::7573746172202000"oh), do: ok("tar", "application/x-tar")
-
-  defp detect(_, <<_::binary-4, 0x47, _::binary-191, 0x47>> <> _), do: ok("mts", "video/mp2t")
-
-  # These patterns are likely to produce false positives
+  # These patterns are likely to produce false positives.
   defp detect(_, ~m"0001000000"h), do: ok("ttf", "font/ttf")
   defp detect(_, ~m"00000100"h), do: ok("ico", "image/x-icon")
   defp detect(_, ~m"00000200"h), do: ok("cur", "image/x-icon")
 
-  # Containers
+  # These formats need further processing
   defp detect(io, ~m"504b0304"h), do: Zip.detect(io)
   defp detect(io, ~m"d0cf11e0a1b11ae1"h), do: CFB.detect(io)
 
-  # Oh, no. Undetected file!
-  defp detect(_, _), do: :error
+  # These formats require more than 32 bytes to detect.
+  defp detect(io, _) do
+    cond do
+      contains?(io, 44, "SCRM") ->
+        ok("s3m", "audio/x-s3m")
+
+      contains?(io, 60, ~h"424f4f4b4d4f4249") ->
+        ok("mobi", "application/x-mobipocket-ebook")
+
+      contains?(io, 128, ~h"4449434d") ->
+        ok("dcm", "application/dicom")
+
+      contains?(io, 257, "ustar") ->
+        ok("tar", "application/x-tar")
+
+      contains?(io, 4, <<0x47>>) and contains?(io, 196, <<0x47>>) ->
+        ok("mts", "video/mp2t")
+
+      true ->
+        {:error, :unrecognized}
+    end
+  end
+
+  defp contains?(io, location, data) do
+    case :file.pread(io, location, byte_size(data)) do
+      {:ok, ^data} -> true
+      _ -> false
+    end
+  end
 end
