@@ -1,10 +1,10 @@
 defmodule FileType.CFB do
   import FileType.Utils, only: [sigil_h: 2]
 
-  @sector_size_location 30
-  @root_index_location 48
   @clsid_offset 80
   @clsid_bytes 16
+
+  @header [{30, 2}, {48, 4}]
 
   @cfb {"cfb", "application/x-cfb"}
   @word {"doc", "application/msword"}
@@ -21,12 +21,13 @@ defmodule FileType.CFB do
   }
 
   def postprocess(io, @cfb) do
-    with {:ok, sector_size} <- read_sector_size(io),
-         {:ok, root_index} <- read_root_index(io),
-         {:ok, clsid} <- read_clsid(io, sector_size, root_index) do
+    with {:ok, fields} <- :file.pread(io, @header),
+         {:ok, header} <- parse_header(fields),
+         {:ok, clsid} <- read_clsid(io, header) do
       match(clsid)
     else
       :eof -> {:error, :unrecognized}
+      {:error, reason} -> {:error, reason}
     end
   end
 
@@ -38,19 +39,14 @@ defmodule FileType.CFB do
 
   defp match(_), do: {:ok, @cfb}
 
-  defp read_clsid(io, sector_size, index) do
-    :file.pread(io, sector_size * (index + 1) + @clsid_offset, @clsid_bytes)
+  defp read_clsid(io, header) do
+    root_offset = header.sector_size * (header.root_index + 1)
+    :file.pread(io, root_offset + @clsid_offset, @clsid_bytes)
   end
 
-  defp read_root_index(io) do
-    with {:ok, <<index::little-32>>} <- :file.pread(io, @root_index_location, 4) do
-      {:ok, index}
-    end
+  defp parse_header([<<exp::little-16>>, <<index::little-32>>]) do
+    {:ok, %{sector_size: round(:math.pow(2, exp)), root_index: index}}
   end
 
-  defp read_sector_size(io) do
-    with {:ok, <<exp::little-16>>} <- :file.pread(io, @sector_size_location, 2) do
-      {:ok, round(:math.pow(2, exp))}
-    end
-  end
+  defp parse_header(_), do: {:error, :unrecognized}
 end
