@@ -1,5 +1,5 @@
 defmodule FileTypeTest do
-  use FileType.Case
+  use FileType.Case, async: true
 
   describe "application/dicom" do
     fixture "fixture.dcm"
