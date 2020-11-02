@@ -163,7 +163,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-lzh-compressed" do
-    @tag :pending
     fixture "fixture.lzh"
   end
 

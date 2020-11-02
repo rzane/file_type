@@ -74,6 +74,18 @@ defmodule FileType.Signature do
 
   # 7 bytes
   def detect(~m"BLENDER"), do: {"blend", "application/x-blender"}
+  def detect(~m"2::-lh0-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lh1-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lh2-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lh3-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lh4-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lh5-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lh6-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lh7-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lzs-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lz4-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lz5-"o), do: {"lzh", "application/x-lzh-compressed"}
+  def detect(~m"2::-lhd-"o), do: {"lzh", "application/x-lzh-compressed"}
 
   # 8 bytes
   def detect(~m"4::free"o), do: {"mov", "video/quicktime"}
