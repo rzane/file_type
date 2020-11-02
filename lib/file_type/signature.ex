@@ -233,14 +233,12 @@ defmodule FileType.Signature do
   # 68 bytes
   def detect(~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
 
-  # 132 bytes
+  # 100+ bytes
   def detect(~m"128::4449434d"oh), do: {"dcm", "application/dicom"}
-
-  # 263 bytes
   def detect(~m"257::757374617200"oh), do: {"tar", "application/x-tar"}
-
-  # 265 bytes
   def detect(~m"257::7573746172202000"oh), do: {"tar", "application/x-tar"}
+
+  def detect(<<_::binary(4), 0x47, _::binary(191), 0x47>> <> _), do: {"mts", "video/mp2t"}
 
   # Low fidelity tests go last!
   def detect(~m"0001000000"h), do: {"ttf", "font/ttf"}

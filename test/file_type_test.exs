@@ -548,7 +548,6 @@ defmodule FileTypeTest do
   end
 
   describe "video/mp2t" do
-    @tag :pending
     fixture "fixture.mts"
   end
 
