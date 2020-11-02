@@ -62,6 +62,9 @@ defmodule FileType.Signature do
   def detect(~m"4f54544f00"h), do: {"otf", "font/otf"}
   def detect(~m"0001000000"h), do: {"ttf", "font/ttf"}
 
+  def detect(~m"000001ba21"h), do: {"mpg", "video/MP1S"}
+  def detect(~m"000001ba44"h), do: {"mpg", "video/MP2P"}
+
   # 6 bytes
   def detect(~m"<?xml "), do: {"xml", "application/xml"}
   def detect(~m"BEGIN:"), do: {"ics", "text/calendar"}

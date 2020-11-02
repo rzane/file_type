@@ -538,12 +538,10 @@ defmodule FileTypeTest do
   end
 
   describe "video/MP1S" do
-    @tag :pending
     fixture "fixture.ps.mpg"
   end
 
   describe "video/MP2P" do
-    @tag :pending
     fixture "fixture.sub.mpg"
   end
 
