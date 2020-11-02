@@ -14,7 +14,7 @@ defmodule FileType.Zip.Header do
 
   defp seek(io, location) do
     case :file.pread(io, location, @eocd_size) do
-      {:ok, <<@eocd_sig, _::binary-size(12), start::little-size(32), _::binary-size(2)>>} ->
+      {:ok, <<@eocd_sig, _::binary-size(12), start::little-32, _::binary-2>>} ->
         :file.position(io, start)
 
       {:ok, data} when byte_size(data) == @eocd_size ->
@@ -36,8 +36,8 @@ defmodule FileType.Zip.Header do
 
   defp parse(
          io,
-         <<@header_sig, _::binary-size(20), size::little-size(32), name_length::little-size(16),
-           extra_length::little-size(16), comment_length::little-size(16), _::binary-size(12)>>
+         <<@header_sig, _::binary-20, size::little-32, name_length::little-16,
+           extra_length::little-16, comment_length::little-16, _::binary-12>>
        ) do
     case :file.read(io, name_length + extra_length + comment_length) do
       {:ok, <<name::binary-size(name_length)>> <> _} ->

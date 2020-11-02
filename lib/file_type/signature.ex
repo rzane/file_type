@@ -109,9 +109,9 @@ defmodule FileType.Signature do
   def detect(~m"8::WEBP"o), do: {"webp", "image/webp"}
   def detect(~m"ab4b5458203131bb0d0a1a0a"h), do: {"ktx", "image/ktx"}
   def detect(~m"494955001800000088e774d8"h), do: {"rw2", "image/x-panasonic-rw2"}
-  def detect(<<"RIFF", _::binary(4), "AVI">> <> _), do: {"avi", "video/vnd.avi"}
-  def detect(<<"RIFF", _::binary(4), "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
-  def detect(<<"RIFF", _::binary(4), "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
+  def detect(<<"RIFF", _::binary-4, "AVI">> <> _), do: {"avi", "video/vnd.avi"}
+  def detect(<<"RIFF", _::binary-4, "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
+  def detect(<<"RIFF", _::binary-4, "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
 
   def detect(~m"4::ftyp"o = data) do
     data
@@ -204,7 +204,7 @@ defmodule FileType.Signature do
 
   # 25 bytes
   for eot <- [<<0x00, 0x00, 0x01>>, <<0x01, 0x00, 0x02>>, <<0x02, 0x00, 0x02>>] do
-    def detect(<<_::binary(8), unquote(eot), _::binary(23), 0x4C, 0x50>> <> _),
+    def detect(<<_::binary-8, unquote(eot), _::binary-23, 0x4C, 0x50>> <> _),
       do: {"eot", "application/vnd.ms-fontobject"}
   end
 
@@ -238,7 +238,7 @@ defmodule FileType.Signature do
   def detect(~m"257::757374617200"oh), do: {"tar", "application/x-tar"}
   def detect(~m"257::7573746172202000"oh), do: {"tar", "application/x-tar"}
 
-  def detect(<<_::binary(4), 0x47, _::binary(191), 0x47>> <> _), do: {"mts", "video/mp2t"}
+  def detect(<<_::binary-4, 0x47, _::binary-191, 0x47>> <> _), do: {"mts", "video/mp2t"}
 
   # Low fidelity tests go last!
   def detect(~m"0001000000"h), do: {"ttf", "font/ttf"}

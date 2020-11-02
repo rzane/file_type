@@ -43,13 +43,13 @@ defmodule FileType.CFB do
   end
 
   defp read_root_index(io) do
-    with {:ok, <<index::little-size(32)>>} <- :file.pread(io, @root_index_location, 4) do
+    with {:ok, <<index::little-32>>} <- :file.pread(io, @root_index_location, 4) do
       {:ok, index}
     end
   end
 
   defp read_sector_size(io) do
-    with {:ok, <<exp::little-size(16)>>} <- :file.pread(io, @sector_size_location, 2) do
+    with {:ok, <<exp::little-16>>} <- :file.pread(io, @sector_size_location, 2) do
       {:ok, round(:math.pow(2, exp))}
     end
   end
