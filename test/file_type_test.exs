@@ -193,7 +193,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-shockwave-flash" do
-    @tag :pending
     fixture "fixture.swf"
   end
 
