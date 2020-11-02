@@ -171,10 +171,7 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-mie" do
-    @tag :pending
     fixture "fixture-big-endian.mie"
-
-    @tag :pending
     fixture "fixture-little-endian.mie"
   end
 
