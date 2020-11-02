@@ -48,8 +48,6 @@ defmodule FileType.Signature do
   def detect(~m"89504e47"h), do: {"png", "image/png"}
   def detect(~m"425047fb"h), do: {"bpg", "image/bpg"}
   def detect(~m"4d4d002a"h), do: {"tif", "image/tiff"}
-  def detect(~m"00000100"h), do: {"ico", "image/x-icon"}
-  def detect(~m"00000200"h), do: {"cur", "image/x-icon"}
   def detect(~m"c5d0d3c6"h), do: {"eps", "application/eps"}
   def detect(~m"504b0304"h), do: {"zip", "application/zip"}
   def detect(~m"0061736d"h), do: {"wasm", "application/wasm"}
@@ -243,6 +241,11 @@ defmodule FileType.Signature do
 
   # 265 bytes
   def detect(~m"257::7573746172202000"oh), do: {"tar", "application/x-tar"}
+
+  # Low fidelity tests go last!
+  def detect(~m"0001000000"h), do: {"ttf", "font/ttf"}
+  def detect(~m"00000100"h), do: {"ico", "image/x-icon"}
+  def detect(~m"00000200"h), do: {"cur", "image/x-icon"}
 
   # Oh, no. Undetected file!
   def detect(_), do: nil

@@ -338,7 +338,10 @@ defmodule FileTypeTest do
   end
 
   describe "audio/x-ms-asf" do
+    @tag :pending
     fixture "fixture.asf"
+
+    @tag :pending
     fixture "fixture.wma.asf"
   end
 
@@ -364,7 +367,6 @@ defmodule FileTypeTest do
   end
 
   describe "font/ttf" do
-    @tag :pending
     fixture "fixture.ttf"
   end
 
