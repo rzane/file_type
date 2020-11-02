@@ -1,6 +1,7 @@
 defmodule FileType do
   alias FileType.Signature
   alias FileType.Zip
+  alias FileType.CFB
 
   @enforce_keys [:ext, :mime]
   defstruct [:ext, :mime]
@@ -33,7 +34,9 @@ defmodule FileType do
   def from_io(io) do
     with {:ok, data} <- binread(io, @required_bytes),
          {:ok, type} <- detect(data),
-         {:ok, {ext, mime}} <- Zip.postprocess(io, type) do
+         {:ok, type} <- Zip.postprocess(io, type),
+         {:ok, type} <- CFB.postprocess(io, type),
+         {ext, mime} <- type do
       {:ok, %__MODULE__{ext: ext, mime: mime}}
     end
   end
