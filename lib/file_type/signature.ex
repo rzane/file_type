@@ -74,7 +74,6 @@ defmodule FileType.Signature do
 
   # 7 bytes
   def detect(~m"BLENDER"), do: {"blend", "application/x-blender"}
-  def detect(~m"!<arch>"), do: {"ar", "application/x-unix-archive"}
 
   # 8 bytes
   def detect(~m"4::free"o), do: {"mov", "video/quicktime"}
@@ -155,6 +154,14 @@ defmodule FileType.Signature do
   # 20 bytes
   def detect(~m"4c0000000114020000000000c000000000000046"h),
     do: {"lnk", "application/x.ms.shortcut"}
+
+  # 21 bytes
+  def detect(~m"!<arch>" = data) do
+    case binary_part(data, 8, 13) do
+      "debian-binary" -> {"deb", "application/x-deb"}
+      _ -> {"ar", "application/x-unix-archive"}
+    end
+  end
 
   # 24 bytes
   def detect(~m"49492a00"h = data) do

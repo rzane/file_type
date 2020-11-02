@@ -147,7 +147,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-deb" do
-    @tag :pending
     fixture "fixture.deb"
   end
 
