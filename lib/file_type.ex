@@ -56,8 +56,9 @@ defmodule FileType do
   """
   @spec from_path(binary) :: {:ok, t} | {:error, error}
   def from_path(path) when is_binary(path) do
-    with {:ok, file} <- File.open(path, [:read, :binary]) do
-      from_file(file)
+    case File.open(path, [:read, :binary], &from_io/1) do
+      {:ok, result} -> result
+      {:error, reason} -> {:error, reason}
     end
   end
 
@@ -80,12 +81,6 @@ defmodule FileType do
 
   def format_error(other) do
     other |> :file.format_error() |> to_string()
-  end
-
-  defp from_file(io) do
-    from_io(io)
-  after
-    File.close(io)
   end
 
   defp detect(data) do
