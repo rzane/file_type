@@ -20,7 +20,8 @@ defmodule FileType.CFB do
     ~h"84100c0000000000c000000000000046" => @msi
   }
 
-  def postprocess(io, @cfb) do
+  @spec detect(IO.device()) :: FileType.Magic.result()
+  def detect(io) do
     with {:ok, fields} <- :file.pread(io, @header),
          {:ok, header} <- parse_header(fields),
          {:ok, clsid} <- read_clsid(io, header) do
@@ -30,8 +31,6 @@ defmodule FileType.CFB do
       {:error, reason} -> {:error, reason}
     end
   end
-
-  def postprocess(_io, type), do: {:ok, type}
 
   for {clsid, type} <- @types do
     defp match(unquote(clsid)), do: {:ok, unquote(type)}

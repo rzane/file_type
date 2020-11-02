@@ -1,7 +1,5 @@
 defmodule FileType do
   alias FileType.Magic
-  alias FileType.Zip
-  alias FileType.CFB
 
   @enforce_keys [:ext, :mime]
   defstruct [:ext, :mime]
@@ -24,10 +22,7 @@ defmodule FileType do
   """
   @spec from_io(IO.device()) :: result
   def from_io(io) do
-    with {:ok, type} <- Magic.detect(io),
-         {:ok, type} <- Zip.postprocess(io, type),
-         {:ok, type} <- CFB.postprocess(io, type),
-         {ext, mime} <- type do
+    with {:ok, {ext, mime}} <- Magic.detect(io) do
       {:ok, %__MODULE__{ext: ext, mime: mime}}
     end
   end

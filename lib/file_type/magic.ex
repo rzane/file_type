@@ -3,6 +3,9 @@ defmodule FileType.Magic do
 
   import FileType.Utils
 
+  alias FileType.Zip
+  alias FileType.CFB
+
   @size 265
   @type result :: {:ok, {binary, binary}} | {:error, FileType.error()}
 
@@ -10,211 +13,214 @@ defmodule FileType.Magic do
   def detect(io) do
     case :file.read(io, @size) do
       {:ok, data} ->
-        case detect(io, data) do
-          {ext, mime} -> {:ok, {ext, mime}}
-          nil -> {:error, :unrecognized}
-        end
+        detect(io, data)
 
-      {:error, reason} -> {:error, reason}
-      :eof -> {:error, :unrecognized}
+      {:error, reason} ->
+        {:error, reason}
+
+      :eof ->
+        {:error, :unrecognized}
     end
   end
 
+  defp ok(ext, mime), do: {:ok, {ext, mime}}
+
   # 2 bytes
-  defp detect(_, ~m"BM"), do: {"bmp", "image/bmp"}
-  defp detect(_, ~m"0b77"h), do: {"ac3", "audio/vnd.dolby.dd-raw"}
-  defp detect(_, ~m"7801"h), do: {"dmg", "application/x-apple-diskimage"}
-  defp detect(_, ~m"4d5a"h), do: {"exe", "application/x-msdownload"}
-  defp detect(_, ~m"1fa0"h), do: {"Z", "application/x-compress"}
-  defp detect(_, ~m"1f9d"h), do: {"Z", "application/x-compress"}
+  defp detect(_, ~m"BM"), do: ok("bmp", "image/bmp")
+  defp detect(_, ~m"0b77"h), do: ok("ac3", "audio/vnd.dolby.dd-raw")
+  defp detect(_, ~m"7801"h), do: ok("dmg", "application/x-apple-diskimage")
+  defp detect(_, ~m"4d5a"h), do: ok("exe", "application/x-msdownload")
+  defp detect(_, ~m"1fa0"h), do: ok("Z", "application/x-compress")
+  defp detect(_, ~m"1f9d"h), do: ok("Z", "application/x-compress")
 
   # 3 bytes
-  defp detect(_, ~m"ID3"), do: {"mp3", "audio/mpeg"}
-  defp detect(_, ~m"MP+"), do: {"mpc", "audio/x-musepack"}
-  defp detect(_, ~m"ffd8ff"h), do: {"jpg", "image/jpeg"}
-  defp detect(_, ~m"4949bc"h), do: {"jxr", "image/vnd.ms-photo"}
-  defp detect(_, ~m"1f8b"h), do: {"gz", "application/gzip"}
-  defp detect(_, ~m"425a68"h), do: {"bz2", "application/x-bzip2"}
-  defp detect(_, ~m"435753"h), do: {"swf", "application/x-shockwave-flash"}
-  defp detect(_, ~m"465753"h), do: {"swf", "application/x-shockwave-flash"}
-  defp detect(_, ~m"474946"h), do: {"gif", "image/gif"}
+  defp detect(_, ~m"ID3"), do: ok("mp3", "audio/mpeg")
+  defp detect(_, ~m"MP+"), do: ok("mpc", "audio/x-musepack")
+  defp detect(_, ~m"ffd8ff"h), do: ok("jpg", "image/jpeg")
+  defp detect(_, ~m"4949bc"h), do: ok("jxr", "image/vnd.ms-photo")
+  defp detect(_, ~m"1f8b"h), do: ok("gz", "application/gzip")
+  defp detect(_, ~m"425a68"h), do: ok("bz2", "application/x-bzip2")
+  defp detect(_, ~m"435753"h), do: ok("swf", "application/x-shockwave-flash")
+  defp detect(_, ~m"465753"h), do: ok("swf", "application/x-shockwave-flash")
+  defp detect(_, ~m"474946"h), do: ok("gif", "image/gif")
 
   # 4 bytes
-  defp detect(_, ~m"FLIF"), do: {"flif", "image/flif"}
-  defp detect(_, ~m"8BPS"), do: {"psd", "image/vnd.adobe.photoshop"}
-  defp detect(_, ~m"icns"), do: {"icns", "image/icns"}
-  defp detect(_, ~m"MPCK"), do: {"mpc", "audio/x-musepack"}
-  defp detect(_, ~m"FORM"), do: {"aif", "audio/aiff"}
-  defp detect(_, ~m"MThd"), do: {"mid", "audio/midi"}
-  defp detect(_, ~m"fLaC"), do: {"flac", "audio/x-flac"}
-  defp detect(_, ~m"IMPM"), do: {"it", "audio/x-it"}
-  defp detect(_, ~m"DSD "), do: {"dsf", "audio/x-dsf"}
-  defp detect(_, ~m"wvpk"), do: {"wv", "audio/wavpack"}
-  defp detect(_, ~m"MAC "), do: {"ape", "audio/ape"}
-  defp detect(_, ~m"%PDF-"), do: {"pdf", "application/pdf"}
-  defp detect(_, ~m"LZIP"), do: {"lz", "application/x-lzip"}
-  defp detect(_, ~m"SQLi"), do: {"sqlite", "application/x-sqlite3"}
-  defp detect(_, ~m"Cr24"), do: {"crx", "application/x-google-chrome-extension"}
-  defp detect(_, ~m"MSCF"), do: {"cab", "application/vnd.ms-cab-compressed"}
-  defp detect(_, ~m"ISc("), do: {"cab", "application/vnd.ms-cab-compressed"}
-  defp detect(_, ~m"1a45dfa3"h), do: {"mkv", "video/x-matroska"}
-  defp detect(_, ~m"464c5601"h), do: {"flv", "video/x-flv"}
-  defp detect(_, ~m"89504e47"h), do: {"png", "image/png"}
-  defp detect(_, ~m"425047fb"h), do: {"bpg", "image/bpg"}
-  defp detect(_, ~m"4d4d002a"h), do: {"tif", "image/tiff"}
-  defp detect(_, ~m"c5d0d3c6"h), do: {"eps", "application/eps"}
-  defp detect(_, ~m"504b0304"h), do: {"zip", "application/zip"}
-  defp detect(_, ~m"0061736d"h), do: {"wasm", "application/wasm"}
-  defp detect(_, ~m"d4c3b2a1"h), do: {"pcap", "application/vnd.tcpdump.pcap"}
-  defp detect(_, ~m"a1b2c3d4"h), do: {"pcap", "application/vnd.tcpdump.pcap"}
-  defp detect(_, ~m"4e45531a"h), do: {"nes", "application/x-nintendo-nes-rom"}
-  defp detect(_, ~m"edabeedb"h), do: {"rpm", "application/x-rpm"}
+  defp detect(_, ~m"FLIF"), do: ok("flif", "image/flif")
+  defp detect(_, ~m"8BPS"), do: ok("psd", "image/vnd.adobe.photoshop")
+  defp detect(_, ~m"icns"), do: ok("icns", "image/icns")
+  defp detect(_, ~m"MPCK"), do: ok("mpc", "audio/x-musepack")
+  defp detect(_, ~m"FORM"), do: ok("aif", "audio/aiff")
+  defp detect(_, ~m"MThd"), do: ok("mid", "audio/midi")
+  defp detect(_, ~m"fLaC"), do: ok("flac", "audio/x-flac")
+  defp detect(_, ~m"IMPM"), do: ok("it", "audio/x-it")
+  defp detect(_, ~m"DSD "), do: ok("dsf", "audio/x-dsf")
+  defp detect(_, ~m"wvpk"), do: ok("wv", "audio/wavpack")
+  defp detect(_, ~m"MAC "), do: ok("ape", "audio/ape")
+  defp detect(_, ~m"%PDF-"), do: ok("pdf", "application/pdf")
+  defp detect(_, ~m"LZIP"), do: ok("lz", "application/x-lzip")
+  defp detect(_, ~m"SQLi"), do: ok("sqlite", "application/x-sqlite3")
+  defp detect(_, ~m"Cr24"), do: ok("crx", "application/x-google-chrome-extension")
+  defp detect(_, ~m"MSCF"), do: ok("cab", "application/vnd.ms-cab-compressed")
+  defp detect(_, ~m"ISc("), do: ok("cab", "application/vnd.ms-cab-compressed")
+  defp detect(_, ~m"1a45dfa3"h), do: ok("mkv", "video/x-matroska")
+  defp detect(_, ~m"464c5601"h), do: ok("flv", "video/x-flv")
+  defp detect(_, ~m"89504e47"h), do: ok("png", "image/png")
+  defp detect(_, ~m"425047fb"h), do: ok("bpg", "image/bpg")
+  defp detect(_, ~m"4d4d002a"h), do: ok("tif", "image/tiff")
+  defp detect(_, ~m"c5d0d3c6"h), do: ok("eps", "application/eps")
+  defp detect(_, ~m"0061736d"h), do: ok("wasm", "application/wasm")
+  defp detect(_, ~m"d4c3b2a1"h), do: ok("pcap", "application/vnd.tcpdump.pcap")
+  defp detect(_, ~m"a1b2c3d4"h), do: ok("pcap", "application/vnd.tcpdump.pcap")
+  defp detect(_, ~m"4e45531a"h), do: ok("nes", "application/x-nintendo-nes-rom")
+  defp detect(_, ~m"edabeedb"h), do: ok("rpm", "application/x-rpm")
 
   # 5 bytes
-  defp detect(_, ~m"#!AMR"), do: {"amr", "audio/amr"}
-  defp detect(_, ~m"{\rtf"), do: {"rtf", "application/rtf"}
-  defp detect(_, ~m"4f54544f00"h), do: {"otf", "font/otf"}
-  defp detect(_, ~m"0001000000"h), do: {"ttf", "font/ttf"}
+  defp detect(_, ~m"#!AMR"), do: ok("amr", "audio/amr")
+  defp detect(_, ~m"{\rtf"), do: ok("rtf", "application/rtf")
+  defp detect(_, ~m"4f54544f00"h), do: ok("otf", "font/otf")
+  defp detect(_, ~m"0001000000"h), do: ok("ttf", "font/ttf")
 
-  defp detect(_, ~m"000001ba21"h), do: {"mpg", "video/MP1S"}
-  defp detect(_, ~m"000001ba44"h), do: {"mpg", "video/MP2P"}
+  defp detect(_, ~m"000001ba21"h), do: ok("mpg", "video/MP1S")
+  defp detect(_, ~m"000001ba44"h), do: ok("mpg", "video/MP2P")
 
   # 6 bytes
-  defp detect(_, ~m"<?xml "), do: {"xml", "application/xml"}
-  defp detect(_, ~m"BEGIN:"), do: {"ics", "text/calendar"}
-  defp detect(_, ~m"solid "), do: {"stl", "model/stl"}
-  defp detect(_, ~m"fd377a585a00"h), do: {"xz", "application/x-xz"}
-  defp detect(_, ~m"526172211a07"h), do: {"rar", "application/vnd.rar"}
-  defp detect(_, ~m"377abcaf271c"h), do: {"7z", "application/x-7z-compressed"}
+  defp detect(_, ~m"<?xml "), do: ok("xml", "application/xml")
+  defp detect(_, ~m"BEGIN:"), do: ok("ics", "text/calendar")
+  defp detect(_, ~m"solid "), do: ok("stl", "model/stl")
+  defp detect(_, ~m"fd377a585a00"h), do: ok("xz", "application/x-xz")
+  defp detect(_, ~m"526172211a07"h), do: ok("rar", "application/vnd.rar")
+  defp detect(_, ~m"377abcaf271c"h), do: ok("7z", "application/x-7z-compressed")
 
   # 7 bytes
-  defp detect(_, ~m"BLENDER"), do: {"blend", "application/x-blender"}
-  defp detect(_, ~m"2::-lh0-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lh1-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lh2-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lh3-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lh4-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lh5-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lh6-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lh7-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lzs-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lz4-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lz5-"o), do: {"lzh", "application/x-lzh-compressed"}
-  defp detect(_, ~m"2::-lhd-"o), do: {"lzh", "application/x-lzh-compressed"}
+  defp detect(_, ~m"BLENDER"), do: ok("blend", "application/x-blender")
+  defp detect(_, ~m"2::-lh0-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lh1-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lh2-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lh3-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lh4-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lh5-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lh6-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lh7-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lzs-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lz4-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lz5-"o), do: ok("lzh", "application/x-lzh-compressed")
+  defp detect(_, ~m"2::-lhd-"o), do: ok("lzh", "application/x-lzh-compressed")
 
   # 8 bytes
-  defp detect(_, ~m"4::free"o), do: {"mov", "video/quicktime"}
-  defp detect(_, ~m"4::mdat"o), do: {"mov", "video/quicktime"}
-  defp detect(_, ~m"4::moov"o), do: {"mov", "video/quicktime"}
-  defp detect(_, ~m"4::wide"o), do: {"mov", "video/quicktime"}
-  defp detect(_, ~m"wOFFOTTO"), do: {"woff", "font/woff"}
-  defp detect(_, ~m"wOF2OTTO"), do: {"woff2", "font/woff2"}
-  defp detect(_, ~m"774f464600010000"h), do: {"woff", "font/woff"}
-  defp detect(_, ~m"774f463200010000"h), do: {"woff2", "font/woff2"}
-  defp detect(_, ~m"4152524f57310000"h), do: {"arrow", "application/x-apache-arrow"}
-  defp detect(_, ~m"676c544602000000"h), do: {"glb", "model/gltf-binary"}
-  defp detect(_, ~m"d0cf11e0a1b11ae1"h), do: {"cfb", "application/x-cfb"}
-  defp detect(_, ~m"4::304d4945"oh), do: {"mie", "application/x-mie"}
+  defp detect(_, ~m"4::free"o), do: ok("mov", "video/quicktime")
+  defp detect(_, ~m"4::mdat"o), do: ok("mov", "video/quicktime")
+  defp detect(_, ~m"4::moov"o), do: ok("mov", "video/quicktime")
+  defp detect(_, ~m"4::wide"o), do: ok("mov", "video/quicktime")
+  defp detect(_, ~m"wOFFOTTO"), do: ok("woff", "font/woff")
+  defp detect(_, ~m"wOF2OTTO"), do: ok("woff2", "font/woff2")
+  defp detect(_, ~m"774f464600010000"h), do: ok("woff", "font/woff")
+  defp detect(_, ~m"774f463200010000"h), do: ok("woff2", "font/woff2")
+  defp detect(_, ~m"4152524f57310000"h), do: ok("arrow", "application/x-apache-arrow")
+  defp detect(_, ~m"676c544602000000"h), do: ok("glb", "model/gltf-binary")
+  defp detect(_, ~m"4::304d4945"oh), do: ok("mie", "application/x-mie")
 
   # 9 bytes
-  defp detect(_, ~m"4949524f0800000018"h), do: {"orf", "image/x-olympus-orf"}
+  defp detect(_, ~m"4949524f0800000018"h), do: ok("orf", "image/x-olympus-orf")
 
   # 10 bytes
-  defp detect(_, ~m"3026b2758e66cf11a6d9"h), do: {"asf", "application/vnd.ms-asf"}
+  defp detect(_, ~m"3026b2758e66cf11a6d9"h), do: ok("asf", "application/vnd.ms-asf")
 
   # 12 bytes
-  defp detect(_, ~m"8::WEBP"o), do: {"webp", "image/webp"}
-  defp detect(_, ~m"ab4b5458203131bb0d0a1a0a"h), do: {"ktx", "image/ktx"}
-  defp detect(_, ~m"494955001800000088e774d8"h), do: {"rw2", "image/x-panasonic-rw2"}
-  defp detect(_, <<"RIFF", _::binary-4, "AVI">> <> _), do: {"avi", "video/vnd.avi"}
-  defp detect(_, <<"RIFF", _::binary-4, "WAVE">> <> _), do: {"wav", "audio/vnd.wave"}
-  defp detect(_, <<"RIFF", _::binary-4, "QLCM">> <> _), do: {"qcp", "audio/qcelp"}
+  defp detect(_, ~m"8::WEBP"o), do: ok("webp", "image/webp")
+  defp detect(_, ~m"ab4b5458203131bb0d0a1a0a"h), do: ok("ktx", "image/ktx")
+  defp detect(_, ~m"494955001800000088e774d8"h), do: ok("rw2", "image/x-panasonic-rw2")
+  defp detect(_, <<"RIFF", _::binary-4, "AVI">> <> _), do: ok("avi", "video/vnd.avi")
+  defp detect(_, <<"RIFF", _::binary-4, "WAVE">> <> _), do: ok("wav", "audio/vnd.wave")
+  defp detect(_, <<"RIFF", _::binary-4, "QLCM">> <> _), do: ok("qcp", "audio/qcelp")
 
   defp detect(_, ~m"4::ftyp"o = data) do
     data
     |> binary_part(8, 4)
     |> String.replace("\0", " ")
     |> case do
-      "avif" -> {"avif", "image/avif"}
-      "mif1" -> {"heic", "image/heif"}
-      "msf1" -> {"heic", "image/heif-sequence"}
-      "heic" -> {"heic", "image/heic"}
-      "heix" -> {"heic", "image/heic"}
-      "hevc" -> {"heic", "image/heic-sequence"}
-      "hevx" -> {"heic", "image/heic-sequence"}
-      "qt  " -> {"mov", "video/quicktime"}
-      "M4V " -> {"m4v", "video/x-m4v"}
-      "M4A " -> {"m4a", "audio/x-m4a"}
-      "M4P " -> {"m4p", "video/mp4"}
-      "F4V " -> {"f4v", "video/mp4"}
-      "F4P " -> {"f4p", "video/mp4"}
-      "M4B " -> {"m4b", "audio/mp4"}
-      "F4A " -> {"f4a", "audio/mp4"}
-      "F4B " -> {"f4b", "audio/mp4"}
-      "mj2s" -> {"mj2", "video/mj2"}
-      "mjp2" -> {"mj2", "video/mj2"}
-      "crx " -> {"cr3", "image/x-canon-cr3"}
-      "3g2" <> _ -> {"3g2", "video/3gpp2"}
-      "3g" <> _ -> {"3gp", "video/3gpp"}
-      _ -> {"mp4", "video/mp4"}
+      "avif" -> ok("avif", "image/avif")
+      "mif1" -> ok("heic", "image/heif")
+      "msf1" -> ok("heic", "image/heif-sequence")
+      "heic" -> ok("heic", "image/heic")
+      "heix" -> ok("heic", "image/heic")
+      "hevc" -> ok("heic", "image/heic-sequence")
+      "hevx" -> ok("heic", "image/heic-sequence")
+      "qt  " -> ok("mov", "video/quicktime")
+      "M4V " -> ok("m4v", "video/x-m4v")
+      "M4A " -> ok("m4a", "audio/x-m4a")
+      "M4P " -> ok("m4p", "video/mp4")
+      "F4V " -> ok("f4v", "video/mp4")
+      "F4P " -> ok("f4p", "video/mp4")
+      "M4B " -> ok("m4b", "audio/mp4")
+      "F4A " -> ok("f4a", "audio/mp4")
+      "F4B " -> ok("f4b", "audio/mp4")
+      "mj2s" -> ok("mj2", "video/mj2")
+      "mjp2" -> ok("mj2", "video/mj2")
+      "crx " -> ok("cr3", "image/x-canon-cr3")
+      "3g2" <> _ -> ok("3g2", "video/3gpp2")
+      "3g" <> _ -> ok("3gp", "video/3gpp")
+      _ -> ok("mp4", "video/mp4")
     end
   end
 
   # 14 bytes
-  defp detect(_, ~m"060e2b34020501010d0102010102"h), do: {"mxf", "application/mxf"}
-  defp detect(_, ~m"2::270a00000000000000000000"oh), do: {"shp", "application/x-esri-shape"}
+  defp detect(_, ~m"060e2b34020501010d0102010102"h), do: ok("mxf", "application/mxf")
+  defp detect(_, ~m"2::270a00000000000000000000"oh), do: ok("shp", "application/x-esri-shape")
 
   # 15 bytes
-  defp detect(_, ~m"FUJIFILMCCD-RAW"), do: {"raf", "image/x-fujifilm-raf"}
+  defp detect(_, ~m"FUJIFILMCCD-RAW"), do: ok("raf", "image/x-fujifilm-raf")
 
   # 16 bytes
-  defp detect(_, ~m"Extended Module:"), do: {"xm", "audio/x-xm"}
-  defp detect(_, ~m"626f6f6b000000006d61726b00000000"h), do: {"alias", "application/x.apple.alias"}
-  defp detect(_, ~m"0606edf5d81d46e5bd31efe7fe74b71d"h), do: {"indd", "application/x-indesign"}
+  defp detect(_, ~m"Extended Module:"), do: ok("xm", "audio/x-xm")
+
+  defp detect(_, ~m"626f6f6b000000006d61726b00000000"h),
+    do: ok("alias", "application/x.apple.alias")
+
+  defp detect(_, ~m"0606edf5d81d46e5bd31efe7fe74b71d"h), do: ok("indd", "application/x-indesign")
 
   # 19 bytes
-  defp detect(_, ~m"Creative Voice File"), do: {"voc", "audio/x-voc"}
+  defp detect(_, ~m"Creative Voice File"), do: ok("voc", "audio/x-voc")
 
   defp detect(_, ~m"%!PS" = data) do
     case data do
-      ~m"14:: EPSF-"o -> {"eps", "application/eps"}
-      _ -> {"ps", "application/postscript"}
+      ~m"14:: EPSF-"o -> ok("eps", "application/eps")
+      _ -> ok("ps", "application/postscript")
     end
   end
 
   # 20 bytes
 
   defp detect(_, ~m"4c0000000114020000000000c000000000000046"h),
-    do: {"lnk", "application/x.ms.shortcut"}
+    do: ok("lnk", "application/x.ms.shortcut")
 
   # 21 bytes
   defp detect(_, ~m"!<arch>" = data) do
     case binary_part(data, 8, 13) do
-      "debian-binary" -> {"deb", "application/x-deb"}
-      _ -> {"ar", "application/x-unix-archive"}
+      "debian-binary" -> ok("deb", "application/x-deb")
+      _ -> ok("ar", "application/x-unix-archive")
     end
   end
 
   # 24 bytes
   defp detect(_, ~m"49492a00"h = data) do
     case data do
-      ~m"8::CR"o -> {"cr2", "image/x-canon-cr2"}
-      ~m"8::1c00fe00"oh -> {"nef", "image/x-nikon-nef"}
-      ~m"8::1f000b00"oh -> {"nef", "image/x-nikon-nef"}
-      ~m"8::2d00fe00"oh -> {"dng", "image/x-adobe-dng"}
-      ~m"8::2700fe00"oh -> {"dng", "image/x-adobe-dng"}
-      ~m"9::00fe00040001000000010000000301"oh -> {"arw", "image/x-sony-arw"}
-      _ -> {"tif", "image/tiff"}
+      ~m"8::CR"o -> ok("cr2", "image/x-canon-cr2")
+      ~m"8::1c00fe00"oh -> ok("nef", "image/x-nikon-nef")
+      ~m"8::1f000b00"oh -> ok("nef", "image/x-nikon-nef")
+      ~m"8::2d00fe00"oh -> ok("dng", "image/x-adobe-dng")
+      ~m"8::2700fe00"oh -> ok("dng", "image/x-adobe-dng")
+      ~m"9::00fe00040001000000010000000301"oh -> ok("arw", "image/x-sony-arw")
+      _ -> ok("tif", "image/tiff")
     end
   end
 
   defp detect(_, ~m"0000000c6a5020200d0a870a"h = data) do
     case binary_part(data, 20, 4) do
-      "jp2 " -> {"jp2", "image/jp2"}
-      "jpx " -> {"jpx", "image/jpx"}
-      "jpm " -> {"jpm", "image/jpm"}
-      "mjp2" -> {"mj2", "image/mj2"}
-      "mj2s" -> {"mj2", "image/mj2"}
+      "jp2 " -> ok("jp2", "image/jp2")
+      "jpx " -> ok("jpx", "image/jpx")
+      "jpm " -> ok("jpm", "image/jpm")
+      "mjp2" -> ok("mj2", "image/mj2")
+      "mj2s" -> ok("mj2", "image/mj2")
       _ -> nil
     end
   end
@@ -222,46 +228,50 @@ defmodule FileType.Magic do
   # 25 bytes
   for eot <- [<<0x00, 0x00, 0x01>>, <<0x01, 0x00, 0x02>>, <<0x02, 0x00, 0x02>>] do
     defp detect(_, <<_::binary-8, unquote(eot), _::binary-23, 0x4C, 0x50>> <> _),
-      do: {"eot", "application/vnd.ms-fontobject"}
+      do: ok("eot", "application/vnd.ms-fontobject")
   end
 
   # 27 bytes
-  defp detect(_, ~m"-----BEGIN PGP MESSAGE-----"), do: {"pgp", "application/pgp-encrypted"}
+  defp detect(_, ~m"-----BEGIN PGP MESSAGE-----"), do: ok("pgp", "application/pgp-encrypted")
 
   # 32 bytes
   defp detect(_, ~m"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"h),
-    do: {"skp", "application/vnd.sketchup.skp"}
+    do: ok("skp", "application/vnd.sketchup.skp")
 
   defp detect(_, ~m"OggS" = data) do
     case data do
-      ~m"28::4f70757348656164"oh -> {"opus", "audio/opus"}
-      ~m"28::53706565782020"oh -> {"spx", "audio/ogg"}
-      ~m"28::7f464c4143"oh -> {"oga", "audio/ogg"}
-      ~m"28::01766f72626973"oh -> {"ogg", "audio/ogg"}
-      ~m"28::807468656f7261"oh -> {"ogv", "video/ogg"}
-      ~m"28::01766964656f00"oh -> {"ogm", "video/ogg"}
-      _ -> {"ogx", "application/ogg"}
+      ~m"28::4f70757348656164"oh -> ok("opus", "audio/opus")
+      ~m"28::53706565782020"oh -> ok("spx", "audio/ogg")
+      ~m"28::7f464c4143"oh -> ok("oga", "audio/ogg")
+      ~m"28::01766f72626973"oh -> ok("ogg", "audio/ogg")
+      ~m"28::807468656f7261"oh -> ok("ogv", "video/ogg")
+      ~m"28::01766964656f00"oh -> ok("ogm", "video/ogg")
+      _ -> ok("ogx", "application/ogg")
     end
   end
 
   # 48 bytes
-  defp detect(_, ~m"44::SCRM"o), do: {"s3m", "audio/x-s3m"}
+  defp detect(_, ~m"44::SCRM"o), do: ok("s3m", "audio/x-s3m")
 
   # 68 bytes
-  defp detect(_, ~m"60::424f4f4b4d4f4249"oh), do: {"mobi", "application/x-mobipocket-ebook"}
+  defp detect(_, ~m"60::424f4f4b4d4f4249"oh), do: ok("mobi", "application/x-mobipocket-ebook")
 
   # 100+ bytes
-  defp detect(_, ~m"128::4449434d"oh), do: {"dcm", "application/dicom"}
-  defp detect(_, ~m"257::757374617200"oh), do: {"tar", "application/x-tar"}
-  defp detect(_, ~m"257::7573746172202000"oh), do: {"tar", "application/x-tar"}
+  defp detect(_, ~m"128::4449434d"oh), do: ok("dcm", "application/dicom")
+  defp detect(_, ~m"257::757374617200"oh), do: ok("tar", "application/x-tar")
+  defp detect(_, ~m"257::7573746172202000"oh), do: ok("tar", "application/x-tar")
 
-  defp detect(_, <<_::binary-4, 0x47, _::binary-191, 0x47>> <> _), do: {"mts", "video/mp2t"}
+  defp detect(_, <<_::binary-4, 0x47, _::binary-191, 0x47>> <> _), do: ok("mts", "video/mp2t")
 
-  # Low fidelity tests go last!
-  defp detect(_, ~m"0001000000"h), do: {"ttf", "font/ttf"}
-  defp detect(_, ~m"00000100"h), do: {"ico", "image/x-icon"}
-  defp detect(_, ~m"00000200"h), do: {"cur", "image/x-icon"}
+  # These patterns are likely to produce false positives
+  defp detect(_, ~m"0001000000"h), do: ok("ttf", "font/ttf")
+  defp detect(_, ~m"00000100"h), do: ok("ico", "image/x-icon")
+  defp detect(_, ~m"00000200"h), do: ok("cur", "image/x-icon")
+
+  # Containers
+  defp detect(io, ~m"504b0304"h), do: Zip.detect(io)
+  defp detect(io, ~m"d0cf11e0a1b11ae1"h), do: CFB.detect(io)
 
   # Oh, no. Undetected file!
-  defp detect(_, _), do: nil
+  defp detect(_, _), do: :error
 end

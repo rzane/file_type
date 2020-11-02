@@ -12,13 +12,12 @@ defmodule FileType.Zip do
     {"odp", "application/vnd.oasis.opendocument.presentation"}
   ]
 
-  def postprocess(io, @zip) do
+  @spec detect(IO.device()) :: FileType.Magic.result()
+  def detect(io) do
     with {:ok, _} <- Header.seek(io) do
       read(io)
     end
   end
-
-  def postprocess(_io, type), do: {:ok, type}
 
   defp read(io) do
     with {:ok, header} <- Header.read(io),
