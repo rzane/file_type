@@ -104,6 +104,9 @@ defmodule FileType.Signature do
   # 9 bytes
   def detect(~m"4949524f0800000018"h), do: {"orf", "image/x-olympus-orf"}
 
+  # 10 bytes
+  def detect(~m"3026b2758e66cf11a6d9"h), do: {"asf", "application/vnd.ms-asf"}
+
   # 12 bytes
   def detect(~m"8::WEBP"o), do: {"webp", "image/webp"}
   def detect(~m"ab4b5458203131bb0d0a1a0a"h), do: {"ktx", "image/ktx"}
@@ -165,6 +168,7 @@ defmodule FileType.Signature do
   end
 
   # 20 bytes
+
   def detect(~m"4c0000000114020000000000c000000000000046"h),
     do: {"lnk", "application/x.ms.shortcut"}
 
