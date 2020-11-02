@@ -86,6 +86,7 @@ defmodule FileType.Signature do
   def detect(~m"774f463200010000"h), do: {"woff2", "font/woff2"}
   def detect(~m"4152524f57310000"h), do: {"arrow", "application/x-apache-arrow"}
   def detect(~m"676c544602000000"h), do: {"glb", "model/gltf-binary"}
+  def detect(~m"d0cf11e0a1b11ae1"h), do: {"cfb", "application/x-cfb"}
 
   # 9 bytes
   def detect(~m"4949524f0800000018"h), do: {"orf", "image/x-olympus-orf"}

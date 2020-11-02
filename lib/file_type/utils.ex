@@ -28,6 +28,13 @@ defmodule FileType.Utils do
   end
 
   @doc """
+  Converts a hex-encoded string to binary.
+  """
+  defmacro sigil_h({:<<>>, _meta, [data]}, []) when is_binary(data) do
+    hex!(data)
+  end
+
+  @doc """
   Just an alias for `binary-size` within a binary pattern match.
   """
   defmacro binary(size) do

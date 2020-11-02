@@ -18,6 +18,11 @@ defmodule FileTypeTest do
     fixture "fixture.tar.gz"
   end
 
+  describe "application/msword" do
+    fixture "fixture.doc"
+    fixture "fixture2.doc"
+  end
+
   describe "application/mxf" do
     fixture "fixture.mxf"
   end
@@ -49,9 +54,17 @@ defmodule FileTypeTest do
     fixture "fixture.cab"
   end
 
+  describe "application/vnd.ms-excel" do
+    fixture "fixture.xls"
+  end
+
   describe "application/vnd.ms-fontobject" do
     fixture "fixture.eot"
     fixture "fixture-0x20001.eot"
+  end
+
+  describe "application/vnd.ms-powerpoint" do
+    fixture "fixture.ppt"
   end
 
   describe "application/vnd.oasis.opendocument.presentation" do
@@ -129,23 +142,6 @@ defmodule FileTypeTest do
     fixture "fixture.bz2"
   end
 
-  describe "application/x-cfb" do
-    @tag :pending
-    fixture "fixture.doc.cfb"
-
-    @tag :pending
-    fixture "fixture.msi.cfb"
-
-    @tag :pending
-    fixture "fixture.ppt.cfb"
-
-    @tag :pending
-    fixture "fixture.xls.cfb"
-
-    @tag :pending
-    fixture "fixture-2.doc.cfb"
-  end
-
   describe "application/x-compress" do
     fixture "fixture.tar.Z"
   end
@@ -190,6 +186,7 @@ defmodule FileTypeTest do
 
   describe "application/x-msdownload" do
     fixture "fixture.exe"
+    fixture "fixture.msi"
   end
 
   describe "application/x-nintendo-nes-rom" do
