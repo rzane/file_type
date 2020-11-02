@@ -386,7 +386,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/avif" do
-    @tag :pending
     fixture "fixture-yuv420-8bit.avif"
   end
 
