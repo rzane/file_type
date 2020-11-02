@@ -225,19 +225,24 @@ defmodule FileType.Magic do
     end
   end
 
-  # 25 bytes
-  for eot <- [<<0x00, 0x00, 0x01>>, <<0x01, 0x00, 0x02>>, <<0x02, 0x00, 0x02>>] do
-    defp detect(_, <<_::binary-8, unquote(eot), _::binary-23, 0x4C, 0x50>> <> _),
-      do: ok("eot", "application/vnd.ms-fontobject")
+  # 27 bytes
+  defp detect(_, ~m"-----BEGIN PGP MESSAGE-----") do
+    ok("pgp", "application/pgp-encrypted")
   end
 
-  # 27 bytes
-  defp detect(_, ~m"-----BEGIN PGP MESSAGE-----"), do: ok("pgp", "application/pgp-encrypted")
-
   # 32 bytes
-  defp detect(_, ~m"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"h),
-    do: ok("skp", "application/vnd.sketchup.skp")
+  defp detect(_, ~m"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"h) do
+    ok("skp", "application/vnd.sketchup.skp")
+  end
 
+  # 36 bytes
+  for eot <- [<<0x00, 0x00, 0x01>>, <<0x01, 0x00, 0x02>>, <<0x02, 0x00, 0x02>>] do
+    defp detect(_, <<_::binary-8, unquote(eot), _::binary-23, 0x4C, 0x50>> <> _) do
+      ok("eot", "application/vnd.ms-fontobject")
+    end
+  end
+
+  # 40 bytes
   defp detect(_, ~m"OggS" = data) do
     case data do
       ~m"28::4f70757348656164"oh -> ok("opus", "audio/opus")
