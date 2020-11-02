@@ -74,6 +74,7 @@ defmodule FileType.Signature do
 
   # 7 bytes
   def detect(~m"BLENDER"), do: {"blend", "application/x-blender"}
+  def detect(~m"!<arch>"), do: {"ar", "application/x-unix-archive"}
 
   # 8 bytes
   def detect(~m"4::free"o), do: {"mov", "video/quicktime"}

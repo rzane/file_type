@@ -215,7 +215,6 @@ defmodule FileTypeTest do
   end
 
   describe "application/x-unix-archive" do
-    @tag :pending
     fixture "fixture.ar"
   end
 
