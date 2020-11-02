@@ -1,4 +1,4 @@
-defmodule FileType.Signature do
+defmodule FileType.Magic do
   @moduledoc false
 
   import FileType.Utils

@@ -1,5 +1,5 @@
 defmodule FileType do
-  alias FileType.Signature
+  alias FileType.Magic
   alias FileType.Zip
   alias FileType.CFB
 
@@ -84,7 +84,7 @@ defmodule FileType do
   end
 
   defp detect(data) do
-    case Signature.detect(data) do
+    case Magic.detect(data) do
       nil -> {:error, :unrecognized}
       type -> {:ok, type}
     end
