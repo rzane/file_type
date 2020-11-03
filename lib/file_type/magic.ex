@@ -2,7 +2,7 @@ defmodule FileType.Magic do
   @moduledoc false
 
   use FileType.Magic.Registration
-  import FileType.Utils, only: [sigil_h: 2]
+  import FileType.Utils
 
   # FIXME: Use fallback module
   @size 300

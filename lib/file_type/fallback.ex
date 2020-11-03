@@ -1,7 +1,7 @@
 defmodule FileType.Fallback do
   @moduledoc false
 
-  import FileType.Utils, only: [sigil_h: 2]
+  import FileType.Utils
 
   @fallbacks [
     {{"s3m", "audio/x-s3m"}, [{44, "SCRM"}]},
