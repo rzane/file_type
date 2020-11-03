@@ -5,6 +5,7 @@ defmodule FileType.Magic do
 
   alias FileType.Zip
   alias FileType.CFB
+  alias FileType.Fallback
 
   @size 40
   @type result :: {:ok, {binary, binary}} | {:error, FileType.error()}
@@ -164,8 +165,13 @@ defmodule FileType.Magic do
   end
 
   # 14 bytes
-  defp detect(_, ~m"060e2b34020501010d0102010102"h), do: ok("mxf", "application/mxf")
-  defp detect(_, ~m"2::270a00000000000000000000"oh), do: ok("shp", "application/x-esri-shape")
+  defp detect(_, ~m"060e2b34020501010d0102010102"h) do
+    ok("mxf", "application/mxf")
+  end
+
+  defp detect(_, ~m"2::270a00000000000000000000"oh) do
+    ok("shp", "application/x-esri-shape")
+  end
 
   # 15 bytes
   defp detect(_, ~m"FUJIFILMCCD-RAW"), do: ok("raf", "image/x-fujifilm-raf")
@@ -173,10 +179,13 @@ defmodule FileType.Magic do
   # 16 bytes
   defp detect(_, ~m"Extended Module:"), do: ok("xm", "audio/x-xm")
 
-  defp detect(_, ~m"626f6f6b000000006d61726b00000000"h),
-    do: ok("alias", "application/x.apple.alias")
+  defp detect(_, ~m"626f6f6b000000006d61726b00000000"h) do
+    ok("alias", "application/x.apple.alias")
+  end
 
-  defp detect(_, ~m"0606edf5d81d46e5bd31efe7fe74b71d"h), do: ok("indd", "application/x-indesign")
+  defp detect(_, ~m"0606edf5d81d46e5bd31efe7fe74b71d"h) do
+    ok("indd", "application/x-indesign")
+  end
 
   # 19 bytes
   defp detect(_, ~m"Creative Voice File"), do: ok("voc", "audio/x-voc")
@@ -190,8 +199,9 @@ defmodule FileType.Magic do
 
   # 20 bytes
 
-  defp detect(_, ~m"4c0000000114020000000000c000000000000046"h),
-    do: ok("lnk", "application/x.ms.shortcut")
+  defp detect(_, ~m"4c0000000114020000000000c000000000000046"h) do
+    ok("lnk", "application/x.ms.shortcut")
+  end
 
   # 21 bytes
   defp detect(_, ~m"!<arch>" = data) do
@@ -263,34 +273,5 @@ defmodule FileType.Magic do
   # These formats need further processing
   defp detect(io, ~m"504b0304"h), do: Zip.detect(io)
   defp detect(io, ~m"d0cf11e0a1b11ae1"h), do: CFB.detect(io)
-
-  # These formats require more than 32 bytes to detect.
-  defp detect(io, _) do
-    cond do
-      contains?(io, 44, "SCRM") ->
-        ok("s3m", "audio/x-s3m")
-
-      contains?(io, 60, ~h"424f4f4b4d4f4249") ->
-        ok("mobi", "application/x-mobipocket-ebook")
-
-      contains?(io, 128, ~h"4449434d") ->
-        ok("dcm", "application/dicom")
-
-      contains?(io, 257, "ustar") ->
-        ok("tar", "application/x-tar")
-
-      contains?(io, 4, <<0x47>>) and contains?(io, 196, <<0x47>>) ->
-        ok("mts", "video/mp2t")
-
-      true ->
-        {:error, :unrecognized}
-    end
-  end
-
-  defp contains?(io, location, data) do
-    case :file.pread(io, location, byte_size(data)) do
-      {:ok, ^data} -> true
-      _ -> false
-    end
-  end
+  defp detect(io, _), do: Fallback.detect(io)
 end
