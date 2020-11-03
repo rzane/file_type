@@ -42,13 +42,13 @@ defmodule FileType.Magic do
   defp detect(io, data)
 
   for {type, magic} <- match_entries do
-    if is_tuple(type) do
-      defp detect(_io, match_magic(unquote(magic))) do
-        {:ok, unquote(type)}
-      end
-    else
+    if is_atom(type) do
       defp detect(io, match_magic(unquote(magic))) do
         unquote(type).detect(io)
+      end
+    else
+      defp detect(_io, match_magic(unquote(magic))) do
+        {:ok, unquote(type)}
       end
     end
   end
