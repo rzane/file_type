@@ -16,7 +16,7 @@ defmodule FileType.Magic.Matcher do
     end
   end
 
-  @spec compile(Magic.magic()) :: Macro.t()
+  @spec compile(Magic.sequence()) :: Macro.t()
   defmacrop compile([]) do
     quote do: _
   end
@@ -32,13 +32,13 @@ defmodule FileType.Magic.Matcher do
   @spec match(IO.device(), binary()) :: Magic.result()
   defp match(io, data)
 
-  for {type, magic} <- Database.entries() do
+  for %Magic{type: type, sequence: sequence} <- Database.entries() do
     if is_atom(type) do
-      defp match(io, compile(unquote(magic))) do
+      defp match(io, compile(unquote(sequence))) do
         unquote(type).detect(io)
       end
     else
-      defp match(_io, compile(unquote(magic))) do
+      defp match(_io, compile(unquote(sequence))) do
         {:ok, unquote(type)}
       end
     end

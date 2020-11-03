@@ -28,14 +28,14 @@ defmodule FileType.Magic.Registration do
   """
   @spec register(Magic.type(), opts()) :: Macro.t()
   defmacro register(type, opts) do
-    magic =
-      opts
-      |> Keyword.get_values(:magic)
-      |> Enum.map(&List.wrap/1)
-      |> Enum.map(&{type, &1})
-
     quote do
-      @__magic__ @__magic__ ++ unquote(magic)
+      entries =
+        unquote(opts)
+        |> Keyword.get_values(:magic)
+        |> Enum.map(&List.wrap/1)
+        |> Enum.map(&FileType.Magic.new(unquote(type), &1))
+
+      @__magic__ @__magic__ ++ entries
     end
   end
 

@@ -3,15 +3,15 @@ defmodule FileType.Magic.ReaderTest do
 
   alias FileType.Magic
 
-  test "size_of/1" do
-    assert Magic.size_of(["foo"]) == 3
-    assert Magic.size_of(["foo", 1, "bar"]) == 7
-    assert Magic.size_of(["foo", 1, 2, "bar"]) == 9
+  test "get_size/1" do
+    assert Magic.get_size(["foo"]) == 3
+    assert Magic.get_size(["foo", 1, "bar"]) == 7
+    assert Magic.get_size(["foo", 1, 2, "bar"]) == 9
   end
 
-  test "location_of/1" do
-    assert Magic.location_of(["foo"]) == [{0, 3}]
-    assert Magic.location_of(["foo", 1, "bar"]) == [{0, 3}, {4, 3}]
-    assert Magic.location_of(["foo", 1, 2, "bar"]) == [{0, 3}, {6, 3}]
+  test "get_locations/1" do
+    assert Magic.get_locations(["foo"]) == [{0, 3}]
+    assert Magic.get_locations(["foo", 1, "bar"]) == [{0, 3}, {4, 3}]
+    assert Magic.get_locations(["foo", 1, 2, "bar"]) == [{0, 3}, {6, 3}]
   end
 end
