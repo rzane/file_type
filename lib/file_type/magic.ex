@@ -4,8 +4,7 @@ defmodule FileType.Magic do
   alias FileType.Magic.Database
   alias FileType.Magic.Registration
 
-  # FIXME: Use fallback module
-  @size 0
+  @size 40
 
   @type result :: {:ok, {binary(), binary()}} | {:error, FileType.error()}
 
