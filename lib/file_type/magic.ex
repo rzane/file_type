@@ -1,60 +1,51 @@
 defmodule FileType.Magic do
   @moduledoc false
 
-  alias FileType.Magic.Database
-  alias FileType.Magic.Registration
-  alias FileType.Magic.Fallback
+  alias FileType.Magic.Matcher
+  alias FileType.Magic.Reader
+
+  @type ext :: binary()
+  @type mime :: binary()
+  @type type :: {ext(), mime()} | module()
+  @type magic :: [binary() | non_neg_integer()]
+  @type t :: {type(), magic()}
+  @type size :: non_neg_integer()
+  @type location :: {non_neg_integer(), size()}
+  @type result :: {:ok, {binary(), binary()}} | {:error, FileType.error()}
 
   @size 40
 
-  @type result :: {:ok, {binary(), binary()}} | {:error, FileType.error()}
-
-  @spec detect(IO.device()) :: result()
   def detect(io) do
-    case :file.read(io, @size) do
-      {:ok, data} ->
-        detect(io, data)
-
-      {:error, reason} ->
-        {:error, reason}
-
-      :eof ->
-        {:error, :unrecognized}
+    with {:error, :unrecognized} <- Matcher.detect(io, @size) do
+      Reader.detect(io, @size)
     end
   end
 
-  @spec match_magic(Registration.magic()) :: Macro.t()
-  defmacrop match_magic([]) do
-    quote do: _
+  @doc """
+  Get the number of bytes that would be required to match the entry.
+  """
+  @spec size_of(magic()) :: size()
+  def size_of(magic), do: size_of(magic, 0)
+  defp size_of([], acc), do: acc
+  defp size_of([h | t], acc) when is_integer(h), do: size_of(t, acc + h)
+  defp size_of([h | t], acc), do: size_of(t, acc + byte_size(h))
+
+  @doc """
+  Convert our magic signature to something we can pass to `:file.pread`.
+  """
+  @spec location_of(magic()) :: [location()]
+  def location_of(magic) do
+    location_of(magic, 0, [])
   end
 
-  defmacrop match_magic([part | parts]) when is_integer(part) do
-    quote do: <<_::binary-size(unquote(part))>> <> match_magic(unquote(parts))
+  defp location_of([], _, acc), do: acc
+
+  defp location_of([h | t], offset, acc) when is_integer(h) do
+    location_of(t, offset + h, acc)
   end
 
-  defmacrop match_magic([part | parts]) do
-    quote do: unquote(part) <> match_magic(unquote(parts))
-  end
-
-  {match_entries, read_entries} = Fallback.split(Database.entries(), @size)
-
-  @spec detect(IO.device(), binary()) :: result()
-  defp detect(io, data)
-
-  for {type, magic} <- match_entries do
-    if is_atom(type) do
-      defp detect(io, match_magic(unquote(magic))) do
-        unquote(type).detect(io)
-      end
-    else
-      defp detect(_io, match_magic(unquote(magic))) do
-        {:ok, unquote(type)}
-      end
-    end
-  end
-
-  @read_entries read_entries
-  defp detect(io, _data) do
-    Fallback.detect(io, @read_entries)
+  defp location_of([h | t], offset, acc) when is_binary(h) do
+    size = byte_size(h)
+    location_of(t, offset + size, acc ++ [{offset, size}])
   end
 end

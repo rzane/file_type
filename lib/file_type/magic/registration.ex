@@ -1,12 +1,9 @@
 defmodule FileType.Magic.Registration do
   @moduledoc false
 
-  @type ext :: binary()
-  @type mime :: binary()
-  @type type :: {ext(), mime()} | module()
-  @type magic :: [binary() | non_neg_integer()]
-  @type t :: {type(), magic()}
-  @type opts :: [{:magic, magic() | binary()}]
+  alias FileType.Magic
+
+  @type opts :: [{:magic, Magic.magic() | binary()}]
 
   defmacro __using__(_) do
     quote do
@@ -21,7 +18,7 @@ defmodule FileType.Magic.Registration do
       @doc """
       List the files types that are registered in the database.
       """
-      @spec entries :: [FileType.Magic.Registration.t()]
+      @spec entries :: [Magic.t()]
       def entries, do: @__magic__
     end
   end
@@ -29,7 +26,7 @@ defmodule FileType.Magic.Registration do
   @doc """
   Registers a new file type.
   """
-  @spec register(type(), opts()) :: Macro.t()
+  @spec register(Magic.type(), opts()) :: Macro.t()
   defmacro register(type, opts) do
     magic =
       opts
@@ -42,7 +39,7 @@ defmodule FileType.Magic.Registration do
     end
   end
 
-  @spec register(ext(), mime(), opts()) :: Macro.t()
+  @spec register(Magic.ext(), Magic.mime(), opts()) :: Macro.t()
   defmacro register(ext, mime, opts) do
     quote do: register({unquote(ext), unquote(mime)}, unquote(opts))
   end
