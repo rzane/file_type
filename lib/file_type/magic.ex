@@ -1,13 +1,14 @@
 defmodule FileType.Magic do
   @moduledoc false
 
-  import FileType.Utils
+  use FileType.Magic.Registration
+  import FileType.Utils, only: [sigil_h: 2]
 
-  alias FileType.Zip
-  alias FileType.CFB
-  alias FileType.Fallback
+  # FIXME: Use fallback module
+  @size 300
+  @tiff ~h"49492a00"
+  @jpeg2000 ~h"0000000c6a5020200d0a870a"
 
-  @size 40
   @type result :: {:ok, {binary, binary}} | {:error, FileType.error()}
 
   @spec detect(IO.device()) :: result
@@ -24,254 +25,241 @@ defmodule FileType.Magic do
     end
   end
 
-  defp ok(ext, mime), do: {:ok, {ext, mime}}
-
   # 2 bytes
-  defp detect(_, ~m"BM"), do: ok("bmp", "image/bmp")
-  defp detect(_, ~m"0b77"h), do: ok("ac3", "audio/vnd.dolby.dd-raw")
-  defp detect(_, ~m"7801"h), do: ok("dmg", "application/x-apple-diskimage")
-  defp detect(_, ~m"4d5a"h), do: ok("exe", "application/x-msdownload")
-  defp detect(_, ~m"1fa0"h), do: ok("Z", "application/x-compress")
-  defp detect(_, ~m"1f9d"h), do: ok("Z", "application/x-compress")
+  register "bmp", "image/bmp", magic: "BM"
+  register "ac3", "audio/vnd.dolby.dd-raw", magic: ~h"0b77"
+  register "dmg", "application/x-apple-diskimage", magic: ~h"7801"
+  register "exe", "application/x-msdownload", magic: ~h"4d5a"
+  register "Z", "application/x-compress", magic: ~h"1fa0"
+  register "Z", "application/x-compress", magic: ~h"1f9d"
 
   # 3 bytes
-  defp detect(_, ~m"ID3"), do: ok("mp3", "audio/mpeg")
-  defp detect(_, ~m"MP+"), do: ok("mpc", "audio/x-musepack")
-  defp detect(_, ~m"ffd8ff"h), do: ok("jpg", "image/jpeg")
-  defp detect(_, ~m"4949bc"h), do: ok("jxr", "image/vnd.ms-photo")
-  defp detect(_, ~m"1f8b"h), do: ok("gz", "application/gzip")
-  defp detect(_, ~m"425a68"h), do: ok("bz2", "application/x-bzip2")
-  defp detect(_, ~m"435753"h), do: ok("swf", "application/x-shockwave-flash")
-  defp detect(_, ~m"465753"h), do: ok("swf", "application/x-shockwave-flash")
-  defp detect(_, ~m"474946"h), do: ok("gif", "image/gif")
+  register "mp3", "audio/mpeg", magic: "ID3"
+  register "mpc", "audio/x-musepack", magic: "MP+"
+  register "jpg", "image/jpeg", magic: ~h"ffd8ff"
+  register "jxr", "image/vnd.ms-photo", magic: ~h"4949bc"
+  register "gz", "application/gzip", magic: ~h"1f8b"
+  register "bz2", "application/x-bzip2", magic: ~h"425a68"
+  register "swf", "application/x-shockwave-flash", magic: ~h"435753"
+  register "swf", "application/x-shockwave-flash", magic: ~h"465753"
+  register "gif", "image/gif", magic: ~h"474946"
 
   # 4 bytes
-  defp detect(_, ~m"FLIF"), do: ok("flif", "image/flif")
-  defp detect(_, ~m"8BPS"), do: ok("psd", "image/vnd.adobe.photoshop")
-  defp detect(_, ~m"icns"), do: ok("icns", "image/icns")
-  defp detect(_, ~m"MPCK"), do: ok("mpc", "audio/x-musepack")
-  defp detect(_, ~m"FORM"), do: ok("aif", "audio/aiff")
-  defp detect(_, ~m"MThd"), do: ok("mid", "audio/midi")
-  defp detect(_, ~m"fLaC"), do: ok("flac", "audio/x-flac")
-  defp detect(_, ~m"IMPM"), do: ok("it", "audio/x-it")
-  defp detect(_, ~m"DSD "), do: ok("dsf", "audio/x-dsf")
-  defp detect(_, ~m"wvpk"), do: ok("wv", "audio/wavpack")
-  defp detect(_, ~m"MAC "), do: ok("ape", "audio/ape")
-  defp detect(_, ~m"%PDF-"), do: ok("pdf", "application/pdf")
-  defp detect(_, ~m"LZIP"), do: ok("lz", "application/x-lzip")
-  defp detect(_, ~m"SQLi"), do: ok("sqlite", "application/x-sqlite3")
-  defp detect(_, ~m"Cr24"), do: ok("crx", "application/x-google-chrome-extension")
-  defp detect(_, ~m"MSCF"), do: ok("cab", "application/vnd.ms-cab-compressed")
-  defp detect(_, ~m"ISc("), do: ok("cab", "application/vnd.ms-cab-compressed")
-  defp detect(_, ~m"1a45dfa3"h), do: ok("mkv", "video/x-matroska")
-  defp detect(_, ~m"464c5601"h), do: ok("flv", "video/x-flv")
-  defp detect(_, ~m"89504e47"h), do: ok("png", "image/png")
-  defp detect(_, ~m"425047fb"h), do: ok("bpg", "image/bpg")
-  defp detect(_, ~m"4d4d002a"h), do: ok("tif", "image/tiff")
-  defp detect(_, ~m"c5d0d3c6"h), do: ok("eps", "application/eps")
-  defp detect(_, ~m"0061736d"h), do: ok("wasm", "application/wasm")
-  defp detect(_, ~m"d4c3b2a1"h), do: ok("pcap", "application/vnd.tcpdump.pcap")
-  defp detect(_, ~m"a1b2c3d4"h), do: ok("pcap", "application/vnd.tcpdump.pcap")
-  defp detect(_, ~m"4e45531a"h), do: ok("nes", "application/x-nintendo-nes-rom")
-  defp detect(_, ~m"edabeedb"h), do: ok("rpm", "application/x-rpm")
+  register "flif", "image/flif", magic: "FLIF"
+  register "psd", "image/vnd.adobe.photoshop", magic: "8BPS"
+  register "icns", "image/icns", magic: "icns"
+  register "mpc", "audio/x-musepack", magic: "MPCK"
+  register "aif", "audio/aiff", magic: "FORM"
+  register "mid", "audio/midi", magic: "MThd"
+  register "flac", "audio/x-flac", magic: "fLaC"
+  register "it", "audio/x-it", magic: "IMPM"
+  register "dsf", "audio/x-dsf", magic: "DSD "
+  register "wv", "audio/wavpack", magic: "wvpk"
+  register "ape", "audio/ape", magic: "MAC "
+  register "pdf", "application/pdf", magic: "%PDF-"
+  register "lz", "application/x-lzip", magic: "LZIP"
+  register "sqlite", "application/x-sqlite3", magic: "SQLi"
+  register "crx", "application/x-google-chrome-extension", magic: "Cr24"
+  register "cab", "application/vnd.ms-cab-compressed", magic: "MSCF"
+  register "cab", "application/vnd.ms-cab-compressed", magic: "ISc("
+  register "mkv", "video/x-matroska", magic: ~h"1a45dfa3"
+  register "flv", "video/x-flv", magic: ~h"464c5601"
+  register "png", "image/png", magic: ~h"89504e47"
+  register "bpg", "image/bpg", magic: ~h"425047fb"
+  register "tif", "image/tiff", magic: ~h"4d4d002a"
+  register "eps", "application/eps", magic: ~h"c5d0d3c6"
+  register "wasm", "application/wasm", magic: ~h"0061736d"
+  register "pcap", "application/vnd.tcpdump.pcap", magic: ~h"d4c3b2a1"
+  register "pcap", "application/vnd.tcpdump.pcap", magic: ~h"a1b2c3d4"
+  register "nes", "application/x-nintendo-nes-rom", magic: ~h"4e45531a"
+  register "rpm", "application/x-rpm", magic: ~h"edabeedb"
 
   # 5 bytes
-  defp detect(_, ~m"#!AMR"), do: ok("amr", "audio/amr")
-  defp detect(_, ~m"{\rtf"), do: ok("rtf", "application/rtf")
-  defp detect(_, ~m"4f54544f00"h), do: ok("otf", "font/otf")
-  defp detect(_, ~m"0001000000"h), do: ok("ttf", "font/ttf")
+  register "amr", "audio/amr", magic: "#!AMR"
+  register "rtf", "application/rtf", magic: "{\\rtf"
+  register "otf", "font/otf", magic: ~h"4f54544f00"
+  register "ttf", "font/ttf", magic: ~h"0001000000"
 
-  defp detect(_, ~m"000001ba21"h), do: ok("mpg", "video/MP1S")
-  defp detect(_, ~m"000001ba44"h), do: ok("mpg", "video/MP2P")
+  register "mpg", "video/MP1S", magic: ~h"000001ba21"
+  register "mpg", "video/MP2P", magic: ~h"000001ba44"
 
   # 6 bytes
-  defp detect(_, ~m"<?xml "), do: ok("xml", "application/xml")
-  defp detect(_, ~m"BEGIN:"), do: ok("ics", "text/calendar")
-  defp detect(_, ~m"solid "), do: ok("stl", "model/stl")
-  defp detect(_, ~m"fd377a585a00"h), do: ok("xz", "application/x-xz")
-  defp detect(_, ~m"526172211a07"h), do: ok("rar", "application/vnd.rar")
-  defp detect(_, ~m"377abcaf271c"h), do: ok("7z", "application/x-7z-compressed")
+  register "xml", "application/xml", magic: "<?xml "
+  register "ics", "text/calendar", magic: "BEGIN:"
+  register "stl", "model/stl", magic: "solid "
+  register "xz", "application/x-xz", magic: ~h"fd377a585a00"
+  register "rar", "application/vnd.rar", magic: ~h"526172211a07"
+  register "7z", "application/x-7z-compressed", magic: ~h"377abcaf271c"
 
   # 7 bytes
-  defp detect(_, ~m"BLENDER"), do: ok("blend", "application/x-blender")
-  defp detect(_, ~m"2::-lh0-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lh1-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lh2-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lh3-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lh4-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lh5-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lh6-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lh7-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lzs-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lz4-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lz5-"o), do: ok("lzh", "application/x-lzh-compressed")
-  defp detect(_, ~m"2::-lhd-"o), do: ok("lzh", "application/x-lzh-compressed")
+  register "blend", "application/x-blender", magic: "BLENDER"
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lh0-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lh1-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lh2-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lh3-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lh4-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lh5-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lh6-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lh7-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lzs-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lz4-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lz5-"]
+  register "lzh", "application/x-lzh-compressed", magic: [2, "-lhd-"]
 
   # 8 bytes
-  defp detect(_, ~m"4::free"o), do: ok("mov", "video/quicktime")
-  defp detect(_, ~m"4::mdat"o), do: ok("mov", "video/quicktime")
-  defp detect(_, ~m"4::moov"o), do: ok("mov", "video/quicktime")
-  defp detect(_, ~m"4::wide"o), do: ok("mov", "video/quicktime")
-  defp detect(_, ~m"wOFFOTTO"), do: ok("woff", "font/woff")
-  defp detect(_, ~m"wOF2OTTO"), do: ok("woff2", "font/woff2")
-  defp detect(_, ~m"774f464600010000"h), do: ok("woff", "font/woff")
-  defp detect(_, ~m"774f463200010000"h), do: ok("woff2", "font/woff2")
-  defp detect(_, ~m"4152524f57310000"h), do: ok("arrow", "application/x-apache-arrow")
-  defp detect(_, ~m"676c544602000000"h), do: ok("glb", "model/gltf-binary")
-  defp detect(_, ~m"4::304d4945"oh), do: ok("mie", "application/x-mie")
+  register "mov", "video/quicktime", magic: [4, "free"]
+  register "mov", "video/quicktime", magic: [4, "mdat"]
+  register "mov", "video/quicktime", magic: [4, "moov"]
+  register "mov", "video/quicktime", magic: [4, "wide"]
+  register "woff", "font/woff", magic: "wOFFOTTO"
+  register "woff2", "font/woff2", magic: "wOF2OTTO"
+  register "woff", "font/woff", magic: ~h"774f464600010000"
+  register "woff2", "font/woff2", magic: ~h"774f463200010000"
+  register "arrow", "application/x-apache-arrow", magic: ~h"4152524f57310000"
+  register "glb", "model/gltf-binary", magic: ~h"676c544602000000"
+  register "mie", "application/x-mie", magic: [4, ~h"304d4945"]
 
   # 9 bytes
-  defp detect(_, ~m"4949524f0800000018"h), do: ok("orf", "image/x-olympus-orf")
+  register "orf", "image/x-olympus-orf", magic: ~h"4949524f0800000018"
 
   # 10 bytes
-  defp detect(_, ~m"3026b2758e66cf11a6d9"h), do: ok("asf", "application/vnd.ms-asf")
+  register "asf", "application/vnd.ms-asf", magic: ~h"3026b2758e66cf11a6d9"
 
   # 12 bytes
-  defp detect(_, ~m"8::WEBP"o), do: ok("webp", "image/webp")
-  defp detect(_, ~m"ab4b5458203131bb0d0a1a0a"h), do: ok("ktx", "image/ktx")
-  defp detect(_, ~m"494955001800000088e774d8"h), do: ok("rw2", "image/x-panasonic-rw2")
-  defp detect(_, <<"RIFF", _::binary-4, "AVI">> <> _), do: ok("avi", "video/vnd.avi")
-  defp detect(_, <<"RIFF", _::binary-4, "WAVE">> <> _), do: ok("wav", "audio/vnd.wave")
-  defp detect(_, <<"RIFF", _::binary-4, "QLCM">> <> _), do: ok("qcp", "audio/qcelp")
+  register "webp", "image/webp", magic: [8, "WEBP"]
+  register "ktx", "image/ktx", magic: ~h"ab4b5458203131bb0d0a1a0a"
+  register "rw2", "image/x-panasonic-rw2", magic: ~h"494955001800000088e774d8"
+  register "avi", "video/vnd.avi", magic: ["RIFF", 4, "AVI"]
+  register "wav", "audio/vnd.wave", magic: ["RIFF", 4, "WAVE"]
+  register "qcp", "audio/qcelp", magic: ["RIFF", 4, "QLCM"]
 
-  defp detect(_, ~m"4::ftyp"o = data) do
-    data
-    |> binary_part(8, 4)
-    |> String.replace("\0", " ")
-    |> case do
-      "avif" -> ok("avif", "image/avif")
-      "mif1" -> ok("heic", "image/heif")
-      "msf1" -> ok("heic", "image/heif-sequence")
-      "heic" -> ok("heic", "image/heic")
-      "heix" -> ok("heic", "image/heic")
-      "hevc" -> ok("heic", "image/heic-sequence")
-      "hevx" -> ok("heic", "image/heic-sequence")
-      "qt  " -> ok("mov", "video/quicktime")
-      "M4V " -> ok("m4v", "video/x-m4v")
-      "M4A " -> ok("m4a", "audio/x-m4a")
-      "M4P " -> ok("m4p", "video/mp4")
-      "F4V " -> ok("f4v", "video/mp4")
-      "F4P " -> ok("f4p", "video/mp4")
-      "M4B " -> ok("m4b", "audio/mp4")
-      "F4A " -> ok("f4a", "audio/mp4")
-      "F4B " -> ok("f4b", "audio/mp4")
-      "mj2s" -> ok("mj2", "video/mj2")
-      "mjp2" -> ok("mj2", "video/mj2")
-      "crx " -> ok("cr3", "image/x-canon-cr3")
-      "3g2" <> _ -> ok("3g2", "video/3gpp2")
-      "3g" <> _ -> ok("3gp", "video/3gpp")
-      _ -> ok("mp4", "video/mp4")
-    end
-  end
+  register "heic", "image/heic",
+    magic: [4, "ftyp", "heic"],
+    magic: [4, "ftyp", "heix"]
+
+  register "heic", "image/heic-sequence",
+    magic: [4, "ftyp", "hevc"],
+    magic: [4, "ftyp", "hevx"]
+
+  register "mj2", "video/mj2",
+    magic: [4, "ftyp", "mj2s"],
+    magic: [4, "ftyp", "mjp2"]
+
+  register "avif", "image/avif", magic: [4, "ftyp", "avif"]
+  register "heic", "image/heif", magic: [4, "ftyp", "mif1"]
+  register "heic", "image/heif-sequence", magic: [4, "ftyp", "msf1"]
+  register "mov", "video/quicktime", magic: [4, "ftyp", "qt"]
+  register "m4v", "video/x-m4v", magic: [4, "ftyp", "M4V"]
+  register "m4a", "audio/x-m4a", magic: [4, "ftyp", "M4A"]
+  register "m4p", "video/mp4", magic: [4, "ftyp", "M4P"]
+  register "f4v", "video/mp4", magic: [4, "ftyp", "F4V"]
+  register "f4p", "video/mp4", magic: [4, "ftyp", "F4P"]
+  register "m4b", "audio/mp4", magic: [4, "ftyp", "M4B"]
+  register "f4a", "audio/mp4", magic: [4, "ftyp", "F4A"]
+  register "f4b", "audio/mp4", magic: [4, "ftyp", "F4B"]
+  register "cr3", "image/x-canon-cr3", magic: [4, "ftyp", "crx"]
+  register "3g2", "video/3gpp2", magic: [4, "ftyp", "3g2"]
+  register "3gp", "video/3gpp", magic: [4, "ftyp", "3g"]
+  register "mp4", "video/mp4", magic: [4, "ftyp"]
 
   # 14 bytes
-  defp detect(_, ~m"060e2b34020501010d0102010102"h) do
-    ok("mxf", "application/mxf")
-  end
-
-  defp detect(_, ~m"2::270a00000000000000000000"oh) do
-    ok("shp", "application/x-esri-shape")
-  end
+  register "mxf", "application/mxf", magic: ~h"060e2b34020501010d0102010102"
+  register "shp", "application/x-esri-shape", magic: [2, ~h"270a00000000000000000000"]
 
   # 15 bytes
-  defp detect(_, ~m"FUJIFILMCCD-RAW"), do: ok("raf", "image/x-fujifilm-raf")
+  register "raf", "image/x-fujifilm-raf", magic: "FUJIFILMCCD-RAW"
 
   # 16 bytes
-  defp detect(_, ~m"Extended Module:"), do: ok("xm", "audio/x-xm")
-
-  defp detect(_, ~m"626f6f6b000000006d61726b00000000"h) do
-    ok("alias", "application/x.apple.alias")
-  end
-
-  defp detect(_, ~m"0606edf5d81d46e5bd31efe7fe74b71d"h) do
-    ok("indd", "application/x-indesign")
-  end
+  register "xm", "audio/x-xm", magic: "Extended Module:"
+  register "alias", "application/x.apple.alias", magic: ~h"626f6f6b000000006d61726b00000000"
+  register "indd", "application/x-indesign", magic: ~h"0606edf5d81d46e5bd31efe7fe74b71d"
 
   # 19 bytes
-  defp detect(_, ~m"Creative Voice File"), do: ok("voc", "audio/x-voc")
+  register "voc", "audio/x-voc", magic: "Creative Voice File"
 
-  defp detect(_, ~m"%!PS" = data) do
-    case data do
-      ~m"14:: EPSF-"o -> ok("eps", "application/eps")
-      _ -> ok("ps", "application/postscript")
-    end
-  end
+  register "eps", "application/eps", magic: ["%!PS", 10, " EPSF-"]
+  register "ps", "application/postscript", magic: "%!PS"
 
   # 20 bytes
-
-  defp detect(_, ~m"4c0000000114020000000000c000000000000046"h) do
-    ok("lnk", "application/x.ms.shortcut")
-  end
+  register "lnk", "application/x.ms.shortcut", magic: ~h"4c0000000114020000000000c000000000000046"
 
   # 21 bytes
-  defp detect(_, ~m"!<arch>" = data) do
-    case binary_part(data, 8, 13) do
-      "debian-binary" -> ok("deb", "application/x-deb")
-      _ -> ok("ar", "application/x-unix-archive")
-    end
-  end
+  register "deb", "application/x-deb", magic: ["!<arch>", 1, "debian-binary"]
+  register "ar", "application/x-unix-archive", magic: "!<arch>"
 
   # 24 bytes
-  defp detect(_, ~m"49492a00"h = data) do
-    case data do
-      ~m"8::CR"o -> ok("cr2", "image/x-canon-cr2")
-      ~m"8::1c00fe00"oh -> ok("nef", "image/x-nikon-nef")
-      ~m"8::1f000b00"oh -> ok("nef", "image/x-nikon-nef")
-      ~m"8::2d00fe00"oh -> ok("dng", "image/x-adobe-dng")
-      ~m"8::2700fe00"oh -> ok("dng", "image/x-adobe-dng")
-      ~m"9::00fe00040001000000010000000301"oh -> ok("arw", "image/x-sony-arw")
-      _ -> ok("tif", "image/tiff")
-    end
-  end
+  register "cr2", "image/x-canon-cr2", magic: [@tiff, 4, "CR"]
 
-  defp detect(_, ~m"0000000c6a5020200d0a870a"h = data) do
-    case binary_part(data, 20, 4) do
-      "jp2 " -> ok("jp2", "image/jp2")
-      "jpx " -> ok("jpx", "image/jpx")
-      "jpm " -> ok("jpm", "image/jpm")
-      "mjp2" -> ok("mj2", "image/mj2")
-      "mj2s" -> ok("mj2", "image/mj2")
-      _ -> nil
-    end
-  end
+  register "nef", "image/x-nikon-nef",
+    magic: [@tiff, 4, ~h"1c00fe00"],
+    magic: [@tiff, 4, ~h"1f000b00"]
+
+  register "dng", "image/x-adobe-dng",
+    magic: [@tiff, 4, ~h"2d00fe00"],
+    magic: [@tiff, 4, ~h"2700fe00"]
+
+  register "arw", "image/x-sony-arw", magic: [@tiff, 5, ~h"00fe00040001000000010000000301"]
+  register "tif", "image/tiff", magic: @tiff
+
+  register "jp2", "image/jp2", magic: [@jpeg2000, 8, "jp2"]
+  register "jpx", "image/jpx", magic: [@jpeg2000, 8, "jpx"]
+  register "jpm", "image/jpm", magic: [@jpeg2000, 8, "jpm"]
+  register "mj2", "image/mj2", magic: [@jpeg2000, 8, "mjp2"], magic: [@jpeg2000, 8, "mj2s"]
 
   # 27 bytes
-  defp detect(_, ~m"-----BEGIN PGP MESSAGE-----") do
-    ok("pgp", "application/pgp-encrypted")
-  end
+  register "pgp", "application/pgp-encrypted", magic: "-----BEGIN PGP MESSAGE-----"
 
   # 32 bytes
-  defp detect(_, ~m"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"h) do
-    ok("skp", "application/vnd.sketchup.skp")
-  end
+  register "skp", "application/vnd.sketchup.skp",
+    magic: ~h"fffeff0e53006b0065007400630068005500700020004d006f00640065006c00"
 
   # 36 bytes
-  for eot <- [<<0x00, 0x00, 0x01>>, <<0x01, 0x00, 0x02>>, <<0x02, 0x00, 0x02>>] do
-    defp detect(_, <<_::binary-8, unquote(eot), _::binary-23, 0x4C, 0x50>> <> _) do
-      ok("eot", "application/vnd.ms-fontobject")
-    end
-  end
+  register "eot", "application/vnd.ms-fontobject",
+    magic: [8, ~h"000001", 23, ~h"4c50"],
+    magic: [8, ~h"010002", 23, ~h"4c50"],
+    magic: [8, ~h"020002", 23, ~h"4c50"]
 
   # 40 bytes
-  defp detect(_, ~m"OggS" = data) do
-    case data do
-      ~m"28::4f70757348656164"oh -> ok("opus", "audio/opus")
-      ~m"28::53706565782020"oh -> ok("spx", "audio/ogg")
-      ~m"28::7f464c4143"oh -> ok("oga", "audio/ogg")
-      ~m"28::01766f72626973"oh -> ok("ogg", "audio/ogg")
-      ~m"28::807468656f7261"oh -> ok("ogv", "video/ogg")
-      ~m"28::01766964656f00"oh -> ok("ogm", "video/ogg")
-      _ -> ok("ogx", "application/ogg")
+  register "opus", "audio/opus", magic: ["OggS", 24, ~h"4f70757348656164"]
+  register "spx", "audio/ogg", magic: ["OggS", 24, ~h"53706565782020"]
+  register "oga", "audio/ogg", magic: ["OggS", 24, ~h"7f464c4143"]
+  register "ogg", "audio/ogg", magic: ["OggS", 24, ~h"01766f72626973"]
+  register "ogv", "video/ogg", magic: ["OggS", 24, ~h"807468656f7261"]
+  register "ogm", "video/ogg", magic: ["OggS", 24, ~h"01766964656f00"]
+  register "ogx", "application/ogg", magic: "OggS"
+
+  # These patterns are likely to produce false positives.
+  register "ttf", "font/ttf", magic: ~h"0001000000"
+  register "ico", "image/x-icon", magic: ~h"00000100"
+  register "cur", "image/x-icon", magic: ~h"00000200"
+
+  register "s3m", "audio/x-s3m", magic: [44, "SCRM"]
+  register "mobi", "application/x-mobipocket-ebook", magic: [60, ~h"424f4f4b4d4f4249"]
+  register "dcm", "application/dicom", magic: [128, ~h"4449434d"]
+  register "mts", "video/mp2t", magic: [4, "G", 191, "G"]
+
+  register "tar", "application/x-tar",
+    magic: [257, ~h"757374617200"],
+    magic: [257, ~h"7573746172202000"]
+
+  # These formats need further processing
+  register FileType.Zip, magic: ~h"504b0304"
+  register FileType.CFB, magic: ~h"d0cf11e0a1b11ae1"
+
+  for {type, magic} <- @magic do
+    if is_tuple(type) do
+      defp detect(_io, match_magic(unquote(magic))) do
+        {:ok, unquote(type)}
+      end
+    else
+      defp detect(io, match_magic(unquote(magic))) do
+        unquote(type).detect(io)
+      end
     end
   end
 
-  # These patterns are likely to produce false positives.
-  defp detect(_, ~m"0001000000"h), do: ok("ttf", "font/ttf")
-  defp detect(_, ~m"00000100"h), do: ok("ico", "image/x-icon")
-  defp detect(_, ~m"00000200"h), do: ok("cur", "image/x-icon")
-
-  # These formats need further processing
-  defp detect(io, ~m"504b0304"h), do: Zip.detect(io)
-  defp detect(io, ~m"d0cf11e0a1b11ae1"h), do: CFB.detect(io)
-  defp detect(io, _), do: Fallback.detect(io)
+  # TODO: Fallback
+  defp detect(_io, _) do
+    {:error, :unrecognized}
+  end
 end

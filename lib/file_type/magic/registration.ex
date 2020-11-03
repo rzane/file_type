@@ -14,14 +14,11 @@ defmodule FileType.Magic.Registration do
   end
 
   defmacro register(type, opts) do
-    type = Macro.expand(type, __CALLER__)
-
     magic =
       opts
       |> Keyword.get_values(:magic)
-      |> Enum.map(&compile_magic/1)
-      |> Enum.map(&%{type: type, magic: &1})
-      |> Macro.escape()
+      |> Enum.map(&List.wrap/1)
+      |> Enum.map(&{type, &1})
 
     quote do
       @magic @magic ++ unquote(magic)
@@ -32,15 +29,15 @@ defmodule FileType.Magic.Registration do
     quote do: register({unquote(ext), unquote(mime)}, unquote(opts))
   end
 
-  # defp magic_size(magic) do
-  #   magic
-  #   |> Enum.map(fn {offset, bytes} -> offset + byte_size(bytes) end)
-  #   |> Enum.sum()
-  # end
+  defmacro match_magic([]) do
+    quote do: _
+  end
 
-  defp compile_magic(magic) when is_binary(magic), do: [{0, magic}]
-  defp compile_magic(magic) when is_list(magic), do: Enum.flat_map(magic, &compile_magic/1)
+  defmacro match_magic([part | parts]) when is_integer(part) do
+    quote do: <<_::binary-size(unquote(part))>> <> match_magic(unquote(parts))
+  end
 
-  defp compile_magic({offset, magic}) when is_integer(offset) and is_binary(magic),
-    do: [{offset, magic}]
+  defmacro match_magic([part | parts]) do
+    quote do: unquote(part) <> match_magic(unquote(parts))
+  end
 end
