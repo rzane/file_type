@@ -1,41 +1,49 @@
 defmodule FileType.Fallback do
   @moduledoc false
 
-  import FileType.Utils
+  @type location :: {non_neg_integer(), non_neg_integer()}
 
-  @fallbacks [
-    {{"s3m", "audio/x-s3m"}, [{44, "SCRM"}]},
-    {{"mobi", "application/x-mobipocket-ebook"}, [{60, ~h"424f4f4b4d4f4249"}]},
-    {{"dcm", "application/dicom"}, [{128, ~h"4449434d"}]},
-    {{"tar", "application/x-tar"}, [{257, "ustar"}]},
-    {{"mts", "video/mp2t"}, [{4, "G"}, {196, "G"}]}
-  ]
+  @spec detect(IO.device(), [Registration.t()]) :: FileType.Magic.result()
+  def detect(io, entries) do
+    locations = Enum.flat_map(entries, &locate(elem(&1, 1)))
 
-  @locations for {_, sequence} <- @fallbacks,
-                 {n, bytes} <- sequence,
-                 do: {n, byte_size(bytes)}
-
-  @matches for {type, locations} <- @fallbacks,
-               do: {type, Enum.map(locations, &elem(&1, 1))}
-
-  @spec detect(IO.device()) :: FileType.Magic.result()
-  def detect(io) do
-    with {:ok, data} <- :file.pread(io, @locations) do
-      match(data, @matches)
-    end
+    with {:ok, data} <- :file.pread(io, locations),
+         {:ok, type} when is_atom(type) <- match(data, entries),
+         do: type.detect(io)
   end
 
-  def match([], []) do
+  defp match([], []) do
     {:error, :unknown}
   end
 
-  def match(data, [{type, magic} | matches]) do
-    if List.starts_with?(data, magic) do
+  defp match(data, [{type, magic} | entries]) do
+    fields = Enum.reject(magic, &is_integer/1)
+
+    if List.starts_with?(data, fields) do
       {:ok, type}
     else
       data
-      |> Enum.drop(length(magic))
-      |> match(matches)
+      |> Enum.drop(length(fields))
+      |> match(entries)
     end
+  end
+
+  @doc """
+  Convert our magic signature to something we can pass to `:file.pread`.
+  """
+  @spec locate(Registration.magic()) :: [location()]
+  def locate(magic) do
+    locate(magic, 0, [])
+  end
+
+  defp locate([], _, acc), do: acc
+
+  defp locate([part | parts], offset, acc) when is_integer(part) do
+    locate(parts, offset + part, acc)
+  end
+
+  defp locate([part | parts], offset, acc) when is_binary(part) do
+    size = byte_size(part)
+    locate(parts, offset + size, acc ++ [{offset, size}])
   end
 end

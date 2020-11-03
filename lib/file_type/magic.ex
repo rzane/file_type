@@ -5,7 +5,7 @@ defmodule FileType.Magic do
   alias FileType.Magic.Registration
 
   # FIXME: Use fallback module
-  @size 300
+  @size 0
 
   @type result :: {:ok, {binary(), binary()}} | {:error, FileType.error()}
 
@@ -51,8 +51,7 @@ defmodule FileType.Magic do
     end
   end
 
-  # TODO: Fallback
-  defp detect(_io, _data) do
-    {:error, :unrecognized}
+  defp detect(io, _data) do
+    FileType.Fallback.detect(io, Database.entries())
   end
 end

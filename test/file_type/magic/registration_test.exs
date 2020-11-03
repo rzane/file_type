@@ -8,7 +8,7 @@ defmodule FileType.Magic.RegistrationTest do
     register Example, magic: "custom"
   end
 
-  test "builds a list of entries" do
+  test "register/2 builds a list of entries" do
     assert Database.entries() == [
              {{"a", "a"}, ["a"]},
              {{"a", "a"}, [4, "a"]},
