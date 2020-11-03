@@ -1,20 +1,35 @@
 defmodule FileType.Magic.Registration do
   @moduledoc false
 
+  @type ext :: binary()
+  @type mime :: binary()
+  @type type :: {ext(), mime()} | module()
+  @type magic :: [binary() | non_neg_integer()]
+  @type t :: {type(), magic()}
+  @type opts :: [{:magic, magic() | binary()}]
+
   defmacro __using__(_) do
     quote do
-      import unquote(__MODULE__)
-      @before_compile unquote(__MODULE__)
-      @magic []
+      import FileType.Magic.Registration
+      @before_compile FileType.Magic.Registration
+      @__magic__ []
     end
   end
 
   defmacro __before_compile__(_) do
     quote do
-      def __magic__, do: @magic
+      @doc """
+      List the files types that are registered in the database.
+      """
+      @spec entries :: [FileType.Magic.Registration.t()]
+      def entries, do: @__magic__
     end
   end
 
+  @doc """
+  Registers a new file type.
+  """
+  @spec register(type(), opts()) :: Macro.t()
   defmacro register(type, opts) do
     magic =
       opts
@@ -23,23 +38,12 @@ defmodule FileType.Magic.Registration do
       |> Enum.map(&{type, &1})
 
     quote do
-      @magic @magic ++ unquote(magic)
+      @__magic__ @__magic__ ++ unquote(magic)
     end
   end
 
+  @spec register(ext(), mime(), opts()) :: Macro.t()
   defmacro register(ext, mime, opts) do
     quote do: register({unquote(ext), unquote(mime)}, unquote(opts))
-  end
-
-  defmacro match_magic([]) do
-    quote do: _
-  end
-
-  defmacro match_magic([part | parts]) when is_integer(part) do
-    quote do: <<_::binary-size(unquote(part))>> <> match_magic(unquote(parts))
-  end
-
-  defmacro match_magic([part | parts]) do
-    quote do: unquote(part) <> match_magic(unquote(parts))
   end
 end
