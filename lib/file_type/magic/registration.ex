@@ -1,4 +1,6 @@
 defmodule FileType.Magic.Registration do
+  @moduledoc false
+
   defmacro __using__(_) do
     quote do
       import unquote(__MODULE__)
