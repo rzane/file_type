@@ -362,7 +362,6 @@ defmodule FileTypeTest do
   end
 
   describe "image/apng" do
-    @tag :pending
     fixture "fixture.apng"
   end
 

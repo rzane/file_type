@@ -45,7 +45,6 @@ defmodule FileType.Magic do
   def run(~h"465753" <> _), do: {"swf", "application/x-shockwave-flash"}
   def run(~h"474946" <> _), do: {"gif", "image/gif"}
   def run(~h"464c5601" <> _), do: {"flv", "video/x-flv"}
-  def run(~h"89504e47" <> _), do: {"png", "image/png"}
   def run(~h"425047fb" <> _), do: {"bpg", "image/bpg"}
   def run(~h"4d4d002a" <> _), do: {"tif", "image/tiff"}
   def run(~h"c5d0d3c6" <> _), do: {"eps", "application/eps"}
@@ -170,6 +169,13 @@ defmodule FileType.Magic do
       <<_::binary-8, "mjp2">> <> _ -> {"mj2", "image/mj2"}
       <<_::binary-8, "mj2s">> <> _ -> {"mj2", "image/mj2"}
       _ -> nil
+    end
+  end
+
+  def run(~h"89504e47" <> data) do
+    case :binary.match(data, "acTL") do
+      :nomatch -> {"png", "image/png"}
+      _ -> {"apng", "image/apng"}
     end
   end
 
