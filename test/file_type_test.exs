@@ -237,16 +237,9 @@ defmodule FileTypeTest do
   end
 
   describe "audio/aac" do
-    @tag :pending
     fixture "fixture-id3v2.aac"
-
-    @tag :pending
     fixture "fixture-adts-mpeg2.aac"
-
-    @tag :pending
     fixture "fixture-adts-mpeg4.aac"
-
-    @tag :pending
     fixture "fixture-adts-mpeg4-2.aac"
   end
 
@@ -273,21 +266,11 @@ defmodule FileTypeTest do
   end
 
   describe "audio/mpeg" do
-    fixture "fixture.mp3"
-
-    @tag :pending
     fixture "fixture.mp1"
-
-    @tag :pending
     fixture "fixture.mp2"
-
-    @tag :pending
     fixture "fixture-mpa.mp2"
-
-    @tag :pending
+    fixture "fixture.mp3"
     fixture "fixture-ffe3.mp3"
-
-    @tag :pending
     fixture "fixture-mp2l3.mp3"
   end
 
@@ -323,8 +306,6 @@ defmodule FileTypeTest do
 
   describe "audio/x-flac" do
     fixture "fixture.flac"
-
-    @tag :pending
     fixture "fixture-id3v2.flac"
   end
 

@@ -1,6 +1,7 @@
 defmodule FileType.Magic do
   @moduledoc false
 
+  import Bitwise
   import FileType.Utils
 
   @type ext :: binary()
@@ -11,7 +12,6 @@ defmodule FileType.Magic do
   def run(content)
 
   def run("BM" <> _), do: {"bmp", "image/bmp"}
-  def run("ID3" <> _), do: {"mp3", "audio/mpeg"}
   def run("MP+" <> _), do: {"mpc", "audio/x-musepack"}
   def run("FLIF" <> _), do: {"flif", "image/flif"}
   def run("8BPS" <> _), do: {"psd", "image/vnd.adobe.photoshop"}
@@ -57,8 +57,6 @@ defmodule FileType.Magic do
   def run(~h"edabeedb" <> _), do: {"rpm", "application/x-rpm"}
   def run(~h"4f54544f00" <> _), do: {"otf", "font/otf"}
   def run(~h"0001000000" <> _), do: {"ttf", "font/ttf"}
-  def run(~h"000001ba21" <> _), do: {"mpg", "video/MP1S"}
-  def run(~h"000001ba44" <> _), do: {"mpg", "video/MP2P"}
   def run("<?xml " <> _), do: {"xml", "application/xml"}
   def run("BEGIN:" <> _), do: {"ics", "text/calendar"}
   def run("solid " <> _), do: {"stl", "model/stl"}
@@ -219,6 +217,23 @@ defmodule FileType.Magic do
   def run(~h"0001000000" <> _), do: {"ttf", "font/ttf"}
   def run(~h"00000100" <> _), do: {"ico", "image/x-icon"}
   def run(~h"00000200" <> _), do: {"cur", "image/x-icon"}
+
+  def run(<<(~h"000001ba"), layer>> <> _) do
+    cond do
+      band(layer, 0xF1) == 0x21 -> {"mpg", "video/MP1S"}
+      band(layer, 0xC4) == 0x44 -> {"mpg", "video/MP2P"}
+    end
+  end
+
+  def run(<<0xFF, layer>> <> _) when band(layer, 0xE0) == 0xE0 do
+    case {band(layer, 0x16), band(layer, 0x06)} do
+      {0x10, _} -> {"aac", "audio/aac"}
+      {_, 0x02} -> {"mp3", "audio/mpeg"}
+      {_, 0x04} -> {"mp2", "audio/mpeg"}
+      {_, 0x06} -> {"mp1", "audio/mpeg"}
+      _ -> nil
+    end
+  end
 
   def run(_), do: nil
 end
