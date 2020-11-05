@@ -562,7 +562,6 @@ defmodule FileTypeTest do
   end
 
   describe "video/webm" do
-    @tag :pending
     fixture "fixture.webm"
   end
 

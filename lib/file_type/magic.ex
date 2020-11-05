@@ -44,7 +44,6 @@ defmodule FileType.Magic do
   def run(~h"435753" <> _), do: {"swf", "application/x-shockwave-flash"}
   def run(~h"465753" <> _), do: {"swf", "application/x-shockwave-flash"}
   def run(~h"474946" <> _), do: {"gif", "image/gif"}
-  def run(~h"1a45dfa3" <> _), do: {"mkv", "video/x-matroska"}
   def run(~h"464c5601" <> _), do: {"flv", "video/x-flv"}
   def run(~h"89504e47" <> _), do: {"png", "image/png"}
   def run(~h"425047fb" <> _), do: {"bpg", "image/bpg"}
@@ -171,6 +170,15 @@ defmodule FileType.Magic do
       <<_::binary-8, "mjp2">> <> _ -> {"mj2", "image/mj2"}
       <<_::binary-8, "mj2s">> <> _ -> {"mj2", "image/mj2"}
       _ -> nil
+    end
+  end
+
+  def run(~h"1a45dfa3" <> data) do
+    with {offset, size} <- :binary.match(data, <<0x42, 0x82>>),
+         "webm" <- binary_part(data, offset + size + 1, 4) do
+      {"webm", "video/webm"}
+    else
+      _ -> {"mkv", "video/x-matroska"}
     end
   end
 
