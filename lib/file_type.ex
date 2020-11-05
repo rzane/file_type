@@ -1,5 +1,11 @@
 defmodule FileType do
+  import FileType.Utils
+
   alias FileType.Magic
+  alias FileType.Zip
+  alias FileType.CFB
+
+  @size 262
 
   @enforce_keys [:ext, :mime]
   defstruct [:ext, :mime]
@@ -22,8 +28,12 @@ defmodule FileType do
   """
   @spec from_io(IO.device()) :: result
   def from_io(io) do
-    with {:ok, {ext, mime}} <- Magic.detect(io) do
+    with {:ok, data} <- :file.read(io, @size),
+         {:ok, {ext, mime}} <- detect(io, data) do
       {:ok, %__MODULE__{ext: ext, mime: mime}}
+    else
+      :eof -> {:error, :unrecognized}
+      {:error, reason} -> {:error, reason}
     end
   end
 
@@ -67,5 +77,20 @@ defmodule FileType do
 
   def format_error(other) do
     other |> :file.format_error() |> to_string()
+  end
+
+  defp detect(io, ~h"504b0304" <> _) do
+    Zip.detect(io)
+  end
+
+  defp detect(io, ~h"d0cf11e0a1b11ae1" <> _) do
+    CFB.detect(io)
+  end
+
+  defp detect(_io, data) do
+    case Magic.run(data) do
+      nil -> {:error, :unrecognized}
+      type -> {:ok, type}
+    end
   end
 end
