@@ -542,10 +542,7 @@ defmodule FileTypeTest do
   end
 
   describe "video/mpeg" do
-    @tag :pending
     fixture "fixture.mpg"
-
-    @tag :pending
     fixture "fixture2.mpg"
   end
 

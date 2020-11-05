@@ -218,20 +218,21 @@ defmodule FileType.Magic do
   def run(~h"00000100" <> _), do: {"ico", "image/x-icon"}
   def run(~h"00000200" <> _), do: {"cur", "image/x-icon"}
 
-  def run(<<(~h"000001ba"), layer>> <> _) do
+  def run(<<0x00, 0x00, 0x01, prefix, layer>> <> _) when prefix in [0xBA, 0xB3] do
     cond do
       band(layer, 0xF1) == 0x21 -> {"mpg", "video/MP1S"}
       band(layer, 0xC4) == 0x44 -> {"mpg", "video/MP2P"}
+      true -> {"mpg", "video/mpeg"}
     end
   end
 
   def run(<<0xFF, layer>> <> _) when band(layer, 0xE0) == 0xE0 do
-    case {band(layer, 0x16), band(layer, 0x06)} do
-      {0x10, _} -> {"aac", "audio/aac"}
-      {_, 0x02} -> {"mp3", "audio/mpeg"}
-      {_, 0x04} -> {"mp2", "audio/mpeg"}
-      {_, 0x06} -> {"mp1", "audio/mpeg"}
-      _ -> nil
+    cond do
+      band(layer, 0x16) == 0x10 -> {"aac", "audio/aac"}
+      band(layer, 0x06) == 0x02 -> {"mp3", "audio/mpeg"}
+      band(layer, 0x06) == 0x04 -> {"mp2", "audio/mpeg"}
+      band(layer, 0x06) == 0x06 -> {"mp1", "audio/mpeg"}
+      true -> nil
     end
   end
 
