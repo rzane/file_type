@@ -1,4 +1,8 @@
 defmodule FileType do
+  @moduledoc """
+  Detect the MIME type of a file based on it's content.
+  """
+
   import FileType.Utils.Hex
 
   @required_bytes 262
@@ -13,36 +17,19 @@ defmodule FileType do
   @type result :: {:ok, t()} | {:error, error()}
 
   @doc """
-  Determines a MIME type from an IO device.
-
-  ## Examples
-
-      iex> {:ok, io} = File.open("file.png", [:read, :binary])
-      {:ok, #PID<0.109.0>}
-
-      iex> FileType.from_io(io)
-      {:ok, %FileType{ext: "png", mime: "image/png"}}
-
-  """
-  @spec from_io(IO.device()) :: result()
-  def from_io(io) do
-    with {:ok, data} <- read(io, @required_bytes),
-         {:ok, type} <- detect(io, data) do
-      {:ok, type}
-    else
-      :eof -> {:error, :unrecognized}
-      {:error, reason} -> {:error, reason}
-    end
-  end
-
-  @doc """
   This is the same as `from_io/1`, except that it will open and close
   a file for you.
 
   ## Examples
 
-      iex> FileType.from_path("file.png")
-      {:ok, %FileType{ext: "png", mime: "image/png"}}
+      iex> FileType.from_path("profile.png")
+      {:ok, {"png", "image/png"}}
+
+      iex> FileType.from_path("contract.docx")
+      {:ok, {"docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"}}
+
+      iex> FileType.from_path("example.txt")
+      {:error, :unrecognized}
 
       iex> FileType.from_path("does-not-exist.png")
       {:error, :enoent}
@@ -52,6 +39,29 @@ defmodule FileType do
   def from_path(path) when is_binary(path) do
     case File.open(path, [:read, :binary], &from_io/1) do
       {:ok, result} -> result
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  @doc """
+  Determines a MIME type from an IO device.
+
+  ## Examples
+
+      iex> {:ok, io} = File.open("profile.png", [:read, :binary])
+      {:ok, #PID<0.109.0>}
+
+      iex> FileType.from_io(io)
+      {:ok, {"png", "image/png"}}
+
+  """
+  @spec from_io(IO.device()) :: result()
+  def from_io(io) do
+    with {:ok, data} <- read(io, @required_bytes),
+         {:ok, type} <- detect(io, data) do
+      {:ok, type}
+    else
+      :eof -> {:error, :unrecognized}
       {:error, reason} -> {:error, reason}
     end
   end
