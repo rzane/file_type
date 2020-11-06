@@ -1,4 +1,6 @@
 defmodule FileType.CFB do
+  @moduledoc false
+
   import FileType.Utils.Hex
 
   @clsid_offset 80

@@ -1,4 +1,6 @@
 defmodule FileType.Zip.Header do
+  @moduledoc false
+
   @eocd_size 22
   @eocd_sig <<0x50, 0x4B, 0x05, 0x06>>
 
