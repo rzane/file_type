@@ -72,7 +72,7 @@ defmodule FileType do
   ## Examples
 
       iex> FileType.format_error(:unrecognized)
-      "the file did not match any known format"
+      "does not match any known format"
 
       iex> FileType.format_error(:enoent)
       "no such file or directory"
@@ -80,7 +80,7 @@ defmodule FileType do
   """
   @spec format_error(error()) :: binary()
   def format_error(:unrecognized) do
-    "the file did not match any known format"
+    "does not match any known format"
   end
 
   def format_error(other) do

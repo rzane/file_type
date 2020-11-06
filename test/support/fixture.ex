@@ -1,12 +1,4 @@
-defmodule FileType.Case do
-  use ExUnit.CaseTemplate
-
-  using do
-    quote do
-      import FileType.Case
-    end
-  end
-
+defmodule FileType.Fixture do
   defmacro fixture(filename) do
     quote do
       test unquote(filename), %{describe: mime} do
