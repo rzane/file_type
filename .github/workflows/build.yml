@@ -6,7 +6,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MIX_ENV: test
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     strategy:
@@ -36,6 +35,8 @@ jobs:
 
       - name: Test
         run: mix coveralls.github
+        env:
+          MIX_ENV: test
 
       - name: Cache dialyzer
         uses: actions/cache@v2
