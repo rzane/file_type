@@ -11,9 +11,11 @@ defmodule FileType do
   @enforce_keys [:ext, :mime]
   defstruct [:ext, :mime]
 
-  @type t :: %__MODULE__{ext: binary, mime: binary}
+  @type ext :: binary()
+  @type mime :: binary()
+  @type t :: {ext(), mime()}
   @type error :: File.posix() | :unrecognized
-  @type result :: {:ok, t} | {:error, error}
+  @type result :: {:ok, t()} | {:error, error()}
 
   @doc """
   Determines a MIME type from an IO device.
@@ -27,11 +29,11 @@ defmodule FileType do
       {:ok, %FileType{ext: "png", mime: "image/png"}}
 
   """
-  @spec from_io(IO.device()) :: result
+  @spec from_io(IO.device()) :: result()
   def from_io(io) do
     with {:ok, data} <- read(io, @required_bytes),
-         {:ok, {ext, mime}} <- detect(io, data) do
-      {:ok, %__MODULE__{ext: ext, mime: mime}}
+         {:ok, type} <- detect(io, data) do
+      {:ok, type}
     else
       :eof -> {:error, :unrecognized}
       {:error, reason} -> {:error, reason}
