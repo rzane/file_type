@@ -53,7 +53,7 @@ defmodule FileType do
       {:error, :enoent}
 
   """
-  @spec from_path(binary) :: result
+  @spec from_path(Path.t()) :: result()
   def from_path(path) when is_binary(path) do
     case File.open(path, [:read, :binary], &from_io/1) do
       {:ok, result} -> result
@@ -73,7 +73,7 @@ defmodule FileType do
       "no such file or directory"
 
   """
-  @spec format_error(error) :: binary
+  @spec format_error(error()) :: binary()
   def format_error(:unrecognized) do
     "the file did not match any known format"
   end
