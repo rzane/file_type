@@ -14,6 +14,7 @@ defmodule FileType.MixProject do
       deps: deps(),
       docs: docs(),
       dialyzer: dialyzer(),
+      package: package(),
       test_coverage: [tool: ExCoveralls]
     ]
   end
@@ -37,6 +38,15 @@ defmodule FileType.MixProject do
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test}
+    ]
+  end
+
+  defp package do
+    [
+      description: "Detect the MIME type of a file based on it's content.",
+      maintainers: ["Ray Zane"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => @source_url}
     ]
   end
 
