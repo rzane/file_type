@@ -1,5 +1,12 @@
 # FileType
 
+[![github.com](https://img.shields.io/github/workflow/status/rzane/file_type/Build.svg)](https://github.com/rzane/file_type/actions?query=workflow%3ABuild)
+[![coveralls.io](https://img.shields.io/coveralls/github/rzane/file_type.svg)](https://coveralls.io/github/rzane/file_type)
+[![hex.pm](https://img.shields.io/hexpm/v/file_type.svg)](https://hex.pm/packages/file_type)
+[![hex.pm](https://img.shields.io/hexpm/dt/file_type.svg)](https://hex.pm/packages/file_type)
+[![hex.pm](https://img.shields.io/hexpm/l/file_type.svg)](https://hex.pm/packages/file_type)
+[![github.com](https://img.shields.io/github/last-commit/rzane/file_type.svg)](https://github.com/rzane/file_type/commits/master)
+
 This package can be used to detect the MIME type and canonical extension by looking for [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)#Magic_numbers_in_files). It works by reading a small amount of data from the file (~256 bytes) and binary pattern matching against it's contents.
 
 [API Documentation](https://hexdocs.pm/file_type/FileType.html)
