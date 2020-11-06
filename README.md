@@ -212,7 +212,7 @@ end
 Most files can be detected with a single binary pattern match. To contribute support for new file type:
 
 1. Find an example file. Please make sure you have the rights to use this file.
-2. Register the fixture in `test/file_type_test.exs`.
+2. Register the fixture in `test/file_type/integration_test.exs`.
 3. Write some code to detect the file's type in `lib/file_type/magic.ex`.
 4. Update the `README` to include a mention of your new file format.
 5. Send a pull request!
