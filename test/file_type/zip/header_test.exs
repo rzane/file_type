@@ -13,7 +13,7 @@ defmodule FileType.Zip.HeaderTest do
 
   @tag io: "test/fixtures/fixture.zip"
   test "reads each header from a valid zip file", %{io: io} do
-    assert {:ok, 54479} = Header.seek(io)
+    assert {:ok, 54_479} = Header.seek(io)
 
     assert {:ok, a} = Header.read(io)
     assert a.name == "a.txt"
@@ -21,7 +21,7 @@ defmodule FileType.Zip.HeaderTest do
 
     assert {:ok, b} = Header.read(io)
     assert b.name == "b.png"
-    assert b.size == 54318
+    assert b.size == 54_318
 
     assert :eof = Header.read(io)
   after

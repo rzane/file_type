@@ -1,6 +1,14 @@
 defmodule FileTypeTest do
   use FileType.Case, async: true
 
+  describe "unrecognizable" do
+    @empty "test/fixtures/fixture-empty.txt"
+
+    test "does not recognize empty file" do
+      assert {:error, :unrecognized} = FileType.from_path(@empty)
+    end
+  end
+
   describe "application/dicom" do
     fixture "fixture.dcm"
   end
@@ -428,9 +436,6 @@ defmodule FileTypeTest do
   describe "image/png" do
     fixture "fixture.png"
     fixture "fixture-itxt.png"
-
-    # FIXME: This should not be recognized as a PNG?
-    fixture "fixture-corrupt.png"
   end
 
   describe "image/tiff" do
