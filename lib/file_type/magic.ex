@@ -4,11 +4,11 @@ defmodule FileType.Magic do
   import Bitwise
   import FileType.Utils
 
-  @type ext :: binary()
-  @type mime :: binary()
-  @type result :: {ext(), mime()}
-
-  @spec run(binary()) :: result() | nil
+  @doc """
+  Attempt to detect the file by pattern matching on magic
+  numbers in the file.
+  """
+  @spec run(binary()) :: FileType.t() | nil
   def run(content)
 
   def run("BM" <> _), do: {"bmp", "image/bmp"}
