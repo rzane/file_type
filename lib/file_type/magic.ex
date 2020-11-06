@@ -2,7 +2,7 @@ defmodule FileType.Magic do
   @moduledoc false
 
   import Bitwise
-  import FileType.Utils
+  import FileType.Utils.Hex
 
   @doc """
   Attempt to detect the file by pattern matching on magic

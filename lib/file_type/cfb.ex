@@ -1,5 +1,5 @@
 defmodule FileType.CFB do
-  import FileType.Utils, only: [sigil_h: 2]
+  import FileType.Utils.Hex
 
   @clsid_offset 80
   @clsid_bytes 16

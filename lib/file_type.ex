@@ -1,10 +1,5 @@
 defmodule FileType do
-  import FileType.Utils
-
-  alias FileType.Magic
-  alias FileType.Zip
-  alias FileType.CFB
-  alias FileType.ID3
+  import FileType.Utils.Hex
 
   @required_bytes 262
 
@@ -84,7 +79,7 @@ defmodule FileType do
 
   defp read(io, position \\ 0, size) do
     with {:ok, data} <- :file.pread(io, position, size) do
-      case ID3.position(data) do
+      case FileType.ID3.position(data) do
         0 -> {:ok, data}
         position -> read(io, position, size)
       end
@@ -92,15 +87,15 @@ defmodule FileType do
   end
 
   defp detect(io, ~h"504b0304" <> _) do
-    Zip.detect(io)
+    FileType.Zip.detect(io)
   end
 
   defp detect(io, ~h"d0cf11e0a1b11ae1" <> _) do
-    CFB.detect(io)
+    FileType.CFB.detect(io)
   end
 
   defp detect(_io, data) do
-    case Magic.run(data) do
+    case FileType.Magic.run(data) do
       nil -> {:error, :unrecognized}
       type -> {:ok, type}
     end

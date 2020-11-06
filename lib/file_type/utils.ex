@@ -1,4 +1,4 @@
-defmodule FileType.Utils do
+defmodule FileType.Utils.Hex do
   @moduledoc false
 
   @doc """
