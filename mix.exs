@@ -15,8 +15,13 @@ defmodule FileType.MixProject do
       docs: docs(),
       dialyzer: dialyzer(),
       package: package(),
+      aliases: aliases(),
       test_coverage: [tool: ExCoveralls]
     ]
+  end
+
+  defp aliases do
+    [benchmark: ["run benchmark.exs"]]
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
