@@ -12,7 +12,8 @@ defmodule FileType.Zip do
     {"odp", "application/vnd.oasis.opendocument.presentation"}
   ]
 
-  @spec detect(IO.device()) :: FileType.Magic.result()
+  @doc "Detect the contents of a zip file"
+  @spec detect(IO.device()) :: FileType.result()
   def detect(io) do
     with {:ok, _} <- Header.seek(io) do
       read(io)

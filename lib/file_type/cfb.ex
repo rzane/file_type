@@ -20,7 +20,8 @@ defmodule FileType.CFB do
     ~h"84100c0000000000c000000000000046" => @msi
   }
 
-  @spec detect(IO.device()) :: FileType.Magic.result()
+  @doc "Detect the contents of a Microsoft CFB file"
+  @spec detect(IO.device()) :: FileType.result()
   def detect(io) do
     with {:ok, fields} <- :file.pread(io, @header),
          {:ok, header} <- parse_header(fields),

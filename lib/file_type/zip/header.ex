@@ -8,6 +8,10 @@ defmodule FileType.Zip.Header do
   @enforce_keys [:name, :size]
   defstruct [:name, :size]
 
+  @type t :: %__MODULE__{name: binary(), size: non_neg_integer()}
+
+  @doc "Move to the position of the first header in the file"
+  @spec seek(IO.device()) :: {:ok, non_neg_integer()} | {:error, FileType.error()}
   def seek(io) do
     seek(io, {:eof, -@eocd_size})
   end
@@ -28,6 +32,8 @@ defmodule FileType.Zip.Header do
     end
   end
 
+  @doc "Read a header from the zip file"
+  @spec read(IO.device()) :: {:ok, t()} | {:error, FileType.error()} | :eof
   def read(io) do
     with {:ok, data} <- :file.read(io, @header_size) do
       parse(io, data)
