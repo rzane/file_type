@@ -209,6 +209,14 @@ end
 
 ## Contributing
 
+### Benchmark
+
+```elixir
+$ mix benchmark
+```
+
+### Adding New File Type
+
 Most files can be detected with a single binary pattern match. To contribute support for new file type:
 
 1. Find an example file. Please make sure you have the rights to use this file.
