@@ -2,6 +2,7 @@ defmodule FileType do
   @moduledoc """
   Detect the MIME type of a file based on it's content.
   """
+require Logger
 
   import FileType.Utils.Hex
 
@@ -64,6 +65,58 @@ defmodule FileType do
       :eof -> {:error, :unrecognized}
       {:error, reason} -> {:error, reason}
     end
+  end
+
+  @spec from_binary(binary()) :: result()
+  def from_binary(binary) when is_binary(binary) do
+    with {:ok, data} <- read_binary(binary, @required_bytes),
+        {:ok, type} <- detect(binary, data) do
+      {:ok, type}
+    else
+      :eof -> {:error, :unrecognized}
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  def from_binary(_binary) do
+    Logger.warning("Binary is too short to detect file type")
+    {:error, :unrecognized}
+  end
+
+
+  defp read_binary(binary, position \\ 0, byte_count)
+
+  defp read_binary(binary, 0, byte_count) do
+    data = if byte_count < byte_size(binary) do
+      <<data::binary-size(byte_count), _rest::binary>> = binary
+      data
+    else
+      binary
+    end
+
+
+    case FileType.ID3.position(data) do
+      0 -> {:ok, data}
+      new_position ->
+        IO.inspect(new_position, label: "position")
+        read_binary(binary, new_position, byte_count)
+    end
+  end
+
+  defp read_binary(binary, position, byte_count) do
+    data = if byte_count + position < byte_size(binary) do
+      <<_::binary-size(position), data::binary-size(byte_count), _rest::binary>> = binary
+      data
+    else
+      if position < byte_size(binary) do
+      <<_::binary-size(position), data::binary>> = binary
+        data
+      else
+        binary
+      end
+    end
+
+    {:ok, data}
   end
 
   @doc """
